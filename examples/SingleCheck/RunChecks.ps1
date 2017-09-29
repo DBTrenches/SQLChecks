@@ -1,5 +1,4 @@
-#Requires -Modules DBATools
-. .\..\..\HelperFunctions\Check-TraceFlags.ps1
+#Requires -Modules DBATools, SQLChecks
 
 [string]$config = Get-Content -Path .\localhost.config.json -Raw
 

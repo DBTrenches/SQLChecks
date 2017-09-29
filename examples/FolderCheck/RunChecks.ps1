@@ -1,5 +1,4 @@
-#Requires -Modules DBATools
-. .\..\..\HelperFunctions\Check-TraceFlags.ps1
+#Requires -Modules DBATools, SQLChecks
 
 $instances = Get-ChildItem -Path .\Instances -Filter *.config.json
 
