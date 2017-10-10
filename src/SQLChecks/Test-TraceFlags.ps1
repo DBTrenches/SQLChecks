@@ -19,8 +19,6 @@ Function Test-TraceFlags {
     {
         $tf = $delta.InputObject
         $side = if($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
-        Write-Verbose "[Test-TraceFlags] $ServerInstance - TF$tf $side"
+        Write-Output "TF$tf $side"
     }
-
-    return $comparison.Count
 }

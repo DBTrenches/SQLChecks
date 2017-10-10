@@ -8,6 +8,6 @@ $serverInstance = $config.ServerInstance
 Describe "SQL Instance $serverInstance" {
     It "has the correct global trace flags set" {
         $traceFlags = $config.TraceFlags
-        Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags | Should Be 0
+        (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
     }
 }
