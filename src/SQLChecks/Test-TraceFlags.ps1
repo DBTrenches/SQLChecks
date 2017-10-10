@@ -15,7 +15,12 @@ Function Test-TraceFlags {
 
     $comparison = @(Compare-Object -ReferenceObject $expectedFlags -DifferenceObject $flags)
 
-    Write-Verbose $comparison
+    foreach($delta in $comparison)     
+    {
+        $tf = $delta.InputObject
+        $side = if($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
+        Write-Verbose "[Test-TraceFlags] $ServerInstance - TF$tf $side"
+    }
 
     return $comparison.Count
 }
