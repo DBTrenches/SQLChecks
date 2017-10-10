@@ -1,1 +1,1 @@
-. $PSScriptRoot/Check-TraceFlags.ps1
+. $PSScriptRoot/Test-TraceFlags.ps1
