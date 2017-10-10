@@ -22,5 +22,5 @@ Import-Module DBATools
 Import-Module .\src\SQLChecks
 
 Get-Content -Path ".\examples\SingleCheck\localhost.config.json" -Raw | ConvertFrom-Json -OutVariable cfg | Out-Null
-Test-TraceFlags -ServerInstance $cfg.ServerInstance -ExpectedFlags $cfg.TraceFlags -Verbose
+Test-TraceFlags -ServerInstance $cfg.ServerInstance -ExpectedFlags $cfg.TraceFlags
 ```
