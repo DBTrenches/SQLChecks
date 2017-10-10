@@ -1,4 +1,4 @@
-Function Check-TraceFlags {
+Function Test-TraceFlags {
     [cmdletbinding()]
     Param(
         [int[]] $ExpectedFlags
@@ -14,6 +14,8 @@ Function Check-TraceFlags {
     }
 
     $comparison = @(Compare-Object -ReferenceObject $expectedFlags -DifferenceObject $flags)
+
+    Write-Verbose $comparison
 
     return $comparison.Count
 }
