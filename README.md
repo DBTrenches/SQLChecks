@@ -23,7 +23,7 @@ Get-Content -Path ".\examples\SingleCheck\localhost.config.json" -Raw | ConvertF
 Test-TraceFlags -ServerInstance $cfg.ServerInstance -ExpectedFlags $cfg.TraceFlags
 ```
 
-## Building a report based on everything in a folder
+## Building a report based on checks against all configs in a folder
 ```powershell
 #Requires -Modules DBATools, SQLChecks, Format-Pester, PScribo
 
