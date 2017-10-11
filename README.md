@@ -9,8 +9,7 @@ The examples folder contains a few different ways of invoking the scripts - agai
 (From the root)
 
 ```powershell
-Import-Module DBATools
-Import-Module .\src\SQLChecks
+#Requires -Modules DBATools, SQLChecks
 
 cd .\examples\SingleCheck
 .\RunChecks.ps1
@@ -18,9 +17,22 @@ cd .\examples\SingleCheck
 
 ## Testing a single item from config
 ```powershell
-Import-Module DBATools
-Import-Module .\src\SQLChecks
+#Requires -Modules DBATools, SQLChecks
 
 Get-Content -Path ".\examples\SingleCheck\localhost.config.json" -Raw | ConvertFrom-Json -OutVariable cfg | Out-Null
 Test-TraceFlags -ServerInstance $cfg.ServerInstance -ExpectedFlags $cfg.TraceFlags
+```
+
+## Building a report based on everything in a folder
+```powershell
+#Requires -Modules DBATools, SQLChecks, Format-Pester, PScribo
+
+$instances = Get-ChildItem -Path .\examples\FolderCheck\Instances -Filter *.config.json
+$configs = @()
+
+foreach($instance in $instances) {
+    [string]$configData = Get-Content -Path $instance.PSPath -Raw
+    $configData | ConvertFrom-Json -OutVariable +configs
+}
+Invoke-Pester -Script @{Path='.\tests';Parameters= @{configs=$configs}} -PassThru | Format-Pester -Format HTML -Path .
 ```
