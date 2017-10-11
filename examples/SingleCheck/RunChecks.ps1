@@ -1,5 +1,6 @@
 #Requires -Modules DBATools, SQLChecks
 
-[string]$config = Get-Content -Path .\localhost.config.json -Raw
+[string]$data = Get-Content -Path .\localhost.config.json -Raw
+$data | ConvertFrom-Json -OutVariable cfg
 
-Invoke-Pester -Script @{Path='.';Parameters= @{instanceConfig=$config}} 
+Invoke-Pester -Script @{Path='.';Parameters= @{configs=@($cfg)}} 

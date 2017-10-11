@@ -1,13 +1,15 @@
 Param(
-    [string]$instanceConfig
+    $configs
 )
 
-$config = ConvertFrom-Json $instanceConfig
-$serverInstance = $config.ServerInstance
-
-Describe "SQL Instance $serverInstance" {
-    It "has the correct global trace flags set" {
-        $traceFlags = $config.TraceFlags
-        (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
+Describe "SQL Server Configuration" {
+    Context "Instance level settings" {
+        foreach($config in $configs) {
+            $serverInstance = $config.ServerInstance
+            $traceFlags = $config.TraceFlags
+            It "$serverInstance has the correct global trace flags set" {
+                (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
+            }
+        }
     }
 }
