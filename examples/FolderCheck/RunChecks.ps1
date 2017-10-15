@@ -5,6 +5,6 @@ $configs = @()
 
 foreach($instance in $instances) {
     [string]$configData = Get-Content -Path $instance.PSPath -Raw
-    $configData | ConvertFrom-Json -OutVariable +configs
+    $configData | ConvertFrom-Json -OutVariable +configs | Out-Null
 }
 Invoke-Pester -Script @{Path='..\..\tests';Parameters= @{configs=$configs}}

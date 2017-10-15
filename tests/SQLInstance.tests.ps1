@@ -10,6 +10,11 @@ Describe "SQL Server Configuration" {
             It "$serverInstance has the correct global trace flags set" {
                 (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
             }
+
+            $maxdop = $config.InstanceMaxDop
+            It "$serverInstance has the correct MAXDOP set" {
+                (Test-InstanceMaxDop -ServerInstance $serverInstance -ExpectedValue $maxdop).Count | Should Be 0
+            }
         }
     }
 }
