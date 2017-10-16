@@ -1,6 +1,8 @@
 {
     "ServerInstance":"localhost",
-    "InstanceMaxDop":0,
-    "XpCmdshell":0,
+    "SpConfig": {
+        "MaxDegreeOfParallelism":0,
+        "XpCmdShellEnabled":0
+    },
     "TraceFlags":[3226,7412]
 }

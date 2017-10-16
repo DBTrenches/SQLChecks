@@ -3,10 +3,9 @@ Param(
 )
 
 Describe "SQL Server Configuration" {
-    Context "Instance level settings" {
-        foreach($config in $configs) {
-            $serverInstance = $config.ServerInstance
-            
+    foreach($config in $configs) {
+        $serverInstance = $config.ServerInstance
+        Context "Instance level settings" {
             It "$serverInstance has the correct global trace flags set" {
                 $traceFlags = $config.TraceFlags
                 if($traceFlags -eq $null) {
@@ -15,23 +14,17 @@ Describe "SQL Server Configuration" {
 
                 (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
             }
+        }
 
-            It "$serverInstance has the correct MAXDOP set" {
-                $maxdop = $config.InstanceMaxDop
-                if($maxdop -eq $null) {
-                    Set-TestInconclusive -Message "No config value found"
-                }
-            
-                (Test-InstanceSpConfigValue -ServerInstance $serverInstance -ExpectedValue $maxdop -ConfigName "MaxDegreeOfParallelism").Count | Should Be 0
-            }
+        Context "Sp_configure settings" {
+            $spconfig = $config.SpConfig
+            foreach($configProperty in $spconfig.PSObject.Properties) {
+                $configName = $configProperty.Name
+                $expectedValue = $configProperty.Value
 
-            It "$serverInstance has the correct xp_cmdshell setting" {
-                $cmdshellEnabled = $config.XpCmdshell
-                if($cmdshellEnabled -eq $null) {
-                    Set-TestInconclusive -Message "No config value found"
+                It "$serverInstance has the correct $configName setting" {               
+                    (Test-InstanceSpConfigValue -ServerInstance $serverInstance -ExpectedValue $expectedValue -ConfigName $configName).Count | Should Be 0
                 }
-            
-                (Test-InstanceSpConfigValue -ServerInstance $serverInstance -ExpectedValue $cmdshellEnabled -ConfigName "XpCmdShellEnabled").Count | Should Be 0
             }
         }
     }
