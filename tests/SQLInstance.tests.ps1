@@ -23,7 +23,7 @@ Describe "SQL Server Configuration" {
                 $expectedValue = $configProperty.Value
 
                 It "$serverInstance has the correct $configName setting" {               
-                    (Test-InstanceSpConfigValue -ServerInstance $serverInstance -ExpectedValue $expectedValue -ConfigName $configName).Count | Should Be 0
+                    (Get-DbaSpConfigure -Server $serverInstance -ConfigName $configName).RunningValue | Should Be $expectedValue
                 }
             }
         }
