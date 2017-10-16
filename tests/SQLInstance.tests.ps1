@@ -22,7 +22,16 @@ Describe "SQL Server Configuration" {
                     Set-TestInconclusive -Message "No config value found"
                 }
             
-                (Test-InstanceMaxDop -ServerInstance $serverInstance -ExpectedValue $maxdop).Count | Should Be 0
+                (Test-InstanceSpConfigValue -ServerInstance $serverInstance -ExpectedValue $maxdop -ConfigName "MaxDegreeOfParallelism").Count | Should Be 0
+            }
+
+            It "$serverInstance has the correct xp_cmdshell setting" {
+                $cmdshellEnabled = $config.XpCmdshell
+                if($cmdshellEnabled -eq $null) {
+                    Set-TestInconclusive -Message "No config value found"
+                }
+            
+                (Test-InstanceSpConfigValue -ServerInstance $serverInstance -ExpectedValue $cmdshellEnabled -ConfigName "XpCmdShellEnabled").Count | Should Be 0
             }
         }
     }

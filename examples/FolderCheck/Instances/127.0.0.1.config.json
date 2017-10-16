@@ -1,5 +1,6 @@
 {
     "ServerInstance":"127.0.0.1",
     "InstanceMaxDop":0,
+    "XpCmdshell":0,
     "TraceFlags":[3226]
 }
