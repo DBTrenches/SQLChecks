@@ -3,9 +3,10 @@ Param(
 )
 
 Describe "SQL Server Configuration" {
-    foreach($config in $configs) {
-        $serverInstance = $config.ServerInstance
-        Context "Instance level settings" {
+    Context "Instance level settings" {
+        foreach($config in $configs) {
+            $serverInstance = $config.ServerInstance
+            
             It "$serverInstance has the correct global trace flags set" {
                 $traceFlags = $config.TraceFlags
                 if($traceFlags -eq $null) {
@@ -15,9 +16,13 @@ Describe "SQL Server Configuration" {
                 (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
             }
         }
+    }
 
-        Context "Sp_configure settings" {
+    Context "Sp_configure settings" {
+        foreach($config in $configs) {
+            $serverInstance = $config.ServerInstance
             $spconfig = $config.SpConfig
+
             foreach($configProperty in $spconfig.PSObject.Properties) {
                 $configName = $configProperty.Name
                 $expectedValue = $configProperty.Value
