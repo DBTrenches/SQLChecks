@@ -15,12 +15,13 @@ Describe "SQL Server Configuration" {
 
                 (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
             }
+            
 			It "$serverInstance has the correct number of error logs" {
                 $numErrorLogs = $config.NumErrorLogs
                 if($numErrorLogs  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-				(Test-NumErrorLogs -ServerInstance $serverInstance -ExpectedNumErrorLogs $numErrorLogs) | Should Be $numErrorLogs
+				Get-NumberOfErrorLogs -ServerInstance $serverInstance | Should Be $numErrorLogs
             }
         }
     }

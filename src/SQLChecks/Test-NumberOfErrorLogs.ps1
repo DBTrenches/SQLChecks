@@ -1,11 +1,10 @@
-Function Test-NumErrorLogs {
+Function Get-NumberOfErrorLogs {
     [cmdletbinding()]
     Param(
-        [int[]] $ExpectedNumErrorLogs
-        ,[string] $ServerInstance
+        [string] $ServerInstance
     )
 
- 	$testNumErrorLogs = "use master
+ 	$query = "use master
     declare @HkeyLocal nvarchar(18)
     declare @MSSqlServerRegPath nvarchar(31)
     declare @InstanceRegPath sysname
@@ -15,8 +14,7 @@ Function Test-NumErrorLogs {
     declare @NumErrorLogs int
     exec master.dbo.xp_instance_regread @HkeyLocal, @InstanceRegPath, N'NumErrorLogs', @NumErrorLogs OUTPUT
     SELECT
-    ISNULL(@NumErrorLogs, -1) AS [numErrorLogs];"
+    ISNULL(@NumErrorLogs, -1) AS [NumberOfErrorLogs];"
 
-	return (Invoke-Sqlcmd -ServerInstance $serverInstance -query $testNumErrorLogs).numErrorLogs 
-  
+	return (Invoke-Sqlcmd -ServerInstance $serverInstance -query $query).NumberOfErrorLogs 
 }
