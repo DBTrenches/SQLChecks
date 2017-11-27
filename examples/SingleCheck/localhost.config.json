@@ -4,5 +4,6 @@
         "MaxDegreeOfParallelism":2,
         "XpCmdShellEnabled":0
     },
+    "NumErrorLogs": 14,
     "TraceFlags":[3226,7412]
 }
