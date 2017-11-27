@@ -4,7 +4,7 @@ Function Get-NumberOfErrorLogs {
         [string] $ServerInstance
     )
 
- 	$query = "use master
+    $query = "use master
     declare @HkeyLocal nvarchar(18)
     declare @MSSqlServerRegPath nvarchar(31)
     declare @InstanceRegPath sysname
@@ -16,5 +16,5 @@ Function Get-NumberOfErrorLogs {
     SELECT
     ISNULL(@NumErrorLogs, -1) AS [NumberOfErrorLogs];"
 
-	return (Invoke-Sqlcmd -ServerInstance $serverInstance -query $query).NumberOfErrorLogs 
+    return (Invoke-Sqlcmd -ServerInstance $serverInstance -query $query).NumberOfErrorLogs 
 }
