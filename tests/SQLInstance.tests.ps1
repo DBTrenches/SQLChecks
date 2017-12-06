@@ -23,6 +23,14 @@ Describe "SQL Server Configuration" {
                 }
                 Get-NumberOfErrorLogs -ServerInstance $serverInstance | Should Be $numErrorLogs
             }
+
+            It "$serverInstance has the all TLogs complying Max Auto Growth" {
+                $MaxTLogAutoGrowthInKB = $config.MaxTLogAutoGrowthInKB
+                if($MaxTLogAutoGrowthInKB  -eq $null) {
+                    Set-TestInconclusive -Message "No config value found"
+                }
+                Get-TLogGrowthSizeAboveLimit -ServerInstance $serverInstance -ExpectedMaxTLogAutoGrowthInKB $MaxTLogAutoGrowthInKB | Should Be 0
+            }
         }
     }
 
