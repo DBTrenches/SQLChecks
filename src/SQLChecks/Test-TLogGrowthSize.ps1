@@ -2,7 +2,7 @@ Function Test-TLogGrowthSize {
     [cmdletbinding()]
     Param(
         [string] $ServerInstance,
-	    [int] $ExpectedMaxTLogAutoGrowthInKB
+	    [int] $MaxTLogAutoGrowthInKB
     )
 
     $query = @"
