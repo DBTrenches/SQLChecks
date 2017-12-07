@@ -25,7 +25,7 @@ where   (
 )
      )
 and     s.type = 1
-and     (s.growth * 8) > $ExpectedMaxTLogAutoGrowthInKB;
+and     (s.growth * 8) > $MaxTLogAutoGrowthInKB;
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
