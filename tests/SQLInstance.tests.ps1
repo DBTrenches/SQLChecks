@@ -29,7 +29,7 @@ Describe "SQL Server Configuration" {
                 if($MaxTLogAutoGrowthInKB  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                Get-TLogGrowthSizeAboveLimit -ServerInstance $serverInstance -ExpectedMaxTLogAutoGrowthInKB $MaxTLogAutoGrowthInKB | Should Be 0
+                (Test-TLogGrowthSize -ServerInstance $serverInstance -ExpectedMaxTLogAutoGrowthInKB $MaxTLogAutoGrowthInKB).Count | Should Be 0
             }
         }
     }
