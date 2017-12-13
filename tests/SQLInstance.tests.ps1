@@ -39,6 +39,9 @@ Describe "SQL Server Configuration" {
                 }
                 (Test-MustHaveDDLTrigger -ServerInstance $serverInstance -MustHaveDDLTrigger $MustHaveDDLTrigger).Count | Should Be 0
             }
+             It "$serverInstance has no oversized indexes" {
+                (Test-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
+            }
         }
     }
 
