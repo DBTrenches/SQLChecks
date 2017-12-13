@@ -31,6 +31,14 @@ Describe "SQL Server Configuration" {
                 }
                 (Test-TLogGrowthSize -ServerInstance $serverInstance -MaxTLogAutoGrowthInKB $MaxTLogAutoGrowthInKB).Count | Should Be 0
             }
+            
+            It "$serverInstance has all the required DDL triggers" {
+                $MustHaveDDLTrigger = $config.MustHaveDDLTrigger
+                if($MustHaveDDLTrigger  -eq $null) {
+                    Set-TestInconclusive -Message "No config value found"
+                }
+                (Test-MustHaveDDLTrigger -ServerInstance $serverInstance -MustHaveDDLTrigger $MustHaveDDLTrigger).Count | Should Be 0
+            }
         }
     }
 
