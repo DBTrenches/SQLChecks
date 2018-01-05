@@ -25,9 +25,11 @@ where   (
 )
      )
 and     s.type = 1
-and     (s.growth * 8) > $MaxTLogAutoGrowthInKB;
+and (( s.growth * 8 ) > $MaxTLogAutoGrowthInKB OR s.is_percent_growth =1);
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
 }
+
+
 
