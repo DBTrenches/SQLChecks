@@ -7,12 +7,12 @@ Describe "SQL Server Databases" {
         foreach($config in $configs) {
             $serverInstance = $config.ServerInstance
             
-            It "$serverInstance has the all TLogs complying Max Auto Growth" {
+            It "$serverInstance has no logs with large fixed autogrowth" {
                 $MaxTLogAutoGrowthInKB = $config.MaxTLogAutoGrowthInKB
                 if($MaxTLogAutoGrowthInKB  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                (Test-TLogGrowthSize -ServerInstance $serverInstance -MaxTLogAutoGrowthInKB $MaxTLogAutoGrowthInKB).Count | Should Be 0
+                (Get-TLogsWithLargeGrowthSize -ServerInstance $serverInstance -GrowthSizeKB $MaxTLogAutoGrowthInKB).Count | Should Be 0
             }
             
             It "$serverInstance has all the required DDL triggers" {
@@ -29,6 +29,14 @@ Describe "SQL Server Databases" {
                     Set-TestInconclusive -Message "No config value found or check not required"
                 }
                 (Get-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
+            }
+
+            It "$serverInstance has no percentage growth log files" {
+                $CheckForPercentageGrowthLogFiles = $config.CheckForPercentageGrowthLogFiles
+                if($CheckForPercentageGrowthLogFiles  -eq $null -or -not $CheckForPercentageGrowthLogFiles) {
+                    Set-TestInconclusive -Message "No config value found or check not required"
+                }
+                (Get-TLogWithPercentageGrowth -ServerInstance $serverInstance).Count | Should Be 0
             }
         }
     }

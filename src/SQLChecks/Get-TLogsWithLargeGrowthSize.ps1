@@ -1,12 +1,12 @@
-Function Test-TLogGrowthSize {
+Function Get-TLogsWithLargeGrowthSize {
     [cmdletbinding()]
     Param(
         [string] $ServerInstance,
-	    [int] $MaxTLogAutoGrowthInKB
+	    [int] $GrowthSizeKB
     )
 
     $query = @"
-select  d.name as DatabaseName
+    select  d.name as DatabaseName
     ,s.name as FileName
     ,s.growth * 8 as GrowthKB
 from    sys.master_files s
@@ -25,7 +25,7 @@ where   (
 )
      )
 and     s.type = 1
-and (( s.growth * 8 ) > $MaxTLogAutoGrowthInKB OR s.is_percent_growth =1);
+and (( s.growth * 8 ) > $GrowthSizeKB and s.is_percent_growth = 0);;
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
