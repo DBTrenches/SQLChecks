@@ -1,4 +1,4 @@
 # SQLChecks Documentation
 See:
-- DatabaseChecks
-- InstanceChecks
+- [DatabaseChecks](./DatabaseChecks.md)
+- [InstanceChecks](./InstanceChecks.md)

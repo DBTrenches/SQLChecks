@@ -5,7 +5,7 @@ Requires the DBATools module.
 
 The examples folder contains a few different ways of invoking the scripts - against a single instance (SingleCheck) or against a folder full of instances (FolderCheck).
 
-Documentation in docs.
+For more information refer to [the documentation](./docs/Readme.md).
 
 ## Example Usage
 (From the root)
