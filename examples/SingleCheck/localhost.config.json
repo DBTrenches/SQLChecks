@@ -7,5 +7,7 @@
     },
     "NumErrorLogs": 14,
     "TraceFlags":[3226,7412],
-    "MustHaveDDLTrigger": "TR_DoesNotExist"
+    "MustHaveDDLTrigger": "TR_DoesNotExist",
+    "CheckForOversizedIndexes": true
+
 }

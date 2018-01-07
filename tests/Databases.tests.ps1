@@ -24,24 +24,11 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance has no oversized indexes" {
-
-                (Get-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
-            }
-        }
-    }
-
-    Context "Sp_configure settings" {
-        foreach($config in $configs) {
-            $serverInstance = $config.ServerInstance
-            $spconfig = $config.SpConfig
-
-            foreach($configProperty in $spconfig.PSObject.Properties) {
-                $configName = $configProperty.Name
-                $expectedValue = $configProperty.Value
-
-                It "$serverInstance has the correct $configName setting" {               
-                    (Get-DbaSpConfigure -Server $serverInstance -ConfigName $configName).RunningValue | Should Be $expectedValue
+                $CheckForOversizedIndexes = $config.CheckForOversizedIndexes
+                if($CheckForOversizedIndexes  -eq $null -or -not $CheckForOversizedIndexes) {
+                    Set-TestInconclusive -Message "No config value found or check not required"
                 }
+                (Get-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
             }
         }
     }
