@@ -20,11 +20,12 @@ Describe "SQL Server Databases" {
                 if($MustHaveDDLTrigger  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                (Test-MustHaveDDLTrigger -ServerInstance $serverInstance -MustHaveDDLTrigger $MustHaveDDLTrigger).Count | Should Be 0
+                (Get-DatabasesWithoutDDLTrigger -ServerInstance $serverInstance -TriggerName $MustHaveDDLTrigger).Count | Should Be 0
             }
 
             It "$serverInstance has no oversized indexes" {
-                (Test-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
+
+                (Get-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
             }
         }
     }

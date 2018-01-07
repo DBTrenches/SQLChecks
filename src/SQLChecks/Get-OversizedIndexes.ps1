@@ -1,4 +1,4 @@
-Function Test-OversizedIndexes {
+Function Get-OversizedIndexes {
     [cmdletbinding()]
     Param(
         [string] $ServerInstance

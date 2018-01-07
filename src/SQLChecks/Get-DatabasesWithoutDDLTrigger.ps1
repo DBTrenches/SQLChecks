@@ -1,8 +1,8 @@
-Function Test-MustHaveDDLTrigger {
+Function Get-DatabasesWithoutDDLTrigger {
     [cmdletbinding()]
     Param(
         [string] $ServerInstance,
-	    [string] $MustHaveDDLTrigger
+	    [string] $TriggerName
     )
 
     $query = @"
@@ -43,7 +43,7 @@ BEGIN
 
 
 SET @Cmd='USE ' + @db +';
-IF NOT EXISTS(SELECT * FROM sys.triggers AS t WHERE t.name=''$MustHaveDDLTrigger'' and t.is_disabled=0)
+IF NOT EXISTS(SELECT * FROM sys.triggers AS t WHERE t.name=''$TriggerName'' and t.is_disabled=0)
 and not exists(SELECT * FROM sys.tables AS t where t.is_memory_optimized=1)
 select ''' + @db + ''' as databaseName'
 

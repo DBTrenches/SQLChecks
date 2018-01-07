@@ -6,5 +6,6 @@
         "ShowAdvancedOptions":0
     },
     "NumErrorLogs": 14,
-    "TraceFlags":[3226,7412]
+    "TraceFlags":[3226,7412],
+    "MustHaveDDLTrigger": "TR_DoesNotExist"
 }
