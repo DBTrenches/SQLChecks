@@ -23,6 +23,14 @@ Describe "SQL Server Databases" {
                 (Get-DatabasesWithoutDDLTrigger -ServerInstance $serverInstance -TriggerName $MustHaveDDLTrigger).Count | Should Be 0
             }
 
+            It "$serverInstance has all databases under Max DataFile Space Used" {
+                $MaxDataFileSpaceUsedPercent = $config.MaxDataFileSpaceUsedPercent
+                if($MaxDataFileSpaceUsedPercent  -eq $null) {
+                    Set-TestInconclusive -Message "No config value found"
+                }
+                (Get-DatabasesOverMaxDataFileSpaceUsed -ServerInstance $serverInstance -MaxDataFileSpaceUsedPercent $MaxDataFileSpaceUsedPercent).Count | Should Be 0
+            }
+
             It "$serverInstance has no oversized indexes" {
                 $CheckForOversizedIndexes = $config.CheckForOversizedIndexes
                 if($CheckForOversizedIndexes  -eq $null -or -not $CheckForOversizedIndexes) {
