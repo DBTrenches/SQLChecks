@@ -10,5 +10,7 @@
     "MustHaveDDLTrigger": "TR_DoesNotExist",
     "CheckForOversizedIndexes": true,
     "CheckForPercentageGrowthLogFiles": true,
-    "MaxTLogAutoGrowthInKB": 900000
+    "MaxTLogAutoGrowthInKB": 900000,
+    "CommandLogDb":"master",
+    "MaxAllowedDaysSinceLastGoodCheckDb":7
 }
