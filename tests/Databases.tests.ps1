@@ -12,7 +12,7 @@ Describe "SQL Server Databases" {
                 if($MaxTLogAutoGrowthInKB  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                (Get-TLogsWithLargeGrowthSize -ServerInstance $serverInstance -GrowthSizeKB $MaxTLogAutoGrowthInKB).Count | Should Be 0
+                @(Get-TLogsWithLargeGrowthSize -ServerInstance $serverInstance -GrowthSizeKB $MaxTLogAutoGrowthInKB).Count | Should Be 0
             }
             
             It "$serverInstance has all the required DDL triggers" {
@@ -20,7 +20,7 @@ Describe "SQL Server Databases" {
                 if($MustHaveDDLTrigger  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                (Get-DatabasesWithoutDDLTrigger -ServerInstance $serverInstance -TriggerName $MustHaveDDLTrigger).Count | Should Be 0
+                @(Get-DatabasesWithoutDDLTrigger -ServerInstance $serverInstance -TriggerName $MustHaveDDLTrigger).Count | Should Be 0
             }
 
             It "$serverInstance has all databases under Max DataFile Space Used" {
@@ -28,7 +28,7 @@ Describe "SQL Server Databases" {
                 if($MaxDataFileSpaceUsedPercent  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                (Get-DatabasesOverMaxDataFileSpaceUsed -ServerInstance $serverInstance -MaxDataFileSpaceUsedPercent $MaxDataFileSpaceUsedPercent).Count | Should Be 0
+                @(Get-DatabasesOverMaxDataFileSpaceUsed -ServerInstance $serverInstance -MaxDataFileSpaceUsedPercent $MaxDataFileSpaceUsedPercent).Count | Should Be 0
             }
 
             It "$serverInstance has no oversized indexes" {
@@ -36,7 +36,7 @@ Describe "SQL Server Databases" {
                 if($CheckForOversizedIndexes  -eq $null -or -not $CheckForOversizedIndexes) {
                     Set-TestInconclusive -Message "No config value found or check not required"
                 }
-                (Get-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
+                @(Get-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
             }
 
             It "$serverInstance has no percentage growth log files" {
@@ -44,7 +44,7 @@ Describe "SQL Server Databases" {
                 if($CheckForPercentageGrowthLogFiles  -eq $null -or -not $CheckForPercentageGrowthLogFiles) {
                     Set-TestInconclusive -Message "No config value found or check not required"
                 }
-                (Get-TLogWithPercentageGrowth -ServerInstance $serverInstance).Count | Should Be 0
+                @(Get-TLogWithPercentageGrowth -ServerInstance $serverInstance).Count | Should Be 0
             }
         }
     }
