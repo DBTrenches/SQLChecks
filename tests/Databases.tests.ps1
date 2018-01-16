@@ -48,12 +48,11 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance has no databases without a recent successful CHECKDB"{
-                $CommandLogDb = config.CommandLogDb
                 $MaxDaysAllowedSinceLastGoodCheckDb = config.MaxDaysAllowedSinceLastGoodCheckDb
-                if(($CommandLogDb -eq $null) -or ($MaxDaysAllowedSinceLastGoodCheckDb -eq $null)){
-                    Set-TestInconclusive -Message "Config value missing for CommandLogDb:[$CommandLogDb] and/or MaxDaysAllowedSinceLastGoodCheckDb:[$MaxDaysAllowedSinceLastGoodCheckDb]"
+                if($MaxDaysAllowedSinceLastGoodCheckDb -eq $null){
+                    Set-TestInconclusive -Message "Config value missing for MaxDaysAllowedSinceLastGoodCheckDb"
                 }
-                @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxAllowedDaysSinceGoodCheckDb $MaxDaysAllowedSinceLastGoodCheckDb -CommandLogDb $CommandLogDb).Count | Should Be 0
+                @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxDaysAllowedSinceLastGoodCheckDb $MaxDaysAllowedSinceLastGoodCheckDb).Count | Should Be 0
             }
         }
     }

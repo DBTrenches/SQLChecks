@@ -11,6 +11,5 @@
     "CheckForOversizedIndexes": true,
     "CheckForPercentageGrowthLogFiles": true,
     "MaxTLogAutoGrowthInKB": 900000,
-    "CommandLogDb":"master",
-    "MaxAllowedDaysSinceLastGoodCheckDb":7
+    "MaxDaysAllowedSinceLastGoodCheckDb":7
 }
