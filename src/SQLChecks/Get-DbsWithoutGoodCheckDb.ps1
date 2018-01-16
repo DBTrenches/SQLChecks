@@ -19,9 +19,15 @@
 
     foreach($db in $lastKnownGood){
         [datetime]$dt=$db.VALUE
-        $daysSince=((Get-Date)-$dt)
-        $db.DaysSinceLastGoodCheckDb=$daysSince.Days
+        if($dt -eq [datetime]"1900-01-01"){
+        }else{
+            $daysSince=((Get-Date)-$dt)
+            $db.DaysSinceLastGoodCheckDb=$daysSince.Days
+        }
     }
 
-    $lastKnownGood | Where-Object {$_.DaysSinceLastGoodCheckDb -gt $MaxDaysAllowedSinceLastGoodCheckDb} | Select dbName,DaysSinceLastGoodCheckDb
+    $lastKnownGood | Where-Object {
+        ($_.DaysSinceLastGoodCheckDb -gt $MaxDaysAllowedSinceLastGoodCheckDb) `
+        -or ($_.DaysSinceLastGoodCheckDb -eq $null)
+    } | Select dbName,DaysSinceLastGoodCheckDb
 }
