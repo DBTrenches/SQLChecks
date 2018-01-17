@@ -46,6 +46,13 @@ Describe "SQL Server Databases" {
                 }
                 @(Get-TLogWithPercentageGrowth -ServerInstance $serverInstance).Count | Should Be 0
             }
+
+            It "$serverInstance has no databases without a recent successful CHECKDB"{
+                $MaxDaysAllowedSinceLastGoodCheckDb = $config.MaxDaysAllowedSinceLastGoodCheckDb
+                if($MaxDaysAllowedSinceLastGoodCheckDb -eq $null){
+                    Set-TestInconclusive -Message "Config value missing for MaxDaysAllowedSinceLastGoodCheckDb"
+                }
+                @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxDaysAllowedSinceLastGoodCheckDb $MaxDaysAllowedSinceLastGoodCheckDb).Count | Should Be 0
            
             It "$serverInstance has no duplicate indexes" {
                 $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
@@ -57,7 +64,6 @@ Describe "SQL Server Databases" {
                 if($CheckDuplicateIndexesConfig  -eq $null -or -not $CheckDuplicateIndexesConfig.Check) {
                     Set-TestInconclusive -Message "No config value found or check not required"
                 }
-                
                 @(Get-DuplicateIndexes -ServerInstance $serverInstance -ExcludeDatabase $ExcludeDatabaseStr -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
             }
         }
