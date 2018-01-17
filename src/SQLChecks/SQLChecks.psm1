@@ -5,3 +5,4 @@
 . $PSScriptRoot/Get-OversizedIndexes.ps1
 . $PSScriptRoot/Get-TLogWithPercentageGrowth.ps1
 . $PSScriptRoot/Get-DatabasesOverMaxDataFileSpaceUsed.ps1
+. $PSScriptRoot/Get-DuplicateIndexes.ps1
