@@ -48,7 +48,7 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance has no databases without a recent successful CHECKDB"{
-                $MaxDaysAllowedSinceLastGoodCheckDb = config.MaxDaysAllowedSinceLastGoodCheckDb
+                $MaxDaysAllowedSinceLastGoodCheckDb = $config.MaxDaysAllowedSinceLastGoodCheckDb
                 if($MaxDaysAllowedSinceLastGoodCheckDb -eq $null){
                     Set-TestInconclusive -Message "Config value missing for MaxDaysAllowedSinceLastGoodCheckDb"
                 }
