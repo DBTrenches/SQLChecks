@@ -6,7 +6,7 @@ Describe "SQL Server Databases" {
     Context "Per-Database settings" {
         foreach($config in $configs) {
             $serverInstance = $config.ServerInstance
-            
+          
             It "$serverInstance has no logs with large fixed autogrowth" {
                 $MaxTLogAutoGrowthInKB = $config.MaxTLogAutoGrowthInKB
                 if($MaxTLogAutoGrowthInKB  -eq $null) {
@@ -53,6 +53,18 @@ Describe "SQL Server Databases" {
                     Set-TestInconclusive -Message "Config value missing for MaxDaysAllowedSinceLastGoodCheckDb"
                 }
                 @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxDaysAllowedSinceLastGoodCheckDb $MaxDaysAllowedSinceLastGoodCheckDb).Count | Should Be 0
+           
+            It "$serverInstance has no duplicate indexes" {
+                $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
+                $ExcludeDatabase = $CheckDuplicateIndexesConfig.ExcludeDatabase
+                $ExcludeIndex = $CheckDuplicateIndexesConfig.ExcludeIndex
+                $ExcludeDatabaseStr  = "'$($ExcludeDatabase -join "','")'"
+                $ExcludeIndexStr  = "'$($ExcludeIndex -join "','")'"
+               
+                if($CheckDuplicateIndexesConfig  -eq $null -or -not $CheckDuplicateIndexesConfig.Check) {
+                    Set-TestInconclusive -Message "No config value found or check not required"
+                }
+                @(Get-DuplicateIndexes -ServerInstance $serverInstance -ExcludeDatabase $ExcludeDatabaseStr -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
             }
         }
     }
