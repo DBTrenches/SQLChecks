@@ -12,7 +12,7 @@ As the log is zeroed out before use it can be a time consuming operation.  When 
 ``` 
 
 ## Transaction log with percentage growth
-Reports on any database with a percentage growth configured.
+Reports on any database log with a percentage growth configured.
 
 If the config value is set to false the check will be skipped.
 
