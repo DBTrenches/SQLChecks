@@ -17,8 +17,9 @@ Function Test-TraceFlags {
 
     foreach($delta in $comparison)     
     {
-        $tf = $delta.InputObject
-        $side = if($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
-        Write-Output "TF$tf $side"
+        [pscustomobject]@{
+            TraceFlag = $delta.InputObject
+            Issue = if($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
+        }
     }
 }
