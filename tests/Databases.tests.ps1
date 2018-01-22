@@ -53,7 +53,8 @@ Describe "SQL Server Databases" {
                     Set-TestInconclusive -Message "Config value missing for MaxDaysAllowedSinceLastGoodCheckDb"
                 }
                 @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxDaysAllowedSinceLastGoodCheckDb $MaxDaysAllowedSinceLastGoodCheckDb).Count | Should Be 0
-           
+            }
+
             It "$serverInstance has no duplicate indexes" {
                 $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
                 $ExcludeDatabase = $CheckDuplicateIndexesConfig.ExcludeDatabase
