@@ -10,7 +10,7 @@
     if($excludeDbs -ne $null){$excludeDb+=$excludeDbs.Split(",")}
 
     (Get-DbaLastGoodCheckDb -SqlServer $ServerInstance -ExcludeDatabase $excludeDb)| Where-Object {
-        ($_.DaysSinceLastGoodCheckDb -gt $MaxDaysAllowedSinceLastGoodCheckDb) `
+        ($_.DaysSinceLastGoodCheckDb -ge $MaxDaysAllowedSinceLastGoodCheckDb) `
         -or ($_.LastGoodCheckDb -eq $null)
     } | Select Database,LastGoodCheckDb,DaysSinceLastGoodCheckDb
 }
