@@ -67,6 +67,13 @@ Describe "SQL Server Databases" {
                 }
                 @(Get-DuplicateIndexes -ServerInstance $serverInstance -ExcludeDatabase $ExcludeDatabaseStr -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
             }
+
+            It "$serverInstance has no zero-autoGrowth FileGroups outside whitelist"{
+                $ZeroAutoGrowthWhitelistDBs=$config.ZeroAutoGrowthWhitelistDBs
+            # missing config value does NOT result in inconclusive test.
+            # if no config value, check ALL filegroups and fail on zero-autogrowth
+                @(Get-DbsWithoutAutogrow -ServerInstance $serverInstance -excludeDbs $ZeroAutoGrowthWhitelistDBs) | Should Be 0
+            }
         }
     }
 }
