@@ -7,4 +7,4 @@
 . $PSScriptRoot/Get-DatabasesOverMaxDataFileSpaceUsed.ps1
 . $PSScriptRoot/Get-DbsWithoutGoodCheckDb.ps1
 . $PSScriptRoot/Get-DuplicateIndexes.ps1
-. $PSScriptRoot/Get-DbsWithoutAutogrow.ps1
+. $PSScriptRoot/Get-FixedSizeFileGroups.ps1

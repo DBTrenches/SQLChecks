@@ -69,10 +69,10 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance has no zero-autoGrowth FileGroups outside whitelist"{
-                $ZeroAutoGrowthWhitelistDBs=$config.ZeroAutoGrowthWhitelistDBs
+                $ZeroAutoGrowthWhitelistFGs=$config.ZeroAutoGrowthWhitelistFGs
             # missing config value does NOT result in inconclusive test.
             # if no config value, check ALL filegroups and fail on zero-autogrowth
-                @(Get-DbsWithoutAutogrow -ServerInstance $serverInstance -excludeDbs $ZeroAutoGrowthWhitelistDBs) | Should Be 0
+                @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $ZeroAutoGrowthWhitelistFGs) | Should Be 0
             }
         }
     }

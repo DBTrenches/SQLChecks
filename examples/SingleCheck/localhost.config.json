@@ -12,5 +12,8 @@
     ,"CheckForPercentageGrowthLogFiles": true
     ,"MaxTLogAutoGrowthInKB": 900000
     ,"MaxDaysAllowedSinceLastGoodCheckDb":7
-    ,"ZeroAutoGrowthWhitelistDBs":["AdventureWorks","tempdb"]
+    ,"ZeroAutoGrowthWhitelistFGs":[
+        "AdventureWorks2016CTP3_mod"
+        ,"templog"
+    ]
 }
