@@ -1,16 +1,16 @@
 {
-    "ServerInstance":"localhost",
-    "SpConfig": {
-        "MaxDegreeOfParallelism":0,
-        "XpCmdShellEnabled":0,
-        "ShowAdvancedOptions":0
-    },
-    "NumErrorLogs": 14,
-    "TraceFlags":[3226,7412],
-    "MustHaveDDLTrigger": "TR_DoesNotExist",
-    "CheckForOversizedIndexes": true,
-    "CheckForPercentageGrowthLogFiles": true,
-    "MaxTLogAutoGrowthInKB": 900000,
-    "MaxDaysAllowedSinceLastGoodCheckDb":7,
-    "ZeroAutoGrowthWhitelistDBs":["AdventureWorks","tempdb"]
+    "ServerInstance":"localhost"
+    ,"SpConfig": {
+        "MaxDegreeOfParallelism":0
+        ,"XpCmdShellEnabled":0
+        ,"ShowAdvancedOptions":0
+    }
+    ,"NumErrorLogs": 14
+    ,"TraceFlags":[3226,7412]
+    ,"MustHaveDDLTrigger": "TR_DoesNotExist"
+    ,"CheckForOversizedIndexes": true
+    ,"CheckForPercentageGrowthLogFiles": true
+    ,"MaxTLogAutoGrowthInKB": 900000
+    ,"MaxDaysAllowedSinceLastGoodCheckDb":7
+    ,"ZeroAutoGrowthWhitelistDBs":["AdventureWorks","tempdb"]
 }
