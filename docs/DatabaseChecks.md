@@ -37,3 +37,12 @@ If the config value is set to false the check will be skipped.
 ```json
 "CheckForOversizedIndexes": true
 ```
+
+## Fixed-Size Filegroups  
+Reports filegroups that are not set to auto-grow. You can whitelist fixed size filegroups by adding the name to the config array
+
+```json
+"ZeroAutoGrowthWhitelistFGs":[
+        "AdventureWorks2016CTP3_mod"
+        ,"templog"]
+```
