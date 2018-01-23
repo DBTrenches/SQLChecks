@@ -72,7 +72,7 @@ Describe "SQL Server Databases" {
                 $ZeroAutoGrowthWhitelistFGs=$config.ZeroAutoGrowthWhitelistFGs
             # missing config value does NOT result in inconclusive test.
             # if no config value, check ALL filegroups and fail on zero-autogrowth
-                @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $ZeroAutoGrowthWhitelistFGs) | Should Be 0
+                @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $ZeroAutoGrowthWhitelistFGs).Count | Should Be 0
             }
         }
     }
