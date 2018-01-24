@@ -6,7 +6,7 @@ select mf.database_id
       ,mf.state_desc
       ,mf.growth
       ,mf.is_percent_growth
-      ,sizeMb=(try_cast(mf.size as bigint)*8000.)/power(1024,2) 
+      ,sizeMb=(try_cast(mf.size as bigint)*8192.)/power(1024,2) 
       ,mf.max_size
       ,dbName=db_name(mf.database_id)
       ,fName=mf.[name]
