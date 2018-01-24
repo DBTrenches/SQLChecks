@@ -46,3 +46,6 @@ Reports filegroups that are not set to auto-grow. You can whitelist fixed size f
         "AdventureWorks2016CTP3_mod"
         ,"templog"]
 ```
+
+## Auto-growth & at-risk Filegroups
+Filegroups that are permitted to auto-grow should have enough space to do so. `Get-AutoGrowthRisks` reports filegroups that may run out of space and fail to complete the next autogrowth. No whitelist configuration is provided for this check. Set growth to `0` if you wish to disallow further growth actions.   
