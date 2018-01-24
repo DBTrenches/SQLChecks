@@ -74,6 +74,11 @@ Describe "SQL Server Databases" {
             # if no config value, check ALL filegroups and fail on zero-autogrowth
                 @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $ZeroAutoGrowthWhitelistFGs).Count | Should Be 0
             }
+
+            It "$serverInstance - all size-governed filegroups have sufficent space for their next growth" {
+            # no whitelist set up for this one
+                @(Get-AutoGrowthRisks -ServerInstance $serverInstance ).Count | Should Be 0
+            }
         }
     }
 }

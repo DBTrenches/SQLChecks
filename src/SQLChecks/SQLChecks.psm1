@@ -8,3 +8,4 @@
 . $PSScriptRoot/Get-DbsWithoutGoodCheckDb.ps1
 . $PSScriptRoot/Get-DuplicateIndexes.ps1
 . $PSScriptRoot/Get-FixedSizeFileGroups.ps1
+. $PSScriptRoot/Get-AutoGrowthRisks.ps1
