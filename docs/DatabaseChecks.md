@@ -39,13 +39,29 @@ If the config value is set to false the check will be skipped.
 ```
 
 ## Fixed-Size Filegroups  
-Reports filegroups that are not set to auto-grow. You can whitelist fixed size filegroups by adding the name to the config array
+Reports filegroups that are not set to auto-grow. You can whitelist fixed size filegroups by adding the name to the config array, or leave the whitelist empty to check every filegroup.
 
 ```json
-"ZeroAutoGrowthWhitelistFGs":[
-        "AdventureWorks2016CTP3_mod"
-        ,"templog"]
+"ZeroAutoGrowthWhitelistFileGroups":{
+        "Check": true
+        ,"Whitelist": [
+                "AdventureWorks2016CTP3_mod"
+                ,"templog"
+        ]
+}
 ```
 
 ## Auto-growth & at-risk Filegroups
+```json
+"ShouldCheckForAutoGrowthRisks": true
+```
 Filegroups that are permitted to auto-grow should have enough space to do so. `Get-AutoGrowthRisks` reports filegroups that may run out of space and fail to complete the next autogrowth. No whitelist configuration is provided for this check. Set growth to `0` if you wish to disallow further growth actions.   
+
+## Duplicate index checks
+```json
+"CheckDuplicateIndexes": {
+        "Check": true,
+        "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
+    }
+```
+This checks for any indexes with duplicate definitions.  You can optionally exclude one or more databases from the check.
