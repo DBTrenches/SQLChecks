@@ -67,6 +67,18 @@ Describe "SQL Server Databases" {
                 }
                 @(Get-DuplicateIndexes -ServerInstance $serverInstance -ExcludeDatabase $ExcludeDatabaseStr -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
             }
+
+            It "$serverInstance has no zero-autoGrowth FileGroups outside whitelist"{
+                $ZeroAutoGrowthWhitelistFGs=$config.ZeroAutoGrowthWhitelistFGs
+            # missing config value does NOT result in inconclusive test.
+            # if no config value, check ALL filegroups and fail on zero-autogrowth
+                @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $ZeroAutoGrowthWhitelistFGs).Count | Should Be 0
+            }
+
+            It "$serverInstance - all size-governed filegroups have sufficent space for their next growth" {
+            # no whitelist set up for this one
+                @(Get-AutoGrowthRisks -ServerInstance $serverInstance ).Count | Should Be 0
+            }
         }
     }
 }
