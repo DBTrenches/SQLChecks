@@ -69,10 +69,12 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance has no zero-autoGrowth FileGroups outside whitelist"{
-                $ZeroAutoGrowthWhitelistFGs=$config.ZeroAutoGrowthWhitelistFGs
-            # missing config value does NOT result in inconclusive test.
-            # if no config value, check ALL filegroups and fail on zero-autogrowth
-                @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $ZeroAutoGrowthWhitelistFGs).Count | Should Be 0
+                $configValue = $config.ZeroAutoGrowthFileGroups
+                
+                if($configValue -eq $null -or -not $configValue.Check) {
+                    Set-TestInconclusive -Message "No config value found or check not required"
+                }
+                @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $configValue.Whitelist).Count | Should Be 0
             }
 
             It "$serverInstance - all size-governed filegroups have sufficent space for their next growth" {

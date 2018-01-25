@@ -39,12 +39,16 @@ If the config value is set to false the check will be skipped.
 ```
 
 ## Fixed-Size Filegroups  
-Reports filegroups that are not set to auto-grow. You can whitelist fixed size filegroups by adding the name to the config array
+Reports filegroups that are not set to auto-grow. You can whitelist fixed size filegroups by adding the name to the config array, or leave the whitelist empty to check every filegroup.
 
 ```json
-"ZeroAutoGrowthWhitelistFGs":[
-        "AdventureWorks2016CTP3_mod"
-        ,"templog"]
+"ZeroAutoGrowthWhitelistFileGroups":{
+        "Check": true
+        ,"Whitelist": [
+                "AdventureWorks2016CTP3_mod"
+                ,"templog"
+        ]
+}
 ```
 
 ## Auto-growth & at-risk Filegroups
