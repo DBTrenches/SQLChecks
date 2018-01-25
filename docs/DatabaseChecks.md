@@ -52,4 +52,16 @@ Reports filegroups that are not set to auto-grow. You can whitelist fixed size f
 ```
 
 ## Auto-growth & at-risk Filegroups
+```json
+"ShouldCheckForAutoGrowthRisks": true
+```
 Filegroups that are permitted to auto-grow should have enough space to do so. `Get-AutoGrowthRisks` reports filegroups that may run out of space and fail to complete the next autogrowth. No whitelist configuration is provided for this check. Set growth to `0` if you wish to disallow further growth actions.   
+
+## Duplicate index checks
+```json
+"CheckDuplicateIndexes": {
+        "Check": true,
+        "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
+    }
+```
+This checks for any indexes with duplicate definitions.  You can optionally exclude one or more databases from the check.
