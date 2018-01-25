@@ -20,4 +20,8 @@
         ]
     }
     ,"ShouldCheckForAutoGrowthRisks": true
+    ,"CheckDuplicateIndexes": {
+        "Check": true,
+        "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
+    }
 }
