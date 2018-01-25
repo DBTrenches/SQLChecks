@@ -78,7 +78,12 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance - all size-governed filegroups have sufficent space for their next growth" {
-            # no whitelist set up for this one
+                $shouldCheck = $config.ShouldCheckForAutoGrowthRisks
+                
+                if($shouldCheck -eq $null -or -not $shouldCheck) {
+                    Set-TestInconclusive -Message "No config value found or check not required"
+                }
+
                 @(Get-AutoGrowthRisks -ServerInstance $serverInstance ).Count | Should Be 0
             }
         }
