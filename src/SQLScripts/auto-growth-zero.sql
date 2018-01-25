@@ -1,15 +1,14 @@
-select mf.database_id
-      ,mf.[file_id]
-      ,mf.[type]
-      ,mf.[type_desc]
-      ,mf.[state]
-      ,mf.state_desc
-      ,mf.growth
-      ,mf.is_percent_growth
-      ,sizeMb=(try_cast(mf.size as bigint)*8192.)/power(1024,2) 
-      ,mf.max_size
-      ,dbName=db_name(mf.database_id)
-      ,fName=mf.[name]
-      ,fPath=mf.physical_name
-from sys.master_files mf
-where mf.growth = 0;
+select database_id
+      ,[file_id]
+      ,[type]
+      ,[type_desc]
+      ,[state]
+      ,state_desc
+      ,growth
+      ,size_mb=try_convert(float,(try_cast(size as bigint)*8192.)/power(1024,2)) 
+      ,max_size
+      ,[db_name]=db_name(database_id)
+      ,f_name=[name]
+      ,f_path=physical_name
+from sys.master_files 
+where growth = 0;
