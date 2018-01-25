@@ -7,9 +7,20 @@
     $WLFGNames=@()
     if($WhitelistFilegroups -ne $null){$WLFGNames+=$WhitelistFilegroups.Split(",")}
 
-    $query=(gc $PSScriptRoot/../SQLScripts/auto-growth-will-fail-for-max_size.sql -Raw)
+    $query=(Get-Content $PSScriptRoot/../SQLScripts/auto-growth-will-fail-for-max_size.sql -Raw)
     
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | where {
+    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
         $WLFGNames -notcontains $_.fName
-    } | Select srvr,db_name,f_name,growth_mb,cur_size_mb,max_size_mb,next_growth_size_mb,grow_file_cmd | ft
+    } | ForEach-Object {
+        [pscustomobject]@{
+            Server = $_.srvr
+            Database = $_.db_name
+            FileName = $_.FileName
+            Growth = $_.growth
+            CurrentSizeMB = $_.cur_size_mb
+            MaxSizeMB = $_.max_size_mb
+            NextGrowthSizeMB = $_.next_growth_size_mb
+            GrowFileCommand = $_.grow_file_cmd
+        }
+    }
 }
