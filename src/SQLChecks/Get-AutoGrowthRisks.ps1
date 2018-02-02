@@ -1,11 +1,11 @@
 ﻿Function Get-AutoGrowthRisks {
     [cmdletbinding()]Param(
          [parameter(Mandatory=$true)][string]$ServerInstance
-        ,$WhitelistFilegroups # optional array or comma-delim string
+        ,$WhitelistFiles # optional array or comma-delim string
     )
 
-    $WLFGNames=@()
-    if($WhitelistFilegroups -ne $null){$WLFGNames+=$WhitelistFilegroups.Split(",")}
+    $whitelistedFiles=@()
+    if($WhitelistFiles -ne $null){$whitelistedFiles+=$WhitelistFiles.Split(",")}
 
     $query=@"
     ;with fileGrowth as (
@@ -52,7 +52,7 @@
 
     
     (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
-        $WLFGNames -notcontains $_.fName
+        $whitelistedFiles -notcontains $_.fName
     } | ForEach-Object {
         [pscustomobject]@{
             Server = $_.srvr
