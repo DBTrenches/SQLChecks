@@ -6,7 +6,8 @@ Function Get-DuplicateIndexes {
         [string] $ExcludeIndex
     )
 
-
+    if([string]::IsNullOrWhiteSpace($ExcludeDatabase)){$ExcludeDatabase="''"}
+    if([string]::IsNullOrWhiteSpace($ExcludeIndexStr)){$ExcludeIndexStr="''"}
 
     $query = @"
 CREATE TABLE #tempResults
@@ -51,8 +52,8 @@ WHILE @@FETCH_STATUS = 0
 
 
 
-        SET @Cmd = 'USE ' + @db
-            + '
+        SET @Cmd = 'USE [' + @db
+            + ']
             ;WITH    XMLTable
           AS ( SELECT   OBJECT_NAME(x.object_id) AS [TableName] ,
                         SCHEMA_NAME(o.schema_id) AS SchemaName ,
