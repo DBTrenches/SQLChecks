@@ -68,13 +68,13 @@ Describe "SQL Server Databases" {
                 @(Get-DuplicateIndexes -ServerInstance $serverInstance -ExcludeDatabase $ExcludeDatabaseStr -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
             }
 
-            It "$serverInstance has no zero-autoGrowth FileGroups outside whitelist"{
-                $configValue = $config.ZeroAutoGrowthFileGroups
+            It "$serverInstance has no zero-autogrowth files outside whitelist"{
+                $configValue = $config.ZeroAutoGrowthFiles
                 
                 if($configValue -eq $null -or -not $configValue.Check) {
                     Set-TestInconclusive -Message "No config value found or check not required"
                 }
-                @(Get-FixedSizeFileGroups -ServerInstance $serverInstance -WhitelistFilegroups $configValue.Whitelist).Count | Should Be 0
+                @(Get-FixedSizeFiles -ServerInstance $serverInstance -WhitelistFiles $configValue.Whitelist).Count | Should Be 0
             }
 
             It "$serverInstance - all size-governed filegroups have sufficent space for their next growth" {

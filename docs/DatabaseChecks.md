@@ -38,11 +38,11 @@ If the config value is set to false the check will be skipped.
 "CheckForOversizedIndexes": true
 ```
 
-## Fixed-Size Filegroups  
-Reports filegroups that are not set to auto-grow. You can whitelist fixed size filegroups by adding the name to the config array, or leave the whitelist empty to check every filegroup.
+## Fixed-Size Files  
+Reports files that are not set to auto-grow. You can whitelist fixed size files by adding the name to the config array, or leave the whitelist empty to check every file.
 
 ```json
-"ZeroAutoGrowthWhitelistFileGroups":{
+"ZeroAutoGrowthWhitelistFiles":{
         "Check": true
         ,"Whitelist": [
                 "AdventureWorks2016CTP3_mod"
