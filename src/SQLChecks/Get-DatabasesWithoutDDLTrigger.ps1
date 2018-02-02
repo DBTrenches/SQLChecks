@@ -60,6 +60,10 @@ DEALLOCATE Dbs
 SELECT tr.databaseName FROM #tempResults AS tr;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
+        [pscustomobject]@{
+            Database = $_.databaseName
+        }
+    }
 }
 

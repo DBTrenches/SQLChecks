@@ -70,6 +70,10 @@ FROM    #tempResults AS tr
 WHERE   tr.UsedSpace > $MaxDataFileSpaceUsedPercent;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
+        [pscustomobject]@{
+            Database = $_.DataBaseName
+        }
+    }
 }
 

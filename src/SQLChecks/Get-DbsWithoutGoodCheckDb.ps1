@@ -12,5 +12,11 @@
     (Get-DbaLastGoodCheckDb -SqlServer $ServerInstance -ExcludeDatabase $excludeDb)| Where-Object {
         ($_.DaysSinceLastGoodCheckDb -ge $MaxDaysAllowedSinceLastGoodCheckDb) `
         -or ($_.LastGoodCheckDb -eq $null)
-    } | Select Database,LastGoodCheckDb,DaysSinceLastGoodCheckDb
+    } | ForEach-Object {
+        [pscustomobject]@{
+            Database = $_.Database
+            LastGoodCheckDB = $_.LastGoodCheckDb
+            DaysSinceLastGoodCheckDB = $_.DaysSinceLastGoodCheckDb
+        }
+    }
 }

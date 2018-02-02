@@ -27,7 +27,13 @@ and s.type = 1
 and s.is_percent_growth =1;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
+        [pscustomobject]@{
+            Database = $_.DatabaseName
+            FileName = $_.FileName
+            GrowthPercentage = $_.GrowthPercentage
+        }
+    }
 }
 
 

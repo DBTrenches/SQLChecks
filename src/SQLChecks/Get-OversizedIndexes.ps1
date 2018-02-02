@@ -84,6 +84,16 @@ SELECT tr.DatabaseName ,
        tr.ColumnCount FROM #tempResults AS tr;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
+        [pscustomobject]@{
+            Database = $_.DatabaseName
+            Schema = $_.SchemaName
+            Table = $_.TableName
+            Index = $_.IndexName
+            IndexType = $_.IndexType
+            RowLength = $_.RowLength
+            ColumnCount = $_.ColumnCount
+        }
+    }
 }
 

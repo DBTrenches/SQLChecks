@@ -8,5 +8,9 @@ Function Get-NumberOfErrorLogs {
     exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'SOFTWARE\Microsoft\MSSQLServer\MSSQLServer', N'NumErrorLogs', @NumErrorLogs OUTPUT;
     select isnull(@NumErrorLogs, -1) AS [NumberOfErrorLogs];"
 
-    return (Invoke-Sqlcmd -ServerInstance $serverInstance -query $query).NumberOfErrorLogs 
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
+        [pscustomobject]@{
+            NumberOfErrorLogs = $_.NumberOfErrorLogs
+        }
+    }
 }

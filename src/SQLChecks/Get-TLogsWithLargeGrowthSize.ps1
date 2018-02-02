@@ -28,7 +28,13 @@ and     s.type = 1
 and (( s.growth * 8 ) > $GrowthSizeKB and s.is_percent_growth = 0);;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query |ForEach-Object {
+        [pscustomobject]@{
+            Database = $_.DatabaseName
+            FileName = $_.FileName
+            GrowthKB = $_.GrowthKB
+        }
+    }
 }
 
 
