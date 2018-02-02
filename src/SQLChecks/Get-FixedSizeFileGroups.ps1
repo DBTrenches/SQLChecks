@@ -4,8 +4,8 @@
         ,$WhitelistFilegroups # optional array or comma-delim string
     )
 
-    $WLFGNames=@()
-    if($WhitelistFilegroups -ne $null){$WLFGNames+=$WhitelistFilegroups.Split(",")}
+    $whitelistedFiles=@()
+    if($WhitelistFilegroups -ne $null){$whitelistedFiles+=$WhitelistFilegroups.Split(",")}
 
     $query=@"
 select database_id
@@ -24,7 +24,16 @@ from sys.master_files
 where growth = 0;
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | where {
-        $WLFGNames -notcontains $_.f_name
-    } | Select db_name,f_name,type_desc,state_desc,size_mb,f_path | ft
+    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
+        $whitelistedFiles -notcontains $_.f_name
+    } | ForEach-Object {
+        [pscustomobject]@{
+            DatabaseName = $_.db_name
+            FileName = $_.f_name
+            FileType = $_.type_desc
+            FileState = $_.state_desc
+            SizeMB = $_.size_mb
+            FilePath = $_.f_path
+        }
+    } 
 }
