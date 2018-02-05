@@ -21,7 +21,7 @@ Describe "SQL Server Instance" {
                 if($numErrorLogs  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                Get-NumberOfErrorLogs -ServerInstance $serverInstance | Should Be $numErrorLogs
+                (Get-NumberOfErrorLogs -ServerInstance $serverInstance).NumberOfErrorLogs | Should Be $numErrorLogs
             }
         }
     }

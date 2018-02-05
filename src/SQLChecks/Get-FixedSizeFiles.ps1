@@ -6,7 +6,7 @@
 
     $whitelistedFiles=@()
     if($WhitelistFiles -ne $null) {
-        $whitelistedFiles+=$WhitelistFilegroups.Split(",")
+        $whitelistedFiles+=$WhitelistFiles.Split(",")
     }
 
     $query=@"
