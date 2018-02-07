@@ -10,6 +10,8 @@ Function Get-DuplicateIndexes {
     if([string]::IsNullOrWhiteSpace($ExcludeIndexStr)){$ExcludeIndexStr="''"}
 
     $query = @"
+SET LOCK_TIMEOUT 10000;
+
 CREATE TABLE #tempResults
     (
       [InstanceName] sysname ,
