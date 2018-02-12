@@ -7,7 +7,7 @@ Function Get-DuplicateIndexes {
     )
 
     if([string]::IsNullOrWhiteSpace($ExcludeDatabase)){$ExcludeDatabase="''"}
-    if([string]::IsNullOrWhiteSpace($ExcludeIndexStr)){$ExcludeIndexStr="''"}
+    if([string]::IsNullOrWhiteSpace($ExcludeIndex)){$ExcludeIndex="''"}
 
     $query = @"
 SET LOCK_TIMEOUT 10000;
@@ -226,10 +226,10 @@ SELECT  *
 FROM    #tempResults AS tr
 WHERE   ( CONCAT(tr.DatabaseName, '.', tr.SchemaName, '.', tr.TableName, '.',
                  tr.IndexName) NOT IN (
-          $ExcludeIndexStr )
+          $ExcludeIndex )
           and CONCAT(tr.DatabaseName, '.', tr.SchemaName, '.', tr.TableName,
                      '.', tr.DuplicateIndexName) NOT IN (
-          $ExcludeIndexStr )
+          $ExcludeIndex )
         );
 "@
 
