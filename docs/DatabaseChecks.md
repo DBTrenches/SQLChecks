@@ -55,7 +55,17 @@ Reports files that are not set to auto-grow. You can whitelist fixed size files 
 ```json
 "ShouldCheckForAutoGrowthRisks": true
 ```
-Filegroups that are permitted to auto-grow should have enough space to do so. `Get-AutoGrowthRisks` reports filegroups that may run out of space and fail to complete the next autogrowth. No whitelist configuration is provided for this check. Set growth to `0` if you wish to disallow further growth actions.   
+Filegroups that are permitted to auto-grow should have enough space to do so. `Get-AutoGrowthRisks` reports filegroups that may run out of space and fail to complete the next autogrowth. No whitelist configuration is provided for this check. Set growth to `0` if you wish to disallow further growth actions.
+
+## Last good CheckDB
+```json
+"LastGoodCheckDb": {
+        "Check": true,
+        "MaxDaysSinceLastGoodCheckDB": 7,
+        "ExcludedDatabases": [ "tempdb" ]
+    }
+```
+This checks the last good CheckDB date for each databases, based on the threshold provided.  Databases in the whitelist are ignored.
 
 ## Duplicate index checks
 ```json

@@ -48,11 +48,15 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance has no databases without a recent successful CHECKDB"{
-                $MaxDaysAllowedSinceLastGoodCheckDb = $config.MaxDaysAllowedSinceLastGoodCheckDb
-                if($MaxDaysAllowedSinceLastGoodCheckDb -eq $null){
-                    Set-TestInconclusive -Message "Config value missing for MaxDaysAllowedSinceLastGoodCheckDb"
+                $checkDbConfig = $config.LastGoodCheckDb
+                if($checkDbConfig -eq $null -or -not $checkDbConfig.Check){
+                    Set-TestInconclusive -Message "No config value found or check not required"
                 }
-                @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxDaysAllowedSinceLastGoodCheckDb $MaxDaysAllowedSinceLastGoodCheckDb).Count | Should Be 0
+
+                $maxDays = $checkDbConfig.MaxDaysSinceLastGoodCheckDB
+                $excludedDbs = $checkDbConfig.ExcludedDatabases
+
+                @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxDaysAllowedSinceLastGoodCheckDb $maxDays -ExcludedDatabases $excludedDbs).Count | Should Be 0
             }
 
             It "$serverInstance has no duplicate indexes" {

@@ -11,7 +11,11 @@
     ,"CheckForOversizedIndexes": true
     ,"CheckForPercentageGrowthLogFiles": true
     ,"MaxTLogAutoGrowthInKB": 900000
-    ,"MaxDaysAllowedSinceLastGoodCheckDb":7
+    ,"LastGoodCheckDb": {
+        "Check": true,
+        "MaxDaysSinceLastGoodCheckDB": 7,
+        "ExcludedDatabases": [ "tempdb" ]
+    }
     ,"ZeroAutoGrowthFiles":{
         "Check": true
         ,"Whitelist": [

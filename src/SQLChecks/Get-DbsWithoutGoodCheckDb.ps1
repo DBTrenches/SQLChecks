@@ -2,14 +2,17 @@
     [cmdletbinding()]Param(
          [parameter(Mandatory=$true)][int]$MaxDaysAllowedSinceLastGoodCheckDb
         ,[parameter(Mandatory=$true)][string]$ServerInstance
-        ,$excludeDbs # optional array or comma-delim string
+        ,[string[]]$ExcludedDatabases
     )
     
-    $excludeDb=@()
-    $excludeDb+="tempdb" # always exclude
-    if($excludeDbs -ne $null){$excludeDb+=$excludeDbs.Split(",")}
+    if($ExcludedDatabases -eq $null)
+    {
+        $ExcludedDatabases = @("tempdb")
+    } else {
+        $ExcludedDatabases+="tempdb" # always exclude
+    }
 
-    (Get-DbaLastGoodCheckDb -SqlServer $ServerInstance -ExcludeDatabase $excludeDb)| Where-Object {
+    (Get-DbaLastGoodCheckDb -SqlServer $ServerInstance -ExcludeDatabase $ExcludedDatabases)| Where-Object {
         ($_.DaysSinceLastGoodCheckDb -ge $MaxDaysAllowedSinceLastGoodCheckDb) `
         -or ($_.LastGoodCheckDb -eq $null)
     } | ForEach-Object {
