@@ -153,6 +153,7 @@ WHILE @@FETCH_STATUS = 0
                                     XML PATH('''')
                                   )
                         END AS inc 
+						,isnull(i.filter_definition, '''') as FilterDefinition
                FROM     sys.indexes (NOLOCK) AS i
                         INNER JOIN sys.dm_db_partition_stats AS s ON i.index_id = s.index_id
                                                               AND i.object_id = s.object_id
@@ -172,7 +173,8 @@ WHILE @@FETCH_STATUS = 0
                         i.object_id ,
                         i.name ,
                         i.index_id ,
-                        i.type
+                        i.type,
+						i.filter_definition
              ),
         DuplicatesTable
           AS ( SELECT   ic1.SchemaName ,
@@ -189,7 +191,7 @@ WHILE @@FETCH_STATUS = 0
                                                  AND ( ISNULL(ic1.inc, '''') = ISNULL(ic2.inc,
                                                               '''')
                                                        OR ic1.index_id = 1
-                                                     )
+                                                     ) and ic1.FilterDefinition = ic2.FilterDefinition
              )
     SELECT  @@SERVERNAME AS InstanceName ,
             DB_NAME() AS DatabaseName,
