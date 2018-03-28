@@ -8,6 +8,7 @@
     ,"NumErrorLogs": 14
     ,"TraceFlags":[3226,7412]
     ,"MustHaveDDLTrigger": "TR_DoesNotExist"
+    ,"MaxDataFileSpaceUsedPercent": 90
     ,"CheckForOversizedIndexes": true
     ,"CheckForPercentageGrowthLogFiles": true
     ,"MaxTLogAutoGrowthInKB": 900000
