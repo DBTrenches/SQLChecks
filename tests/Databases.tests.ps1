@@ -32,6 +32,7 @@ Describe "SQL Server Databases" {
                 $MaxDataFileParams=@{
                     ServerInstance=$serverInstance
                     MaxDataFileSpaceUsedPercent=$MaxDataFileSize.SpaceUsedPercent
+                    WhiteListFiles = "'$($MaxDataFileSize.WhitelistFiles -join "','")'"
                 }
                 
                 @(Get-DatabasesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should Be 0

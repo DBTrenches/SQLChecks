@@ -11,6 +11,7 @@
     ,"MaxDataFileSize":{
         "Check":true
         ,"SpaceUsedPercent": 90
+        ,"WhitelistFiles": ["MyVLDB.ReadOnly_FG1","MyVLDB.ReadOnly_FG2"]
     }
     ,"CheckForOversizedIndexes": true
     ,"CheckForPercentageGrowthLogFiles": true
