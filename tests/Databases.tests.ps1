@@ -24,13 +24,14 @@ Describe "SQL Server Databases" {
             }
 
             It "$serverInstance has all databases under Max DataFile Space Used" {
-                $MaxDataFileSpaceUsedPercent = $config.MaxDataFileSpaceUsedPercent
-                if($MaxDataFileSpaceUsedPercent  -eq $null) {
+                $MaxDataFileSize=$config.MaxDataFileSize
+                
+                if(($MaxDataFileSize -eq $null) -or ($MaxDataFileSize.Check -eq $false)) {
                     Set-TestInconclusive -Message "No config value found"
                 }
                 $MaxDataFileParams=@{
                     ServerInstance=$serverInstance
-                    MaxDataFileSpaceUsedPercent=$MaxDataFileSpaceUsedPercent
+                    MaxDataFileSpaceUsedPercent=$MaxDataFileSize.SpaceUsedPercent
                 }
                 
                 @(Get-DatabasesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should Be 0
