@@ -28,7 +28,12 @@ Describe "SQL Server Databases" {
                 if($MaxDataFileSpaceUsedPercent  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
                 }
-                @(Get-DatabasesOverMaxDataFileSpaceUsed -ServerInstance $serverInstance -MaxDataFileSpaceUsedPercent $MaxDataFileSpaceUsedPercent).Count | Should Be 0
+                $MaxDataFileParams=@{
+                    ServerInstance=$serverInstance
+                    MaxDataFileSpaceUsedPercent=$MaxDataFileSpaceUsedPercent
+                }
+                
+                @(Get-DatabasesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should Be 0
             }
 
             It "$serverInstance has no oversized indexes" {
