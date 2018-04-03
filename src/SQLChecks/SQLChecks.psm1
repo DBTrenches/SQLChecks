@@ -9,3 +9,4 @@
 . $PSScriptRoot/Get-DuplicateIndexes.ps1
 . $PSScriptRoot/Get-FixedSizeFiles.ps1
 . $PSScriptRoot/Get-AutoGrowthRisks.ps1
+. $PSScriptRoot/Get-DatabasesToCheck

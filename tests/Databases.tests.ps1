@@ -135,14 +135,17 @@ Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
         Context "Testing for autogrowth available space on $serverInstance" {
-            It "All size-governed filegroups have sufficent space for their next growth on $serverInstance" {
-                $shouldCheck = $config.ShouldCheckForAutoGrowthRisks
-                
-                if($shouldCheck -eq $null -or -not $shouldCheck) {
-                    Set-TestInconclusive -Message "No config value found or check not required"
-                }
+            $databases = Get-DatabasesToCheck -ServerInstance $serverInstance
 
-                @(Get-AutoGrowthRisks -ServerInstance $serverInstance ).Count | Should Be 0
+            foreach($database in $databases) {
+                It "$database size-governed filegroups have space for their next growth on $serverInstance" {
+                    $shouldCheck = $config.ShouldCheckForAutoGrowthRisks
+                    if($shouldCheck -eq $null -or -not $shouldCheck) {
+                        Set-TestInconclusive -Message "No config value found or check not required"
+                    }
+            
+                    @(Get-AutoGrowthRisks -ServerInstance $serverInstance -Database $database).Count | Should Be 0
+                }
             }
         }
     }
