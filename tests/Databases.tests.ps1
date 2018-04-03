@@ -21,15 +21,16 @@ Describe "Data file space used" -Tag MaxDataFileSpaceUsedPercent {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
         Context "Testing for data file space usage on $serverInstance" {
-            It "All databases under Max DataFile Space Used on $serverInstance" {
-                $MaxDataFileSpaceUsedPercent = $config.MaxDataFileSpaceUsedPercent
-                if($MaxDataFileSpaceUsedPercent  -eq $null) {
-            It "$serverInstance has all databases under Max DataFile Space Used" {
+            $MaxDataFileSpaceUsedPercent = $config.MaxDataFileSpaceUsedPercent
+            if($MaxDataFileSpaceUsedPercent  -eq $null) {
                 $MaxDataFileSize=$config.MaxDataFileSize
-                
-                if(($MaxDataFileSize -eq $null) -or ($MaxDataFileSize.Check -eq $false)) {
-                  Set-TestInconclusive -Message "No config value found"
-                }
+            }
+
+            if(($MaxDataFileSize -eq $null) -or ($MaxDataFileSize.Check -eq $false)) {
+                Set-TestInconclusive -Message "No config value found"
+            }
+
+            It "$serverInstance has all databases under Max DataFile Space Used" {
                 $MaxDataFileParams=@{
                     ServerInstance=$serverInstance
                     MaxDataFileSpaceUsedPercent=$MaxDataFileSize.SpaceUsedPercent
