@@ -7,12 +7,15 @@
     }
     ,"NumErrorLogs": 14
     ,"TraceFlags":[3226,7412]
-    ,"MustHaveDDLTrigger": "TR_DoesNotExist"
     ,"MaxDataFileSize":{
         "Check":true
         ,"SpaceUsedPercent": 90
         ,"WhitelistFiles": ["MyVLDB.ReadOnly_FG1","MyVLDB.ReadOnly_FG2"]
     }
+    ,"MustHaveDDLTrigger": {
+        "TriggerName": "TR_DoesNotExist"
+        ,"WhiteList": ["ExcludedDb"]
+    } 
     ,"CheckForOversizedIndexes": true
     ,"CheckForPercentageGrowthLogFiles": true
     ,"MaxTLogAutoGrowthInKB": 900000

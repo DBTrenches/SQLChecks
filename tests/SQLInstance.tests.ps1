@@ -2,12 +2,11 @@ Param(
     $configs
 )
 
-Describe "SQL Server Instance" {
-    Context "Instance level settings" {
-        foreach($config in $configs) {
-            $serverInstance = $config.ServerInstance
-            
-            It "$serverInstance has the correct global trace flags set" {
+Describe "Trace flags" -Tag TraceFlags {
+    foreach($config in $configs) {
+        $serverInstance = $config.ServerInstance
+        Context "Testing for traceflags on $serverInstance" {
+            It "Correct global trace flags set on $serverInstance" {
                 $traceFlags = $config.TraceFlags
                 if($traceFlags -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
@@ -15,8 +14,15 @@ Describe "SQL Server Instance" {
 
                 (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
             }
-            
-            It "$serverInstance has the correct number of error logs" {
+        }
+    }
+}
+
+Describe "Number of SQL error logs" -Tag NumErrorLogs {
+    foreach($config in $configs) {
+        $serverInstance = $config.ServerInstance
+        Context "Testing for number of SQL error logs on $serverInstance" {
+            It "Correct number of SQL error logs on $serverInstance" {
                 $numErrorLogs = $config.NumErrorLogs
                 if($numErrorLogs  -eq $null) {
                     Set-TestInconclusive -Message "No config value found"
@@ -25,17 +31,19 @@ Describe "SQL Server Instance" {
             }
         }
     }
+}
 
-    Context "Sp_configure settings" {
-        foreach($config in $configs) {
-            $serverInstance = $config.ServerInstance
+Describe "Number of SQL error logs" -Tag NumErrorLogs {
+    foreach($config in $configs) {
+        $serverInstance = $config.ServerInstance
+        Context "Testing for SPConfigure values on $serverInstance" {
             $spconfig = $config.SpConfig
 
             foreach($configProperty in $spconfig.PSObject.Properties) {
                 $configName = $configProperty.Name
                 $expectedValue = $configProperty.Value
 
-                It "$serverInstance has the correct $configName setting" {               
+                It "Correct sp_configure setting $configName on $serverInstance " {
                     (Get-DbaSpConfigure -Server $serverInstance -ConfigName $configName).RunningValue | Should Be $expectedValue
                 }
             }

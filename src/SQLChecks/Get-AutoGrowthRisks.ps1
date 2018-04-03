@@ -1,6 +1,7 @@
 ﻿Function Get-AutoGrowthRisks {
     [cmdletbinding()]Param(
          [parameter(Mandatory=$true)][string]$ServerInstance
+         ,[parameter(Mandatory=$true)][string]$Database
         ,$WhitelistFiles # optional array or comma-delim string
     )
 
@@ -9,26 +10,29 @@
 
     $query=@"
     ;with fileGrowth as (
-        select database_id
-              ,[file_id]
-              ,[type]
-              ,[type_desc]
-              ,[state]
-              ,state_desc
-              ,growth
-              ,is_percent_growth
+        select mf.database_id
+              ,mf.[file_id]
+              ,mf.[type]
+              ,mf.[type_desc]
+              ,mf.[state]
+              ,mf.state_desc
+              ,mf.growth
+              ,mf.is_percent_growth
               ,growth_mb=
-                   case is_percent_growth 
-                       when 1 then (growth/100.)*(try_cast(size as bigint)*8192.)/power(1024,2) 
-                       else (try_cast(growth as bigint)*8192.)/power(1024,2) 
+                   case mf.is_percent_growth 
+                       when 1 then (mf.growth/100.)*(try_cast(size as bigint)*8192.)/power(1024,2) 
+                       else (try_cast(mf.growth as bigint)*8192.)/power(1024,2) 
                    end
-              ,size_mb=(try_cast(size as bigint)*8192.)/power(1024,2) 
-              ,max_size_mb=(try_cast(nullif(max_size,-1) as bigint)*8192.)/power(1024,2) 
-              ,[db_name]=db_name(database_id)
-              ,f_name=[name]
-              ,f_path=physical_name
+              ,size_mb=(try_cast(mf.size as bigint)*8192.)/power(1024,2) 
+              ,max_size_mb=(try_cast(nullif(mf.max_size,-1) as bigint)*8192.)/power(1024,2) 
+              ,d.name as db_name
+              ,f_name=mf.[name]
+              ,f_path=mf.physical_name
         from sys.master_files mf
+        join sys.databases as d
+        on  d.database_id = mf.database_id
         where max_size <> -1
+        and d.name = '$Database'
     )
     select @@servername as srvr
           ,[db_name]
@@ -49,7 +53,6 @@
     from fileGrowth fg
     where (size_mb+growth_mb)>max_size_mb; 
 "@
-
     
     (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
         $whitelistedFiles -notcontains $_.fName

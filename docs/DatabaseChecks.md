@@ -21,12 +21,15 @@ If the config value is set to false the check will be skipped.
 ```
 
 ## Required DDL trigger
-Reports on any database which does not contain the specified DDL trigger.  Excludes system databases and any databases with a memory optimised filegroup.
+Reports on any database which does not contain the specified DDL trigger.  Excludes system databases.
 
 If you had a trigger which logged all DDL changes, you might mandate its usage in some of your environments and check for compliance with this test.
 
 ```json
-"MustHaveDDLTrigger": "TR_LogDDLChanges"
+"MustHaveDDLTrigger": {
+    "TriggerName": "TR_LogDDLChanges",
+    "ExcludedDatabases": ["ExcludedDatabase1"]
+  }
 ``` 
 
 ## Datafile Size Maximum
