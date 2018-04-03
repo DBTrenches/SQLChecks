@@ -3,6 +3,7 @@ Function Get-DatabasesToCheck {
     Param(
         [parameter(Mandatory=$true)][string]$ServerInstance
         ,[switch]$PrimaryOnly
+        ,[switch]$ExcludeSystemDatabases
     )
 
     $query = @"
@@ -21,11 +22,15 @@ where d.state_desc = 'ONLINE'
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | Sort-Object -Property DatabaseName | ForEach-Object {
-        if(-not $PrimaryOnly)
-        {
-            $_.DatabaseName
-        } elseif($_.IsPrimaryReplica -or -not $_.IsAvailabilityGroupDatabase) {
-            $_.DatabaseName
+        if($PrimaryOnly -and -not ($_.IsPrimaryReplica -or -not $_.IsAvailabilityGroupDatabase)) {
+            return
         }
+
+        if($ExcludeSystemDatabases `
+        -and ($_.DatabaseName -eq "master" -or $_.DatabaseName -eq "model" -or $_.DatabaseName -eq "msdb" -or $_.DatabaseName -eq "tempdb")) {
+            return
+        }
+
+        $_.DatabaseName
     }
 }

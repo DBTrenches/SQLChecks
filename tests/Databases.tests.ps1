@@ -20,13 +20,25 @@ Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
 Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
+        $MustHaveDDLTrigger = $config.MustHaveDDLTrigger
+        if($MustHaveDDLTrigger  -eq $null) {
+            continue
+        }
+
+        $triggerName = $MustHaveDDLTrigger.TriggerName
+        $excludedDatabases = $MustHaveDDLTrigger.ExcludedDatabases
+
         Context "Testing for presence of DDL Trigger on $serverInstance" {
-            It "All the required DDL triggers are deployed on $serverInstance" {
-                $MustHaveDDLTrigger = $config.MustHaveDDLTrigger
-                if($MustHaveDDLTrigger  -eq $null) {
-                    Set-TestInconclusive -Message "No config value found"
+            $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly -ExcludeSystemDatabases
+
+            foreach($database in $databases) {
+                if($excludedDatabases -contains $database) {
+                    continue
                 }
-                @(Get-DatabasesWithoutDDLTrigger -ServerInstance $serverInstance -TriggerName $MustHaveDDLTrigger).Count | Should Be 0
+
+                It "$database has required DDL triggers on $serverInstance" {  
+                    Get-DatabaseTriggerStatus -ServerInstance $serverInstance -TriggerName $triggerName -Database $database | Should Be $true
+                }
             }
         }
     }
