@@ -135,7 +135,7 @@ Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
         Context "Testing for autogrowth available space on $serverInstance" {
-            $databases = Get-DatabasesToCheck -ServerInstance $serverInstance
+            $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly
 
             foreach($database in $databases) {
                 It "$database size-governed filegroups have space for their next growth on $serverInstance" {
