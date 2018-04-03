@@ -2,6 +2,7 @@ Function Get-DatabasesToCheck {
     [cmdletbinding()]
     Param(
         [parameter(Mandatory=$true)][string]$ServerInstance
+        ,[string[]]$ExcludedDatabases
         ,[switch]$PrimaryOnly
         ,[switch]$ExcludeSystemDatabases
     )
@@ -22,6 +23,10 @@ where d.state_desc = 'ONLINE'
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | Sort-Object -Property DatabaseName | ForEach-Object {
+        if($ExcludedDatabases -contains $_.DatabaseName) {
+            return
+        }
+
         if($PrimaryOnly -and -not ($_.IsPrimaryReplica -or -not $_.IsAvailabilityGroupDatabase)) {
             return
         }

@@ -14,7 +14,7 @@
     }
     ,"MustHaveDDLTrigger": {
         "TriggerName": "TR_DoesNotExist"
-        ,"WhiteList": ["ExcludedDb"]
+        ,"ExcludedDatabases": ["ExcludedDb", "tsqlscheduler"]
     } 
     ,"CheckForOversizedIndexes": true
     ,"CheckForPercentageGrowthLogFiles": true

@@ -55,12 +55,9 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
         $excludedDatabases = $MustHaveDDLTrigger.ExcludedDatabases
 
         Context "Testing for presence of DDL Trigger on $serverInstance" {
-            $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly -ExcludeSystemDatabases
+            $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly -ExcludeSystemDatabases -ExcludedDatabases $excludedDatabases
 
             foreach($database in $databases) {
-                if($excludedDatabases -contains $database) {
-                    continue
-                }
                 It "$database has required DDL triggers on $serverInstance" {  
                     Get-DatabaseTriggerStatus -ServerInstance $serverInstance -TriggerName $triggerName -Database $database | Should Be $true
                 }
@@ -121,7 +118,7 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
 Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
-        Context "Testing for duplicatge indexes on $serverInstance" {
+        Context "Testing for duplicate indexes on $serverInstance" {
             It "No duplicate indexes on $serverInstance" {
                 $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
                 $ExcludeDatabase = $CheckDuplicateIndexesConfig.ExcludeDatabase
