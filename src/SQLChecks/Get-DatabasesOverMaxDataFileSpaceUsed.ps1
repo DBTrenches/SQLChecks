@@ -53,10 +53,10 @@ WHILE @@FETCH_STATUS = 0
 SELECT  DB_NAME() [DataBaseName],
         a.name  [FileName],
         fg.name [FileGroup], 
-        (FILEPROPERTY(A.name, ''SPACEUSED'')  /  (A.size * 1.0)  ) * 100 AS [UsedSpace]
+        (FILEPROPERTY(a.name, ''SPACEUSED'')  /  (a.size * 1.0)  ) * 100 AS [UsedSpace]
 FROM    sys.database_files a
-        LEFT JOIN sys.filegroups fg ON A.data_space_id = fg.data_space_id
-WHERE   A.type != 1;';
+        LEFT JOIN sys.filegroups fg ON a.data_space_id = fg.data_space_id
+WHERE   a.type != 1;';
 
         INSERT  INTO #tempResults
                 EXEC sys.sp_executesql @Cmd;
