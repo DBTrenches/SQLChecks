@@ -32,7 +32,18 @@ If you had a trigger which logged all DDL changes, you might mandate its usage i
   }
 ``` 
 
-## Oversided indexes
+## Datafile Size Maximum
+Polls for files above a certain percentage of fullness. This can help alert you if an autogrow is about to occur. You can opt of this check for the entire Instance or on a per-file basis. 
+
+```json
+"MaxDataFileSize":{
+    "Check":true
+    ,"SpaceUsedPercent": 90
+    ,"WhitelistFiles": ["MyVLDB.ReadOnly_FG1","MyVLDB.ReadOnly_FG2"]
+}
+```
+
+## Oversized indexes
 Reports on any database which has oversized indexes (potential key size larger than 1700 bytes).
 
 If the config value is set to false the check will be skipped.

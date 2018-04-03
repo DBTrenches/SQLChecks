@@ -17,6 +17,31 @@ Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
     }
 }
 
+Describe "Data file space used" -Tag MaxDataFileSpaceUsedPercent {
+    foreach($config in $configs) {
+        $serverInstance = $config.ServerInstance
+        Context "Testing for data file space usage on $serverInstance" {
+            It "All databases under Max DataFile Space Used on $serverInstance" {
+                $MaxDataFileSpaceUsedPercent = $config.MaxDataFileSpaceUsedPercent
+                if($MaxDataFileSpaceUsedPercent  -eq $null) {
+            It "$serverInstance has all databases under Max DataFile Space Used" {
+                $MaxDataFileSize=$config.MaxDataFileSize
+                
+                if(($MaxDataFileSize -eq $null) -or ($MaxDataFileSize.Check -eq $false)) {
+                  Set-TestInconclusive -Message "No config value found"
+                }
+                $MaxDataFileParams=@{
+                    ServerInstance=$serverInstance
+                    MaxDataFileSpaceUsedPercent=$MaxDataFileSize.SpaceUsedPercent
+                    WhiteListFiles = "'$($MaxDataFileSize.WhitelistFiles -join "','")'"
+                }
+                
+                @(Get-DatabasesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should Be 0
+            }
+        }
+    }
+}
+
 Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
@@ -35,24 +60,9 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
                 if($excludedDatabases -contains $database) {
                     continue
                 }
-
                 It "$database has required DDL triggers on $serverInstance" {  
                     Get-DatabaseTriggerStatus -ServerInstance $serverInstance -TriggerName $triggerName -Database $database | Should Be $true
                 }
-            }
-        }
-    }
-}
-Describe "Data file space used" -Tag MaxDataFileSpaceUsedPercent {
-    foreach($config in $configs) {
-        $serverInstance = $config.ServerInstance
-        Context "Testing for data file space usage on $serverInstance" {
-            It "All databases under Max DataFile Space Used on $serverInstance" {
-                $MaxDataFileSpaceUsedPercent = $config.MaxDataFileSpaceUsedPercent
-                if($MaxDataFileSpaceUsedPercent  -eq $null) {
-                    Set-TestInconclusive -Message "No config value found"
-                }
-                @(Get-DatabasesOverMaxDataFileSpaceUsed -ServerInstance $serverInstance -MaxDataFileSpaceUsedPercent $MaxDataFileSpaceUsedPercent).Count | Should Be 0
             }
         }
     }
