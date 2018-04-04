@@ -17,17 +17,13 @@ Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
     }
 }
 
-Describe "Data file space used" -Tag MaxDataFileSpaceUsedPercent {
+Describe "Data file space used" -Tag MaxDataFileSize {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
         Context "Testing for data file space usage on $serverInstance" {
-            $MaxDataFileSpaceUsedPercent = $config.MaxDataFileSpaceUsedPercent
-            if($MaxDataFileSpaceUsedPercent  -eq $null) {
-                $MaxDataFileSize=$config.MaxDataFileSize
-            }
-
-            if(($MaxDataFileSize -eq $null) -or ($MaxDataFileSize.Check -eq $false)) {
-                Set-TestInconclusive -Message "No config value found"
+            $MaxDataFileSize = $config.MaxDataFileSize
+            if($MaxDataFileSize  -eq $null) {
+                continue
             }
 
             It "$serverInstance has all databases under Max DataFile Space Used" {
