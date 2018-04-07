@@ -24,16 +24,22 @@ Describe "Data file space used" -Tag MaxDataFileSize {
         if($maxDataConfig  -eq $null) {
             continue
         }
-
+        
+        $spaceUsedPercentLimit = $maxDataConfig.SpaceUsedPercent
         $MaxDataFileParams=@{
             ServerInstance = $serverInstance
-            MaxDataFileSpaceUsedPercent = $maxDataConfig.SpaceUsedPercent
+            MaxDataFileSpaceUsedPercent = $spaceUsedPercentLimit
             WhiteListFiles = $maxDataConfig.WhitelistFiles
         }
 
+        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly
+
         Context "Testing for data file space usage on $serverInstance" {
-            It "$serverInstance has all databases under Max DataFile Space Used" {               
-                @(Get-DatabasesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should Be 0
+            foreach($database in $databases) {
+                It "$database files are all under $spaceUsedPercentLimit% full on $serverInstance" {
+                    $MaxDataFileParams.Database = $database
+                    @(Get-DatabaseFilesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should -Be 0
+                }
             }
         }
     }
