@@ -36,5 +36,5 @@ foreach($instance in $instances) {
     [string]$configData = Get-Content -Path $instance.PSPath -Raw
     $configData | ConvertFrom-Json -OutVariable +configs
 }
-Invoke-Pester -Script @{Path='.\tests';Parameters= @{configs=$configs}} -PassThru | Format-Pester -Format HTML -Path .
+Invoke-SqlChecks -Config $configs -PassThru | Format-Pester -Format HTML -Path .
 ```

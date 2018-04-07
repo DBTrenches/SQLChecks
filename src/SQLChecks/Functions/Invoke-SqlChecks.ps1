@@ -6,9 +6,12 @@ Function Invoke-SqlChecks {
         $Config,
 
         [Alias("Tags")]
-        [string[]] $Tag
+        [string[]] $Tag,
+
+        [switch]
+        $PassThru
     )
 
     $path = ($script:MyInvocation.MyCommand.Path | Split-Path) + '\Tests'
-    Invoke-Pester -Script @{Path=$path;Parameters= @{configs=$Config}} -Tag $Tag
+    Invoke-Pester -Script @{Path=$path;Parameters= @{configs=$Config}} -Tag $Tag -PassThru:$PassThru
 }
