@@ -1,4 +1,5 @@
 . $PSScriptRoot/Functions/Test-TraceFlags.ps1
+
 . $PSScriptRoot/Functions/Get-NumberOfErrorLogs.ps1
 . $PSScriptRoot/Functions/Get-TLogsWithLargeGrowthSize.ps1
 . $PSScriptRoot/Functions/Get-DatabaseTriggerStatus.ps1
@@ -10,3 +11,5 @@
 . $PSScriptRoot/Functions/Get-FixedSizeFiles.ps1
 . $PSScriptRoot/Functions/Get-AutoGrowthRisks.ps1
 . $PSScriptRoot/Functions/Get-DatabasesToCheck.ps1
+
+. $PSScriptRoot/Functions/Invoke-SqlChecks.ps1
