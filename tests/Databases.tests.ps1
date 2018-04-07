@@ -20,19 +20,19 @@ Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
 Describe "Data file space used" -Tag MaxDataFileSize {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
-        Context "Testing for data file space usage on $serverInstance" {
-            $MaxDataFileSize = $config.MaxDataFileSize
-            if($MaxDataFileSize  -eq $null) {
-                continue
-            }
+        $maxDataConfig = $config.MaxDataFileSize
+        if($maxDataConfig  -eq $null) {
+            continue
+        }
 
-            It "$serverInstance has all databases under Max DataFile Space Used" {
-                $MaxDataFileParams=@{
-                    ServerInstance=$serverInstance
-                    MaxDataFileSpaceUsedPercent=$MaxDataFileSize.SpaceUsedPercent
-                    WhiteListFiles = "'$($MaxDataFileSize.WhitelistFiles -join "','")'"
-                }
-                
+        $MaxDataFileParams=@{
+            ServerInstance = $serverInstance
+            MaxDataFileSpaceUsedPercent = $maxDataConfig.SpaceUsedPercent
+            WhiteListFiles = $maxDataConfig.WhitelistFiles
+        }
+
+        Context "Testing for data file space usage on $serverInstance" {
+            It "$serverInstance has all databases under Max DataFile Space Used" {               
                 @(Get-DatabasesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should Be 0
             }
         }

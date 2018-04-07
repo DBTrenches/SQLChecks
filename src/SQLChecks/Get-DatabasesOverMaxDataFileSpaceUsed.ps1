@@ -3,11 +3,15 @@ Function Get-DatabasesOverMaxDataFileSpaceUsed {
     Param(
         [string] $ServerInstance,
 	    [int] $MaxDataFileSpaceUsedPercent,
-        [string] $WhiteListFiles
+        [string[]] $WhitelistFiles
     )
     
-    if([string]::IsNullOrWhiteSpace($WhiteListFiles)){$WhiteListFiles="''"}
-
+    $WhitelistString = "''"
+    if($WhitelistFiles -ne $null)
+    {
+        $WhitelistString = "'$($WhitelistFiles -join "','")'"
+    }
+    
     $query = @"
 CREATE TABLE #tempResults
     (
@@ -71,7 +75,7 @@ DEALLOCATE Dbs;
 SELECT  distinct tr.DataBaseName
 FROM    #tempResults AS tr
 WHERE   tr.UsedSpace > $MaxDataFileSpaceUsedPercent
-    and (tr.DataBaseName+'.'+tr.[FileName]) not in ($WhiteListFiles);
+    and (tr.DataBaseName+'.'+tr.[FileName]) not in ($WhitelistString);
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
