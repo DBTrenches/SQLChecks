@@ -1,12 +1,15 @@
-. $PSScriptRoot/Test-TraceFlags.ps1
-. $PSScriptRoot/Get-NumberOfErrorLogs.ps1
-. $PSScriptRoot/Get-TLogsWithLargeGrowthSize.ps1
-. $PSScriptRoot/Get-DatabaseTriggerStatus.ps1
-. $PSScriptRoot/Get-OversizedIndexes.ps1
-. $PSScriptRoot/Get-TLogWithPercentageGrowth.ps1
-. $PSScriptRoot/Get-DatabaseFilesOverMaxDataFileSpaceUsed.ps1
-. $PSScriptRoot/Get-DbsWithoutGoodCheckDb.ps1
-. $PSScriptRoot/Get-DuplicateIndexes.ps1
-. $PSScriptRoot/Get-FixedSizeFiles.ps1
-. $PSScriptRoot/Get-AutoGrowthRisks.ps1
-. $PSScriptRoot/Get-DatabasesToCheck.ps1
+. $PSScriptRoot/Functions/Test-TraceFlags.ps1
+
+. $PSScriptRoot/Functions/Get-NumberOfErrorLogs.ps1
+. $PSScriptRoot/Functions/Get-TLogsWithLargeGrowthSize.ps1
+. $PSScriptRoot/Functions/Get-DatabaseTriggerStatus.ps1
+. $PSScriptRoot/Functions/Get-OversizedIndexes.ps1
+. $PSScriptRoot/Functions/Get-TLogWithPercentageGrowth.ps1
+. $PSScriptRoot/Functions/Get-DatabaseFilesOverMaxDataFileSpaceUsed.ps1
+. $PSScriptRoot/Functions/Get-DbsWithoutGoodCheckDb.ps1
+. $PSScriptRoot/Functions/Get-DuplicateIndexes.ps1
+. $PSScriptRoot/Functions/Get-FixedSizeFiles.ps1
+. $PSScriptRoot/Functions/Get-AutoGrowthRisks.ps1
+. $PSScriptRoot/Functions/Get-DatabasesToCheck.ps1
+
+. $PSScriptRoot/Functions/Invoke-SqlChecks.ps1
