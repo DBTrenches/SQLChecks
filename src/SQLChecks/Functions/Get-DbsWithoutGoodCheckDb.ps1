@@ -1,24 +1,31 @@
 ﻿Function Get-DbsWithoutGoodCheckDb{
     [cmdletbinding()]Param(
-         [parameter(Mandatory=$true)][int]$MaxDaysAllowedSinceLastGoodCheckDb
-        ,[parameter(Mandatory=$true)][string]$ServerInstance
-        ,[string[]]$ExcludedDatabases
+        [parameter(Mandatory=$true)][string]$ServerInstance
+        ,[parameter(Mandatory=$true)][string]$Database
     )
-    
-    if($ExcludedDatabases -eq $null)
-    {
-        $ExcludedDatabases = @("tempdb")
-    } else {
-        $ExcludedDatabases+="tempdb" # always exclude
-    }
 
-    (Get-DbaLastGoodCheckDb -SqlServer $ServerInstance -ExcludeDatabase $ExcludedDatabases)| Where-Object {
-        ($_.DaysSinceLastGoodCheckDb -ge $MaxDaysAllowedSinceLastGoodCheckDb) `
-        -or ($_.LastGoodCheckDb -eq $null)
-    } | ForEach-Object {
+    $query = @"
+drop table if exists #DBInfo;
+create table #DBInfo 
+(
+    ParentObject varchar(255)
+    ,[Object] varchar(255)
+    ,Field varchar(255)
+    ,[Value] varchar(255)
+);
+
+insert #DBInfo
+execute('dbcc dbinfo() with tableresults');
+
+select  try_cast(dbi.[Value] as datetime) as LastGoodCheckDbDate
+        ,coalesce(datediff(day, try_cast(dbi.[Value] as datetime), getutcdate()),9999) as DaysSinceLastGoodCheckDb
+from    #DBInfo as dbi
+where   dbi.Field = 'dbi_dbccLastKnownGood'
+"@
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $database | ForEach-Object {
         [pscustomobject]@{
-            Database = $_.Database
-            LastGoodCheckDB = $_.LastGoodCheckDb
+            Database = $database
+            LastGoodCheckDb = $_.LastGoodCheckDbDate
             DaysSinceLastGoodCheckDB = $_.DaysSinceLastGoodCheckDb
         }
     }

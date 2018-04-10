@@ -101,17 +101,20 @@ Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
 Describe "Last good checkdb" -Tag LastGoodCheckDb {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
+        $checkDbConfig = $config.LastGoodCheckDb
+        $maxDays = $checkDbConfig.MaxDaysSinceLastGoodCheckDB
+        $excludedDbs = $checkDbConfig.ExcludedDatabases
+
         Context "Testing for last good check db on $serverInstance" {
-            It "No databases without a recent successful CHECKDB on $serverInstance"{
-                $checkDbConfig = $config.LastGoodCheckDb
-                if($checkDbConfig -eq $null -or -not $checkDbConfig.Check){
-                    Set-TestInconclusive -Message "No config value found or check not required"
+            $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly
+            foreach($database in $databases) {
+                if($excludedDbs -contains $database -or $database -eq "tempdb") {
+                    continue
                 }
 
-                $maxDays = $checkDbConfig.MaxDaysSinceLastGoodCheckDB
-                $excludedDbs = $checkDbConfig.ExcludedDatabases
-
-                @(Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -MaxDaysAllowedSinceLastGoodCheckDb $maxDays -ExcludedDatabases $excludedDbs).Count | Should Be 0
+                It "$database had a successful CHECKDB in the last $maxDays days on $serverInstance"{
+                    (Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -Database $database).DaysSinceLastGoodCheckDB | Should -BeLessOrEqual $maxDays
+                }
             }
         }
     }
