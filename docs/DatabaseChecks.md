@@ -3,28 +3,24 @@
 In all cases if the config value is not present the test will be skipped.
 
 ## Max transaction log fixed growth
-Reports on any database which has a fixed growth larger than the config value.
-
-As the log is zeroed out before use it can be a time consuming operation.  When the log is full and an auto-grow is requested all no writes can complete until the grow is completed, and so capping the size of the growth to a value less than 1GB is suggested.
-
 ```json
 "MaxTLogAutoGrowthInKB": 999000
 ``` 
 
+Reports on any database which has a fixed growth larger than the config value.
+
+As the log is zeroed out before use it can be a time consuming operation.  When the log is full and an auto-grow is requested all no writes can complete until the grow is completed, and so capping the size of the growth to a value less than 1GB is suggested.
+
 ## Transaction log with percentage growth
-Reports on any database log with a percentage growth configured.
-
-If the config value is set to false the check will be skipped.
-
 ```json
 "CheckForPercentageGrowthLogFiles": true
 ```
 
+Reports on any database log with a percentage growth configured.
+
+If the config value is set to false the check will be skipped.
+
 ## Required DDL trigger
-Reports on any database which does not contain the specified DDL trigger.  Excludes system databases.
-
-If you had a trigger which logged all DDL changes, you might mandate its usage in some of your environments and check for compliance with this test.
-
 ```json
 "MustHaveDDLTrigger": {
     "TriggerName": "TR_LogDDLChanges",
@@ -32,9 +28,12 @@ If you had a trigger which logged all DDL changes, you might mandate its usage i
   }
 ``` 
 
-## Datafile Size Maximum
-Polls for files above a certain percentage of fullness. This can help alert you if an autogrow is about to occur. You can opt of this check for the entire Instance or on a per-file basis. 
+Reports on any database which does not contain the specified DDL trigger.  Excludes system databases.
 
+If for example you had a trigger which logged all DDL changes, you might mandate its usage in some of your environments and check for compliance with this test.
+
+
+## Datafile Size Maximum
 ```json
 "MaxDataFileSize":{
     "Check":true
@@ -43,18 +42,18 @@ Polls for files above a certain percentage of fullness. This can help alert you 
 }
 ```
 
+Polls for files above a certain percentage of fullness. This can help alert you if an autogrow is about to occur. You can opt of this check for on a per-file basis. 
+
 ## Oversized indexes
-Reports on any database which has oversized indexes (potential key size larger than 1700 bytes).
-
-If the config value is set to false the check will be skipped.
-
 ```json
 "CheckForOversizedIndexes": true
 ```
 
-## Fixed-Size Files  
-Reports files that are not set to auto-grow. You can whitelist fixed size files by adding the name to the config array, or leave the whitelist empty to check every file.
+Reports on any database which has oversized indexes (potential key size larger than 1700 bytes - the maximum in SQL 2016+).
 
+If the config value is set to false the check will be skipped.
+
+## Fixed-Size Files  
 ```json
 "ZeroAutoGrowthWhitelistFiles":{
         "Check": true
@@ -64,6 +63,8 @@ Reports files that are not set to auto-grow. You can whitelist fixed size files 
         ]
 }
 ```
+
+Reports files that are not set to auto-grow. You can whitelist fixed size files by adding the name to the config array, or leave the whitelist empty to check every file.
 
 ## Auto-growth & at-risk Filegroups
 ```json
