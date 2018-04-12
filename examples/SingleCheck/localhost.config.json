@@ -34,5 +34,8 @@
     ,"CheckDuplicateIndexes": {
         "Check": true,
         "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
-    }
+    },"StartupXEvents" : [
+            "system_health"
+            ,"telemetry_xevents"
+    ]
 }

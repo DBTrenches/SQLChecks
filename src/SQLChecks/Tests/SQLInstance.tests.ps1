@@ -33,7 +33,7 @@ Describe "Number of SQL error logs" -Tag NumErrorLogs {
     }
 }
 
-Describe "Number of SQL error logs" -Tag NumErrorLogs {
+Describe "Number of SQL error logs" -Tag SpConfig {
     foreach($config in $configs) {
         $serverInstance = $config.ServerInstance
         Context "Testing for SPConfigure values on $serverInstance" {
@@ -46,6 +46,22 @@ Describe "Number of SQL error logs" -Tag NumErrorLogs {
                 It "Correct sp_configure setting $configName on $serverInstance " {
                     (Get-DbaSpConfigure -Server $serverInstance -ConfigName $configName).RunningValue | Should Be $expectedValue
                 }
+            }
+        }
+    }
+}
+
+Describe "Startup Extended Events" -Tag StartupXEvents {
+    foreach($config in $configs) {
+        $serverInstance = $config.ServerInstance
+        Context "Testing for startup extended event sessions on $serverInstance" {
+            $xeConfig = $config.StartupXEvents
+            if($xeConfig -eq $null) {
+                continue
+            }
+
+            It "Correct set of startup extended event sessions on $serverInstance" {
+                @(Test-StartupXEvents -Server $serverInstance -ExpectedSessions $xeConfig).Count | Should Be 0
             }
         }
     }

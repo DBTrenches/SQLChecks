@@ -9,7 +9,7 @@ In all cases if the config value is not present the test will be skipped.
 
 Compares global trace flags against a list of trace flags, and reports on the number of discrepancies (trace flags in config but not on the server, or on the server but not in config.)
 
-The example below checks for 3226 (suppress backup messages in the SQL Error log) and 7412 (lightweight query profiling).
+The example above checks for 3226 (suppress backup messages in the SQL Error log) and 7412 (lightweight query profiling).
 
 ## Number of error logs
 ```json
@@ -31,4 +31,14 @@ Assuming you have a job to cycle your error logs daily, a value of 14 would give
 
 Checks the runtime value against the value specified in config.  Each value checked is reported as an individual test result.
 
-The example below would check that MaxDop was 1, Show Advanced Options was off, and xp_cmdshell was disabled.
+The example above would check that MaxDop was 1, Show Advanced Options was off, and xp_cmdshell was disabled.
+
+## Startup Extended Event Sessions
+```json
+"StartupXEvents" : [
+    "system_health"
+    ,"telemetry_xevents"
+]
+```
+
+Checks that the extended event sessions configured to run at startup.  If you want to verify there are no sessions set to startup (not recommended!) then provide an empty array.
