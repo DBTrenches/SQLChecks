@@ -12,7 +12,7 @@ Describe "Trace flags" -Tag TraceFlags {
                     Set-TestInconclusive -Message "No config value found"
                 }
 
-                (Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
+                @(Test-TraceFlags -ServerInstance $serverInstance -ExpectedFlags $traceFlags).Count | Should Be 0
             }
         }
     }
