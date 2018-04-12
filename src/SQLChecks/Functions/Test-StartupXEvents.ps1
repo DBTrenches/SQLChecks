@@ -18,7 +18,7 @@ where   s.startup_state = 1;
     foreach($delta in $comparison)     
     {
         [pscustomobject]@{
-            TraceFlag = $delta.InputObject
+            EventSession = $delta.InputObject
             Issue = if($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
         }
     }
