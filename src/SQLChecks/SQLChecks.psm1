@@ -11,6 +11,9 @@
 . $PSScriptRoot/Functions/Get-FixedSizeFiles.ps1
 . $PSScriptRoot/Functions/Get-AutoGrowthRisks.ps1
 . $PSScriptRoot/Functions/Get-DatabasesToCheck.ps1
+. $PSScriptRoot/Functions/Get-SqlAgentJobsWithDisabledSchedule.ps1
+. $PSScriptRoot/Functions/Get-SqlAgentJobsWithNoActiveSchedule.ps1
 . $PSScriptRoot/Functions/Test-StartupXEvents.ps1
+
 
 . $PSScriptRoot/Functions/Invoke-SqlChecks.ps1

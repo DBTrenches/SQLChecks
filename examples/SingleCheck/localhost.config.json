@@ -38,4 +38,6 @@
             "system_health"
             ,"telemetry_xevents"
     ]
+    ,"AgentJobOneActiveSchedule": {}
+    ,"AgentJobNoDisabledSchedules": {}
 }

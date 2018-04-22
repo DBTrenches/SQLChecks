@@ -1,7 +1,5 @@
 # Instance Level Checks
 
-In all cases if the config value is not present the test will be skipped.
-
 ## Global trace flags
 ```json
 "TraceFlags": [3226,7412]

@@ -1,7 +1,5 @@
 # Database level checks
 
-In all cases if the config value is not present the test will be skipped.
-
 ## Max transaction log fixed growth
 ```json
 "MaxTLogAutoGrowthInKB": 999000
