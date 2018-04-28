@@ -22,17 +22,19 @@ select  case when rs.database_id is null then 0 else 1 end as IsAvailabilityGrou
 where d.state_desc = 'ONLINE'
 "@
 
+    if($ExcludeSystemDatabases) {
+        $ExcludedDatabases += "master"
+        $ExcludedDatabases += "model"
+        $ExcludedDatabases += "msdb"
+        $ExcludedDatabases += "tempdb"
+    }
+
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | Sort-Object -Property DatabaseName | ForEach-Object {
         if($ExcludedDatabases -contains $_.DatabaseName) {
             return
         }
 
         if($PrimaryOnly -and -not ($_.IsPrimaryReplica -or -not $_.IsAvailabilityGroupDatabase)) {
-            return
-        }
-
-        if($ExcludeSystemDatabases `
-        -and ($_.DatabaseName -eq "master" -or $_.DatabaseName -eq "model" -or $_.DatabaseName -eq "msdb" -or $_.DatabaseName -eq "tempdb")) {
             return
         }
 
