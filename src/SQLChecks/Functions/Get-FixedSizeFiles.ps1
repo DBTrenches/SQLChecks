@@ -1,6 +1,7 @@
 ﻿function Get-FixedSizeFiles {
     [cmdletbinding()]Param(
          [parameter(Mandatory=$true)][string]$ServerInstance
+         ,[string]$Database
         ,$WhitelistFiles # optional array or comma-delim string
     )
 
@@ -23,10 +24,11 @@ select database_id
     ,f_name=[name]
     ,f_path=physical_name
 from sys.master_files 
-where growth = 0;
+where growth = 0
+and database_id = db_id();
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
+    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database $Database -Query $query) | Where-Object {
         $whitelistedFiles -notcontains $_.f_name
     } | ForEach-Object {
         [pscustomobject]@{

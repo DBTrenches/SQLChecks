@@ -136,13 +136,13 @@ Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
 
 Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
     Context "Testing for zero autogrowth files on $serverInstance" {
-        It "No zero-autogrowth files outside whitelist on $serverInstance"{
-            $configValue = $config.ZeroAutoGrowthFiles
-            
-            if($configValue -eq $null -or -not $configValue.Check) {
-                Set-TestInconclusive -Message "No config value found or check not required"
+        $whitelist = $config.ZeroAutoGrowthFiles.Whitelist
+        $databases = Get-DatabasesToCheck @databasesToCheckParams 
+        
+        foreach($database in $databases) {
+            It "$database has no zero autogrowth files on $serverInstance"{
+                @(Get-FixedSizeFiles -ServerInstance $serverInstance -WhitelistFiles $whitelist -Database $database).Count | Should Be 0
             }
-            @(Get-FixedSizeFiles -ServerInstance $serverInstance -WhitelistFiles $configValue.Whitelist).Count | Should Be 0
         }
     }
 }
