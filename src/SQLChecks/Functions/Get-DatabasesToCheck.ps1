@@ -3,7 +3,7 @@ Function Get-DatabasesToCheck {
     Param(
         [parameter(Mandatory=$true)][string]$ServerInstance
         ,[string[]]$ExcludedDatabases
-        ,[switch]$PrimaryOnly
+        ,[switch]$IncludeSecondary = $false
         ,[switch]$ExcludeSystemDatabases
     )
 
@@ -29,15 +29,20 @@ where d.state_desc = 'ONLINE'
         $ExcludedDatabases += "tempdb"
     }
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | Sort-Object -Property DatabaseName | ForEach-Object {
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | Sort-Object -Property DatabaseName | ForEach-Object {       
         if($ExcludedDatabases -contains $_.DatabaseName) {
             return
         }
 
-        if($PrimaryOnly -and -not ($_.IsPrimaryReplica -or -not $_.IsAvailabilityGroupDatabase)) {
-            return
+        if(-not $_.IsAvailabilityGroupDatabase) {
+            $_.DatabaseName
+        } elseif ($_.IsPrimaryReplica) {
+            $_.DatabaseName
+        } else {
+            # AG database, not primary
+            if($IncludeSecondary) {
+                $_.DatabaseName
+            }
         }
-
-        $_.DatabaseName
     }
 }

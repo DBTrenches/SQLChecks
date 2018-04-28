@@ -29,7 +29,7 @@ Describe "Data file space used" -Tag MaxDataFileSize {
         WhiteListFiles = $maxDataConfig.WhitelistFiles
     }
 
-    $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly
+    $databases = Get-DatabasesToCheck -ServerInstance $serverInstance
 
     Context "Testing for data file space usage on $serverInstance" {
         foreach($database in $databases) {
@@ -51,7 +51,7 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
     $excludedDatabases = $MustHaveDDLTrigger.ExcludedDatabases
 
     Context "Testing for presence of DDL Trigger on $serverInstance" {
-        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly -ExcludeSystemDatabases -ExcludedDatabases $excludedDatabases
+        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -ExcludeSystemDatabases -ExcludedDatabases $excludedDatabases
 
         foreach($database in $databases) {
             It "$database has required DDL triggers on $serverInstance" {  
@@ -91,9 +91,9 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
     $excludedDbs = $checkDbConfig.ExcludedDatabases
 
     Context "Testing for last good check db on $serverInstance" {
-        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly
+        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -ExcludedDatabases $excludedDbs
         foreach($database in $databases) {
-            if($excludedDbs -contains $database -or $database -eq "tempdb") {
+            if($database -eq "tempdb") {
                 continue
             }
 
@@ -136,7 +136,7 @@ Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
 
 Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
     Context "Testing for autogrowth available space on $serverInstance" {
-        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly
+        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance
 
         foreach($database in $databases) {
             It "$database size-governed filegroups have space for their next growth on $serverInstance" {
