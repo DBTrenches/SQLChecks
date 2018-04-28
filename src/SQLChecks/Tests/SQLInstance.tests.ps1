@@ -2,8 +2,9 @@ Param(
     $Config
 )
 
+$serverInstance = $config.ServerInstance
+
 Describe "Trace flags" -Tag TraceFlags {
-    $serverInstance = $config.ServerInstance
     Context "Testing for traceflags on $serverInstance" {
         It "Correct global trace flags set on $serverInstance" {
             $traceFlags = $config.TraceFlags
@@ -17,7 +18,6 @@ Describe "Trace flags" -Tag TraceFlags {
 }
 
 Describe "Number of SQL error logs" -Tag NumErrorLogs {
-    $serverInstance = $config.ServerInstance
     Context "Testing for number of SQL error logs on $serverInstance" {
         It "Correct number of SQL error logs on $serverInstance" {
             $numErrorLogs = $config.NumErrorLogs
@@ -30,7 +30,6 @@ Describe "Number of SQL error logs" -Tag NumErrorLogs {
 }
 
 Describe "Number of SQL error logs" -Tag SpConfig {
-    $serverInstance = $config.ServerInstance
     Context "Testing for SPConfigure values on $serverInstance" {
         $spconfig = $config.SpConfig
 
@@ -46,7 +45,6 @@ Describe "Number of SQL error logs" -Tag SpConfig {
 }
 
 Describe "Startup Extended Events" -Tag StartupXEvents {
-    $serverInstance = $config.ServerInstance
     Context "Testing for startup extended event sessions on $serverInstance" {
         $xeConfig = $config.StartupXEvents
         if($xeConfig -eq $null) {
@@ -55,6 +53,18 @@ Describe "Startup Extended Events" -Tag StartupXEvents {
 
         It "Correct set of startup extended event sessions on $serverInstance" {
             @(Test-StartupXEvents -Server $serverInstance -ExpectedSessions $xeConfig).Count | Should Be 0
+        }
+    }
+}
+
+Describe "Database Mail is configured" -Tag DatabaseMail {
+    Context "Testing for database mail configuration on $serverInstance" {
+        It "Database mail is enabled on $serverInstance" {
+            (Get-DbaSpConfigure -Server $serverInstance -ConfigName "DatabaseMailEnabled").RunningValue | Should Be 1
+        }
+
+        It "Database mail has a default profile configured on $serverInstance" {
+            @(Get-DefaultDatabaseMailProfile -Server $serverInstance).Count | Should Be 1
         }
     }
 }

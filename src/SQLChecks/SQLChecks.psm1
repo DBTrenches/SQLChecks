@@ -15,5 +15,6 @@
 . $PSScriptRoot/Functions/Get-SqlAgentJobsWithNoActiveSchedule.ps1
 . $PSScriptRoot/Functions/Test-StartupXEvents.ps1
 
+. $PSScriptRoot/Functions/Get-DefaultDatabaseMailProfile.ps1
 
 . $PSScriptRoot/Functions/Invoke-SqlChecks.ps1

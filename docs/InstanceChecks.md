@@ -40,3 +40,10 @@ The example above would check that MaxDop was 1, Show Advanced Options was off, 
 ```
 
 Checks that the extended event sessions configured to run at startup.  If you want to verify there are no sessions set to startup (not recommended!) then provide an empty array.
+
+## Database mail
+```json
+"DatabaseMail": {}
+```
+
+Checks that the database mail SpConfigure option is set, and that a default global profile has been set.
