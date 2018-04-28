@@ -4,6 +4,16 @@ Param(
 
 $serverInstance = $config.ServerInstance
 
+$databasesToCheckConfig = $config.DatabasesToCheck
+$databasesToCheckParams = @{}
+
+if($databasesToCheckConfig -eq "AGOnly") {
+    $databasesToCheckParams.ExcludeLocal = $true
+} elseif($databasesToCheckConfig -eq "LocalOnly") {
+    $databasesToCheckParams.ExcludePrimary = $true
+    # Secondary databases are excluded by default
+}
+
 Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
     Context "Testing no large fixed autogrowth on $serverInstance" {
         It "No logs with large fixed autogrowth on $serverInstance " {
@@ -29,7 +39,7 @@ Describe "Data file space used" -Tag MaxDataFileSize {
         WhiteListFiles = $maxDataConfig.WhitelistFiles
     }
 
-    $databases = Get-DatabasesToCheck -ServerInstance $serverInstance
+    $databases = Get-DatabasesToCheck -ServerInstance $serverInstance @databasesToCheckParams 
 
     Context "Testing for data file space usage on $serverInstance" {
         foreach($database in $databases) {
@@ -51,7 +61,7 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
     $excludedDatabases = $MustHaveDDLTrigger.ExcludedDatabases
 
     Context "Testing for presence of DDL Trigger on $serverInstance" {
-        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -ExcludeSystemDatabases -ExcludedDatabases $excludedDatabases
+        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -ExcludeSystemDatabases -ExcludedDatabases $excludedDatabases @databasesToCheckParams
 
         foreach($database in $databases) {
             It "$database has required DDL triggers on $serverInstance" {  
@@ -91,7 +101,7 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
     $excludedDbs = $checkDbConfig.ExcludedDatabases
 
     Context "Testing for last good check db on $serverInstance" {
-        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -ExcludedDatabases $excludedDbs
+        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -ExcludedDatabases $excludedDbs @databasesToCheckParams 
         foreach($database in $databases) {
             if($database -eq "tempdb") {
                 continue
@@ -136,7 +146,7 @@ Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
 
 Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
     Context "Testing for autogrowth available space on $serverInstance" {
-        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance
+        $databases = Get-DatabasesToCheck -ServerInstance $serverInstance @databasesToCheckParams 
 
         foreach($database in $databases) {
             It "$database size-governed filegroups have space for their next growth on $serverInstance" {

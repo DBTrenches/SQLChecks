@@ -5,6 +5,8 @@ Function Get-DatabasesToCheck {
         ,[string[]]$ExcludedDatabases
         ,[switch]$IncludeSecondary = $false
         ,[switch]$ExcludeSystemDatabases
+        ,[switch]$ExcludePrimary = $false
+        ,[switch]$ExcludeLocal = $false
     )
 
     $query = @"
@@ -34,15 +36,12 @@ where d.state_desc = 'ONLINE'
             return
         }
 
-        if(-not $_.IsAvailabilityGroupDatabase) {
+        if(-not $_.IsAvailabilityGroupDatabase -and -not $ExcludeLocal) {
             $_.DatabaseName
-        } elseif ($_.IsPrimaryReplica) {
+        } elseif ($_.IsPrimaryReplica -and -not $ExcludePrimary) {
             $_.DatabaseName
-        } else {
-            # AG database, not primary
-            if($IncludeSecondary) {
-                $_.DatabaseName
-            }
+        } elseif ($_.IsAvailabilityGroupDatabase -and -not $_.IsPrimaryReplica -and $IncludeSecondary) {
+            $_.DatabaseName
         }
     }
 }
