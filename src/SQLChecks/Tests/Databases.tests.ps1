@@ -119,17 +119,21 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
 
 Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
     Context "Testing for duplicate indexes on $serverInstance" {
-        It "No duplicate indexes on $serverInstance" {
-            $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
-            $ExcludeDatabase = $CheckDuplicateIndexesConfig.ExcludeDatabase
-            $ExcludeIndex = $CheckDuplicateIndexesConfig.ExcludeIndex
-            $ExcludeDatabaseStr  = "'$($ExcludeDatabase -join "','")'"
-            $ExcludeIndexStr  = "'$($ExcludeIndex -join "','")'"
-            
-            if($CheckDuplicateIndexesConfig  -eq $null -or -not $CheckDuplicateIndexesConfig.Check) {
-                Set-TestInconclusive -Message "No config value found or check not required"
+        $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
+        $ExcludeDatabase = $CheckDuplicateIndexesConfig.ExcludeDatabase
+        $ExcludeIndex = $CheckDuplicateIndexesConfig.ExcludeIndex
+        $ExcludeIndexStr  = "'$($ExcludeIndex -join "','")'"
+
+        $databases = Get-DatabasesToCheck @databasesToCheckParams 
+        
+        foreach($database in $databases) {
+            if($ExcludeDatabase -contains $database) {
+                continue
             }
-            @(Get-DuplicateIndexes -ServerInstance $serverInstance -ExcludeDatabase $ExcludeDatabaseStr -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
+
+            It "$database has no duplicate indexes on $serverInstance" {
+                @(Get-DuplicateIndexes -ServerInstance $serverInstance -Database $database -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
+            }
         }
     }
 }

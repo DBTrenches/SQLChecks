@@ -4,9 +4,9 @@ Function Get-DuplicateIndexes {
         [string] $ServerInstance,
 	    [string] $ExcludeDatabase,
         [string] $ExcludeIndex
+        ,[string] $Database
     )
 
-    if([string]::IsNullOrWhiteSpace($ExcludeDatabase)){$ExcludeDatabase="''"}
     if([string]::IsNullOrWhiteSpace($ExcludeIndex)){$ExcludeIndex="''"}
 
     $query = @"
@@ -22,40 +22,9 @@ CREATE TABLE #tempResults
       [DuplicateIndexName] sysname 
     );
 
-SELECT  d.name
-INTO    #tempDatabases
-FROM    sys.databases d
-WHERE   ( d.replica_id IS NULL
-          OR EXISTS ( SELECT    *
-                      FROM      sys.availability_databases_cluster AS adc
-                                JOIN sys.dm_hadr_availability_replica_states
-                                AS dhars ON dhars.group_id = adc.group_id
-                      WHERE     dhars.role = 1
-                                AND adc.database_name = d.name )
-        )
-        AND d.name NOT IN ($ExcludeDatabase);
-
-
-DECLARE Dbs CURSOR
-FOR
-    SELECT  name
-    FROM    #tempDatabases;
-
-DECLARE @db NVARCHAR(50);
-SET @db = '';
 DECLARE @Cmd AS NVARCHAR(MAX)= '';
 
-
-OPEN Dbs;
-FETCH NEXT FROM Dbs INTO @db;
-
-WHILE @@FETCH_STATUS = 0
-    BEGIN
-
-
-
-        SET @Cmd = 'USE [' + @db
-            + ']
+        SET @Cmd = '
             ;WITH    XMLTable
           AS ( SELECT   OBJECT_NAME(x.object_id) AS [TableName] ,
                         SCHEMA_NAME(o.schema_id) AS SchemaName ,
@@ -219,11 +188,6 @@ WHILE @@FETCH_STATUS = 0
                 )
                 EXEC sys.sp_executesql @Cmd;
 
-        FETCH NEXT FROM Dbs INTO @db;
-    END;
-
-CLOSE Dbs;
-DEALLOCATE Dbs;
 SELECT  *
 FROM    #tempResults AS tr
 WHERE   ( CONCAT(tr.DatabaseName, '.', tr.SchemaName, '.', tr.TableName, '.',
@@ -235,6 +199,6 @@ WHERE   ( CONCAT(tr.DatabaseName, '.', tr.SchemaName, '.', tr.TableName, '.',
         );
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 0
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 0 -Database $database
 }
 
