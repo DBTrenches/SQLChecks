@@ -11,6 +11,11 @@ $databasesToCheckParams = @{
 
 if($databasesToCheckConfig -eq "AGOnly") {
     $databasesToCheckParams.ExcludeLocal = $true
+
+    if($config.AvailabilityGroup -ne $null) {
+        $databasesToCheckParams.AvailabilityGroup = $config.AvailabilityGroup
+    }
+
 } elseif($databasesToCheckConfig -eq "LocalOnly") {
     $databasesToCheckParams.ExcludePrimary = $true
     # Secondary databases are excluded by default
