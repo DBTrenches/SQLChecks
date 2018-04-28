@@ -2,8 +2,9 @@ Param(
     $Config
 )
 
+$serverInstance = $config.ServerInstance
+
 Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
-    $serverInstance = $config.ServerInstance
     Context "Testing no large fixed autogrowth on $serverInstance" {
         It "No logs with large fixed autogrowth on $serverInstance " {
             $MaxTLogAutoGrowthInKB = $config.MaxTLogAutoGrowthInKB
@@ -16,7 +17,6 @@ Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
 }
 
 Describe "Data file space used" -Tag MaxDataFileSize {
-    $serverInstance = $config.ServerInstance
     $maxDataConfig = $config.MaxDataFileSize
     if($maxDataConfig  -eq $null) {
         continue
@@ -42,7 +42,6 @@ Describe "Data file space used" -Tag MaxDataFileSize {
 }
 
 Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
-    $serverInstance = $config.ServerInstance
     $MustHaveDDLTrigger = $config.MustHaveDDLTrigger
     if($MustHaveDDLTrigger  -eq $null) {
         continue
@@ -63,7 +62,6 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
 }
 
 Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
-    $serverInstance = $config.ServerInstance
     Context "Testing for oversied indexes on $serverInstance" {
         It "No oversized indexes on $serverInstance" {
             $CheckForOversizedIndexes = $config.CheckForOversizedIndexes
@@ -76,7 +74,6 @@ Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
 }
 
 Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
-    $serverInstance = $config.ServerInstance
     Context "Testing for no percentage growth log files $serverInstance" {
         It "No percentage growth log files on $serverInstance" {
             $CheckForPercentageGrowthLogFiles = $config.CheckForPercentageGrowthLogFiles
@@ -89,7 +86,6 @@ Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
 }
 
 Describe "Last good checkdb" -Tag LastGoodCheckDb {
-    $serverInstance = $config.ServerInstance
     $checkDbConfig = $config.LastGoodCheckDb
     $maxDays = $checkDbConfig.MaxDaysSinceLastGoodCheckDB
     $excludedDbs = $checkDbConfig.ExcludedDatabases
@@ -109,7 +105,6 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
 }
 
 Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
-    $serverInstance = $config.ServerInstance
     Context "Testing for duplicate indexes on $serverInstance" {
         It "No duplicate indexes on $serverInstance" {
             $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
@@ -127,7 +122,6 @@ Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
 }
 
 Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
-    $serverInstance = $config.ServerInstance
     Context "Testing for zero autogrowth files on $serverInstance" {
         It "No zero-autogrowth files outside whitelist on $serverInstance"{
             $configValue = $config.ZeroAutoGrowthFiles
@@ -141,7 +135,6 @@ Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
 }
 
 Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
-    $serverInstance = $config.ServerInstance
     Context "Testing for autogrowth available space on $serverInstance" {
         $databases = Get-DatabasesToCheck -ServerInstance $serverInstance -PrimaryOnly
 
