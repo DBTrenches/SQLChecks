@@ -88,12 +88,11 @@ Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
 
 Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
     Context "Testing for no percentage growth log files $serverInstance" {
-        It "No percentage growth log files on $serverInstance" {
-            $CheckForPercentageGrowthLogFiles = $config.CheckForPercentageGrowthLogFiles
-            if($CheckForPercentageGrowthLogFiles  -eq $null -or -not $CheckForPercentageGrowthLogFiles) {
-                Set-TestInconclusive -Message "No config value found or check not required"
+        $databases = Get-DatabasesToCheck @databasesToCheckParams 
+        foreach($database in $databases) {
+            It "$database has no percentage growth log files on $serverInstance" {
+                @(Get-TLogWithPercentageGrowth -ServerInstance $serverInstance -Database $database).Count | Should Be 0
             }
-            @(Get-TLogWithPercentageGrowth -ServerInstance $serverInstance).Count | Should Be 0
         }
     }
 }
