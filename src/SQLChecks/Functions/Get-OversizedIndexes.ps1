@@ -2,6 +2,7 @@ Function Get-OversizedIndexes {
     [cmdletbinding()]
     Param(
         [string] $ServerInstance
+        ,[string] $Database
     )
 
     $query = @"
@@ -18,25 +19,8 @@ ColumnCount TINYINT
 )
 DECLARE @cmd NVARCHAR(max)
 
-DECLARE dbs CURSOR FOR SELECT d.name FROM sys.databases AS d WHERE d.name NOT IN ('master','tempdb','msdb') AND  ( d.replica_id IS NULL
-              OR EXISTS ( SELECT    *
-                          FROM      sys.availability_databases_cluster AS adc
-                                    JOIN sys.dm_hadr_availability_replica_states
-                                    AS dhars ON dhars.group_id = adc.group_id
-                          WHERE     dhars.role = 1
-                                    AND adc.database_name = d.name )
-            )
 
-DECLARE @db AS NVARCHAR(50)
-
-OPEN dbs
-FETCH NEXT FROM dbs INTO @db
-
-WHILE @@FETCH_STATUS = 0
-BEGIN
-
-
- SET @cmd='Use ' + @db + ';
+ SET @cmd='
   
 SELECT DB_NAME() as DatabaseName,SCHEMA_NAME (o.schema_id) AS ''SchemaName'',o.name AS TableName, i.name AS IndexName, i.type_desc AS IndexType,
 sum(max_length) AS RowLength, count (ic.index_id) AS ''ColumnCount''
@@ -68,13 +52,6 @@ ORDER BY 1,2,3'
          )
  EXEC sys.sp_executesql @cmd=@cmd
 
- FETCH NEXT FROM dbs INTO @db
-
-END
-
-CLOSE dbs
-DEALLOCATE dbs
-
 SELECT tr.DatabaseName ,
        tr.SchemaName ,
        tr.TableName ,
@@ -84,7 +61,7 @@ SELECT tr.DatabaseName ,
        tr.ColumnCount FROM #tempResults AS tr;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | ForEach-Object {
         [pscustomobject]@{
             Database = $_.DatabaseName
             Schema = $_.SchemaName

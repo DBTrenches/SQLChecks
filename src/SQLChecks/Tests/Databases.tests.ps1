@@ -76,12 +76,11 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
 
 Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
     Context "Testing for oversied indexes on $serverInstance" {
-        It "No oversized indexes on $serverInstance" {
-            $CheckForOversizedIndexes = $config.CheckForOversizedIndexes
-            if($CheckForOversizedIndexes  -eq $null -or -not $CheckForOversizedIndexes) {
-                Set-TestInconclusive -Message "No config value found or check not required"
+        $databases = Get-DatabasesToCheck @databasesToCheckParams 
+        foreach($database in $databases) {
+            It "$database has no oversized indexes on $serverInstance" {
+                @(Get-OversizedIndexes -ServerInstance $serverInstance -Database $database).Count | Should Be 0
             }
-            @(Get-OversizedIndexes -ServerInstance $serverInstance).Count | Should Be 0
         }
     }
 }
