@@ -18,12 +18,12 @@ if($databasesToCheckConfig -eq "AGOnly") {
 
 Describe "Log File Growth" -Tag MaxTLogAutoGrowthInKB {
     Context "Testing no large fixed autogrowth on $serverInstance" {
-        It "No logs with large fixed autogrowth on $serverInstance " {
-            $MaxTLogAutoGrowthInKB = $config.MaxTLogAutoGrowthInKB
-            if($MaxTLogAutoGrowthInKB  -eq $null) {
-                Set-TestInconclusive -Message "No config value found"
+        $MaxTLogAutoGrowthInKB = $config.MaxTLogAutoGrowthInKB
+        $databases = Get-DatabasesToCheck @databasesToCheckParams 
+        foreach($database in $databases) {
+            It "$database has no log files with autogrowth greater than $MaxTLogAutoGrowthInKB KB on $serverInstance " {
+                @(Get-TLogsWithLargeGrowthSize -ServerInstance $serverInstance -GrowthSizeKB $MaxTLogAutoGrowthInKB -Database $database).Count | Should Be 0
             }
-            @(Get-TLogsWithLargeGrowthSize -ServerInstance $serverInstance -GrowthSizeKB $MaxTLogAutoGrowthInKB).Count | Should Be 0
         }
     }
 }
@@ -41,9 +41,9 @@ Describe "Data file space used" -Tag MaxDataFileSize {
         WhiteListFiles = $maxDataConfig.WhitelistFiles
     }
 
-    $databases = Get-DatabasesToCheck @databasesToCheckParams 
-
+    
     Context "Testing for data file space usage on $serverInstance" {
+        $databases = Get-DatabasesToCheck @databasesToCheckParams 
         foreach($database in $databases) {
             It "$database files are all under $spaceUsedPercentLimit% full on $serverInstance" {
                 $MaxDataFileParams.Database = $database

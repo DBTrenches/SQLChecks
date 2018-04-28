@@ -1,8 +1,9 @@
 Function Get-TLogsWithLargeGrowthSize {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance,
-	    [int] $GrowthSizeKB
+        [string] $ServerInstance
+        ,[string] $Database
+	    ,[int] $GrowthSizeKB
     )
 
     $query = @"
@@ -25,10 +26,11 @@ where   (
 )
      )
 and     s.type = 1
-and (( s.growth * 8 ) > $GrowthSizeKB and s.is_percent_growth = 0);;
+and (( s.growth * 8 ) > $GrowthSizeKB and s.is_percent_growth = 0)
+and s.database_id = db_id();
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query |ForEach-Object {
+    Invoke-Sqlcmd -ServerInstance $serverInstance -Database $Database -query $query |ForEach-Object {
         [pscustomobject]@{
             Database = $_.DatabaseName
             FileName = $_.FileName
