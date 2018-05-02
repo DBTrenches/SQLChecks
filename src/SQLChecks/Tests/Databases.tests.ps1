@@ -80,7 +80,7 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
 }
 
 Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
-    Context "Testing for oversied indexes on $serverInstance" {
+    Context "Testing for oversized indexes on $serverInstance" {
         $databases = Get-DatabasesToCheck @databasesToCheckParams 
         foreach($database in $databases) {
             It "$database has no oversized indexes on $serverInstance" {
