@@ -80,8 +80,10 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
 }
 
 Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
+    $databasesToCheckParams.ExcludedDatabases = $config.CheckForOversizedIndexes.ExcludedDatabases
+
     Context "Testing for oversized indexes on $serverInstance" {
-        $databases = Get-DatabasesToCheck @databasesToCheckParams 
+        $databases = Get-DatabasesToCheck @databasesToCheckParams
         foreach($database in $databases) {
             It "$database has no oversized indexes on $serverInstance" {
                 @(Get-OversizedIndexes -ServerInstance $serverInstance -Database $database).Count | Should Be 0
@@ -104,15 +106,13 @@ Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
 Describe "Last good checkdb" -Tag LastGoodCheckDb {
     $checkDbConfig = $config.LastGoodCheckDb
     $maxDays = $checkDbConfig.MaxDaysSinceLastGoodCheckDB
-    $databasesToCheckParams.ExcludedDatabases = $checkDbConfig.ExcludedDatabases
+    [string[]]$excludedDbs = $checkDbConfig.ExcludedDatabases
+    $excludedDbs += "tempdb"
+    $databasesToCheckParams.ExcludedDatabases = $excludedDbs
 
     Context "Testing for last good check db on $serverInstance" {
         $databases = Get-DatabasesToCheck @databasesToCheckParams 
         foreach($database in $databases) {
-            if($database -eq "tempdb") {
-                continue
-            }
-
             It "$database had a successful CHECKDB in the last $maxDays days on $serverInstance"{
                 (Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -Database $database).DaysSinceLastGoodCheckDB | Should -BeLessOrEqual $maxDays
             }

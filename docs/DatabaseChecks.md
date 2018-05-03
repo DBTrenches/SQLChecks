@@ -44,12 +44,12 @@ Polls for files above a certain percentage of fullness. This can help alert you 
 
 ## Oversized indexes
 ```json
-"CheckForOversizedIndexes": true
+"CheckForOversizedIndexes": {
+    "ExcludedDatabases": ["tempdb"]
+}
 ```
 
-Reports on any database which has oversized indexes (potential key size larger than 1700 bytes - the maximum in SQL 2016+).
-
-If the config value is set to false the check will be skipped.
+Reports on any database which has oversized indexes - potential key size larger than 1700 bytes for a nonclustered index, or 900 bytes for a clustered index. (These values are for SQL 2016+).
 
 ## Fixed-Size Files  
 ```json

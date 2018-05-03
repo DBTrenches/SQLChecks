@@ -15,7 +15,9 @@
         "TriggerName": "TR_DoesNotExist"
         ,"ExcludedDatabases": ["ExcludedDb", "tsqlscheduler"]
     } 
-    ,"CheckForOversizedIndexes": true
+    ,"CheckForOversizedIndexes": {
+        "ExcludedDatabases": ["tempdb"]
+    }
     ,"CheckForPercentageGrowthLogFiles": true
     ,"MaxTLogAutoGrowthInKB": 900000
     ,"LastGoodCheckDb": {
