@@ -1,5 +1,4 @@
-. $PSScriptRoot/Functions/Test-TraceFlags.ps1
-
+# Gets
 . $PSScriptRoot/Functions/Get-NumberOfErrorLogs.ps1
 . $PSScriptRoot/Functions/Get-TLogsWithLargeGrowthSize.ps1
 . $PSScriptRoot/Functions/Get-DatabaseTriggerStatus.ps1
@@ -13,8 +12,14 @@
 . $PSScriptRoot/Functions/Get-DatabasesToCheck.ps1
 . $PSScriptRoot/Functions/Get-SqlAgentJobsWithDisabledSchedule.ps1
 . $PSScriptRoot/Functions/Get-SqlAgentJobsWithNoActiveSchedule.ps1
-. $PSScriptRoot/Functions/Test-StartupXEvents.ps1
-
 . $PSScriptRoot/Functions/Get-DefaultDatabaseMailProfile.ps1
 
+# Tests
+. $PSScriptRoot/Functions/Test-TraceFlags.ps1
+. $PSScriptRoot/Functions/Test-StartupXEvents.ps1
+
+# Utility
 . $PSScriptRoot/Functions/Invoke-SqlChecks.ps1
+
+# Sets
+. $PSScriptRoot/Functions/Set/Set-SpConfig.ps1
