@@ -1,14 +1,11 @@
 Function Set-SpConfig {
     [cmdletbinding()]
     Param(
-        [parameter(Mandatory=$true)]
-        [string]
-        $ServerInstance,
-
         [Parameter(Mandatory=$true)]
         [string]
         $Config
     )
+    $serverInstance = $Config.ServerInstance
 
     foreach($configProperty in $spconfig.PSObject.Properties) {
         $configName = $configProperty.Name
