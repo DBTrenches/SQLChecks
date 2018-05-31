@@ -14,6 +14,9 @@
 . $PSScriptRoot/Functions/Get-SqlAgentJobsWithNoActiveSchedule.ps1
 . $PSScriptRoot/Functions/Get-DefaultDatabaseMailProfile.ps1
 
+# Reads
+. $PSScriptRoot/Functions/Read/Read-SqlChecksConfig.ps1
+
 # Tests
 . $PSScriptRoot/Functions/Test-TraceFlags.ps1
 . $PSScriptRoot/Functions/Test-StartupXEvents.ps1

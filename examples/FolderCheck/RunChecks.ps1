@@ -3,7 +3,6 @@
 $instances = Get-ChildItem -Path .\Instances -Filter *.config.json
 
 foreach($instance in $instances) {
-    [string]$configData = Get-Content -Path $instance.PSPath -Raw
-    $configData | ConvertFrom-Json -OutVariable +config | Out-Null
+    $config = Read-SqlChecksConfig -Path $instance.PSPath
     Invoke-SqlChecks -Config $config
 }

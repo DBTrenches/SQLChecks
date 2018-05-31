@@ -1,6 +1,5 @@
 #Requires -Modules DBATools, SQLChecks
 
-[string]$data = Get-Content -Path .\localhost.config.json -Raw
-$data | ConvertFrom-Json -OutVariable configs | Out-Null
+$configs = Read-SqlChecksConfig -Path .\localhost.config.json
 
 Invoke-SqlChecks -Config $configs
