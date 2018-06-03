@@ -1,7 +1,7 @@
 Function Set-SpConfig {
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
         $Config
     )
     $serverInstance = $Config.ServerInstance

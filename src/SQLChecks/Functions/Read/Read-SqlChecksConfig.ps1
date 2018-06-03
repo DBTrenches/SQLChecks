@@ -1,7 +1,7 @@
 Function Read-SqlChecksConfig {
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
         [System.IO.FileInfo]
         $Path
     )
