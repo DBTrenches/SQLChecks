@@ -1,28 +1,28 @@
 # Gets
-. $PSScriptRoot/Functions/Get-NumberOfErrorLogs.ps1
-. $PSScriptRoot/Functions/Get-TLogsWithLargeGrowthSize.ps1
-. $PSScriptRoot/Functions/Get-DatabaseTriggerStatus.ps1
-. $PSScriptRoot/Functions/Get-OversizedIndexes.ps1
-. $PSScriptRoot/Functions/Get-TLogWithPercentageGrowth.ps1
-. $PSScriptRoot/Functions/Get-DatabaseFilesOverMaxDataFileSpaceUsed.ps1
-. $PSScriptRoot/Functions/Get-DbsWithoutGoodCheckDb.ps1
-. $PSScriptRoot/Functions/Get-DuplicateIndexes.ps1
-. $PSScriptRoot/Functions/Get-FixedSizeFiles.ps1
-. $PSScriptRoot/Functions/Get-AutoGrowthRisks.ps1
-. $PSScriptRoot/Functions/Get-DatabasesToCheck.ps1
-. $PSScriptRoot/Functions/Get-SqlAgentJobsWithDisabledSchedule.ps1
-. $PSScriptRoot/Functions/Get-SqlAgentJobsWithNoActiveSchedule.ps1
-. $PSScriptRoot/Functions/Get-DefaultDatabaseMailProfile.ps1
+. $PSScriptRoot/Functions/Get/Get-NumberOfErrorLogs.ps1
+. $PSScriptRoot/Functions/Get/Get-TLogsWithLargeGrowthSize.ps1
+. $PSScriptRoot/Functions/Get/Get-DatabaseTriggerStatus.ps1
+. $PSScriptRoot/Functions/Get/Get-OversizedIndexes.ps1
+. $PSScriptRoot/Functions/Get/Get-TLogWithPercentageGrowth.ps1
+. $PSScriptRoot/Functions/Get/Get-DatabaseFilesOverMaxDataFileSpaceUsed.ps1
+. $PSScriptRoot/Functions/Get/Get-DbsWithoutGoodCheckDb.ps1
+. $PSScriptRoot/Functions/Get/Get-DuplicateIndexes.ps1
+. $PSScriptRoot/Functions/Get/Get-FixedSizeFiles.ps1
+. $PSScriptRoot/Functions/Get/Get-AutoGrowthRisks.ps1
+. $PSScriptRoot/Functions/Get/Get-DatabasesToCheck.ps1
+. $PSScriptRoot/Functions/Get/Get-SqlAgentJobsWithDisabledSchedule.ps1
+. $PSScriptRoot/Functions/Get/Get-SqlAgentJobsWithNoActiveSchedule.ps1
+. $PSScriptRoot/Functions/Get/Get-DefaultDatabaseMailProfile.ps1
 
 # Reads
 . $PSScriptRoot/Functions/Read/Read-SqlChecksConfig.ps1
 
 # Tests
-. $PSScriptRoot/Functions/Test-TraceFlags.ps1
-. $PSScriptRoot/Functions/Test-StartupXEvents.ps1
-
-# Utility
-. $PSScriptRoot/Functions/Invoke-SqlChecks.ps1
+. $PSScriptRoot/Functions/Test/Test-TraceFlags.ps1
+. $PSScriptRoot/Functions/Test/Test-StartupXEvents.ps1
 
 # Sets
 . $PSScriptRoot/Functions/Set/Set-SpConfig.ps1
+
+# Utility
+. $PSScriptRoot/Functions/Invoke-SqlChecks.ps1
