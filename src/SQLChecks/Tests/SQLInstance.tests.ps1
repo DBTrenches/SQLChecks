@@ -60,7 +60,7 @@ Describe "Startup Extended Events" -Tag StartupXEvents {
 Describe "Database Mail is configured" -Tag DatabaseMail {
     Context "Testing for database mail configuration on $serverInstance" {
         It "Database mail is enabled on $serverInstance" {
-            (Get-DbaSpConfigure -Server $serverInstance -ConfigName "DatabaseMailEnabled").RunningValue | Should Be 1
+            (Get-SpConfigValue -Server $serverInstance -ConfigName "Database Mail XPs").ConfiguredValue | Should Be 1
         }
 
         It "Database mail has a default profile configured on $serverInstance" {
