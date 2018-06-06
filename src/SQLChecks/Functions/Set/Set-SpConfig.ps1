@@ -12,12 +12,12 @@ Function Set-SpConfig {
         $total++
         $configName = $configProperty.Name
         $expectedValue = $configProperty.Value
-        $configValue = (Get-DbaSpConfigure -Server $serverInstance -ConfigName $configName).ConfiguredValue
+        $configValue = (Get-SpConfigValue -Server $serverInstance -ConfigName $configName).ConfiguredValue
         
         if($expectedValue -ne $configValue) {
             $changed++
             Write-Verbose "Updating $configName on $serverInstance from $configValue to $expectedValue"
-            Set-DbaSpConfigure -Server $serverInstance -ConfigName $configName -Value $expectedValue | Out-Null
+            Set-SpConfigValue -Server $serverInstance -ConfigName $configName -Value $expectedValue
         }
     }
 

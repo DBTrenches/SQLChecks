@@ -27,7 +27,7 @@ Assuming you have a job to cycle your error logs daily, a value of 14 would give
 }
 ```
 
-Checks the runtime value against the value specified in config.  Each value checked is reported as an individual test result.
+Checks the configured value against the value specified in config.  Each value checked is reported as an individual test result.
 
 The example above would check that MaxDop was 1, Show Advanced Options was off, and xp_cmdshell was disabled.
 

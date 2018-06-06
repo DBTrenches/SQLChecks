@@ -38,7 +38,7 @@ Describe "Number of SQL error logs" -Tag SpConfig {
             $expectedValue = $configProperty.Value
 
             It "Correct sp_configure setting $configName on $serverInstance " {
-                (Get-DbaSpConfigure -Server $serverInstance -ConfigName $configName).RunningValue | Should Be $expectedValue
+                (Get-SpConfigValue -Server $serverInstance -ConfigName $configName).ConfiguredValue | Should Be $expectedValue
             }
         }
     }
