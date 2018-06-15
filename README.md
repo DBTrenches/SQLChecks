@@ -1,7 +1,7 @@
 # SQLChecks
 Helper functions and tests for SQL Server.
 
-Requires the DBATools module.
+Requires the SqlServer and DBATools modules.
 
 The examples folder contains a few different ways of invoking the scripts - against a single instance (SingleCheck) or against a folder full of instances (FolderCheck).
 
@@ -11,7 +11,7 @@ For more information refer to [the documentation](./docs/Readme.md).
 (From the root)
 
 ```powershell
-#Requires -Modules DBATools, SQLChecks
+#Requires -Modules SQLChecks
 
 cd .\examples\SingleCheck
 .\RunChecks.ps1
@@ -19,8 +19,8 @@ cd .\examples\SingleCheck
 
 ## Testing a single item from config
 ```powershell
-#Requires -Modules DBATools, SQLChecks
+#Requires -Modules SQLChecks
 
-Get-Content -Path ".\examples\SingleCheck\localhost.config.json" -Raw | ConvertFrom-Json -OutVariable cfg | Out-Null
-Test-TraceFlags -ServerInstance $cfg.ServerInstance -ExpectedFlags $cfg.TraceFlags
+$config = Read-SqlChecksConfig -Path ".\examples\SingleCheck\localhost.config.json"
+Test-TraceFlags -ServerInstance $config.ServerInstance -ExpectedFlags $config.TraceFlags
 ```
