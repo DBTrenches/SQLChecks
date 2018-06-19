@@ -1,5 +1,6 @@
 ﻿Function Get-AutoGrowthRisks {
-    [cmdletbinding()]Param(
+    [cmdletbinding()]
+    Param(
          [parameter(Mandatory=$true)][string]$ServerInstance
          ,[parameter(Mandatory=$true)][string]$Database
         ,$WhitelistFiles # optional array or comma-delim string

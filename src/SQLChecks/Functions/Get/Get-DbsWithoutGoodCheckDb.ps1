@@ -1,5 +1,6 @@
 ﻿Function Get-DbsWithoutGoodCheckDb{
-    [cmdletbinding()]Param(
+    [cmdletbinding()]
+    Param(
         [parameter(Mandatory=$true)][string]$ServerInstance
         ,[parameter(Mandatory=$true)][string]$Database
     )
