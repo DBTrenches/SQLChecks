@@ -1,7 +1,8 @@
 Function Get-DefaultDatabaseMailProfile {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance
+        [string]
+        $ServerInstance
     )
 
     $query = @"

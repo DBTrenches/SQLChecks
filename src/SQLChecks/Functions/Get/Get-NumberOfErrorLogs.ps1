@@ -1,7 +1,8 @@
 Function Get-NumberOfErrorLogs {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance
+        [string]
+        $ServerInstance
     )
 
     $query = "declare @NumErrorLogs int;

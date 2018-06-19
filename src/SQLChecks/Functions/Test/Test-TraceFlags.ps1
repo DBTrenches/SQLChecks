@@ -1,8 +1,11 @@
 Function Test-TraceFlags {
     [cmdletbinding()]
     Param(
-        [int[]] $ExpectedFlags
-        ,[string] $ServerInstance
+        [int[]]
+        $ExpectedFlags,
+        
+        [string]
+        $ServerInstance
     )
 
     $dbFlags = Get-DbaTraceFlag -SqlInstance $serverInstance

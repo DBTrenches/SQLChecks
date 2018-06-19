@@ -1,9 +1,14 @@
 ﻿function Get-FixedSizeFiles {
     [cmdletbinding()]
     Param(
-         [parameter(Mandatory=$true)][string]$ServerInstance
-         ,[string]$Database
-        ,$WhitelistFiles # optional array or comma-delim string
+        [parameter(Mandatory=$true)]
+        [string]
+        $ServerInstance,
+
+        [string]
+        $Database,
+        
+        $WhitelistFiles # optional array or comma-delim string
     )
 
     $whitelistedFiles=@()

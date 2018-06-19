@@ -1,8 +1,11 @@
 Function Get-OversizedIndexes {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance
-        ,[string] $Database
+        [string]
+        $ServerInstance,
+        
+        [string]
+        $Database
     )
 
     $query = @"

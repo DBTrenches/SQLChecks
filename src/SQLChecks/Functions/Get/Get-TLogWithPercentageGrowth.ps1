@@ -1,8 +1,11 @@
 Function Get-TLogWithPercentageGrowth {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance
-        ,[string] $Database
+        [string]
+        $ServerInstance,
+        
+        [string]
+        $Database
     )
 
     $query = @"

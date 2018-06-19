@@ -1,10 +1,17 @@
 Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance,
-	    [int] $MaxDataFileSpaceUsedPercent,
-        [string[]] $WhitelistFiles,
-        [string] $Database
+        [string]
+        $ServerInstance,
+        
+        [int]
+        $MaxDataFileSpaceUsedPercent,
+        
+        [string[]]
+        $WhitelistFiles,
+        
+        [string]
+        $Database
     )
     
     $WhitelistString = "''"

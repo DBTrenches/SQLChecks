@@ -1,10 +1,17 @@
 Function Get-DuplicateIndexes {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance,
-	    [string] $ExcludeDatabase,
-        [string] $ExcludeIndex
-        ,[string] $Database
+        [string]
+        $ServerInstance,
+        
+        [string]
+        $ExcludeDatabase,
+        
+        [string]
+        $ExcludeIndex,
+        
+        [string]
+        $Database
     )
 
     if([string]::IsNullOrWhiteSpace($ExcludeIndex)){$ExcludeIndex="''"}

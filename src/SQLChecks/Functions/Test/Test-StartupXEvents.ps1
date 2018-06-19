@@ -1,8 +1,11 @@
 Function Test-StartupXEvents {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance
-        ,[string[]] $ExpectedSessions
+        [string]
+        $ServerInstance,
+        
+        [string[]]
+        $ExpectedSessions
     )
 
     $query = @"

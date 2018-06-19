@@ -1,9 +1,14 @@
 Function Get-DatabaseTriggerStatus {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance,
-        [string] $TriggerName,
-        [string] $Database
+        [string]
+        $ServerInstance,
+        
+        [string]
+        $TriggerName,
+        
+        [string]
+        $Database
     )
 
     $query = @"

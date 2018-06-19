@@ -1,9 +1,14 @@
 Function Get-TLogsWithLargeGrowthSize {
     [cmdletbinding()]
     Param(
-        [string] $ServerInstance
-        ,[string] $Database
-	    ,[int] $GrowthSizeKB
+        [string]
+        $ServerInstance,
+        
+        [string]
+        $Database,
+        
+        [int]
+        $GrowthSizeKB
     )
 
     $query = @"

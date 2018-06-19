@@ -1,8 +1,13 @@
 ﻿Function Get-DbsWithoutGoodCheckDb{
     [cmdletbinding()]
     Param(
-        [parameter(Mandatory=$true)][string]$ServerInstance
-        ,[parameter(Mandatory=$true)][string]$Database
+        [parameter(Mandatory=$true)]
+        [string]
+        $ServerInstance,
+        
+        [parameter(Mandatory=$true)]
+        [string]
+        $Database
     )
 
     $query = @"

@@ -1,12 +1,13 @@
 Function Get-SpConfigValue {
     [cmdletbinding()]
     Param(
-         [parameter(Mandatory=$true)]
-         [string]
-         $ServerInstance
-         ,[parameter(Mandatory=$true)]
-         [string]
-         $ConfigName
+        [parameter(Mandatory=$true)]
+        [string]
+        $ServerInstance,
+        
+        [parameter(Mandatory=$true)]
+        [string]
+        $ConfigName
     )
 
     $query = @"
