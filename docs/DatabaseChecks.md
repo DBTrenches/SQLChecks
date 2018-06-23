@@ -11,7 +11,7 @@ As the log is zeroed out before use it can be a time consuming operation.  When 
 
 ## Transaction log with percentage growth
 ```json
-"CheckForPercentageGrowthLogFiles": true
+"CheckForPercentageGrowthLogFiles": {}
 ```
 
 Reports on any database log with a percentage growth configured.

@@ -18,7 +18,7 @@
     ,"CheckForOversizedIndexes": {
         "ExcludedDatabases": ["tempdb"]
     }
-    ,"CheckForPercentageGrowthLogFiles": true
+    ,"CheckForPercentageGrowthLogFiles": {}
     ,"MaxTLogAutoGrowthInKB": 900000
     ,"LastGoodCheckDb": {
         "Check": true,
