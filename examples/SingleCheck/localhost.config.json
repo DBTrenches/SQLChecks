@@ -32,7 +32,7 @@
             ,"templog"
         ]
     }
-    ,"ShouldCheckForAutoGrowthRisks": true
+    ,"ShouldCheckForAutoGrowthRisks": {}
     ,"CheckDuplicateIndexes": {
         "Check": true,
         "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
