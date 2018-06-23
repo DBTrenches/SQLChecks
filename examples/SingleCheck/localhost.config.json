@@ -21,20 +21,17 @@
     ,"CheckForPercentageGrowthLogFiles": {}
     ,"MaxTLogAutoGrowthInKB": 900000
     ,"LastGoodCheckDb": {
-        "Check": true,
         "MaxDaysSinceLastGoodCheckDB": 7,
         "ExcludedDatabases": [ "tempdb" ]
     }
     ,"ZeroAutoGrowthFiles":{
-        "Check": true
-        ,"Whitelist": [
+        "Whitelist": [
             "AdventureWorks2016CTP3_mod"
             ,"templog"
         ]
     }
     ,"ShouldCheckForAutoGrowthRisks": {}
     ,"CheckDuplicateIndexes": {
-        "Check": true,
         "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
     },"StartupXEvents" : [
             "system_health"

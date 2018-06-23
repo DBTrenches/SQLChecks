@@ -54,7 +54,6 @@ Reports on any database which has oversized indexes - potential key size larger 
 ## Fixed-Size Files  
 ```json
 "ZeroAutoGrowthWhitelistFiles":{
-        "Check": true
         ,"Whitelist": [
                 "AdventureWorks2016CTP3_mod"
                 ,"templog"
@@ -73,7 +72,6 @@ Filegroups that are permitted to auto-grow should have enough space to do so. `G
 ## Last good CheckDB
 ```json
 "LastGoodCheckDb": {
-        "Check": true,
         "MaxDaysSinceLastGoodCheckDB": 7,
         "ExcludedDatabases": [ "tempdb" ]
     }
@@ -83,7 +81,6 @@ This checks the last good CheckDB date for each databases, based on the threshol
 ## Duplicate index checks
 ```json
 "CheckDuplicateIndexes": {
-        "Check": true,
         "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
     }
 ```
