@@ -5,8 +5,5 @@ Describe "Import-Module SQLChecks" {
     It "Should export at least one function" {
       @(Get-Command -Module SQLChecks).Count | Should BeGreaterThan 0
     }
-    It "Should always fail" {
-      $true | Should Be $false
-    }
   }
 }
