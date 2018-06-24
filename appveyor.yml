@@ -1,0 +1,4 @@
+build: false
+
+test_script:
+  - ps: Invoke-Pester -Path ".\tests"
