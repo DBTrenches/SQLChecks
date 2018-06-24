@@ -1,5 +1,7 @@
 install:
   - cinst pester
+  - ps: Install-Module dbatools
+  - ps: Install-Module SqlServer
 
 build: off
 
