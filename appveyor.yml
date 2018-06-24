@@ -1,3 +1,7 @@
+skip_commits:
+  files:
+    - '**/*.md'
+
 install:
   - cinst pester
   - ps: Install-Module dbatools -AllowClobber -Force
