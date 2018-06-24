@@ -1,4 +1,7 @@
 # SQLChecks
+![AppVeyor Build Status](https://img.shields.io/appveyor/ci/taddison/SQLChecks.svg)
+![AppVeyor Tests](https://img.shields.io/appveyor/tests/taddison/SQLChecks.svg)
+
 Helper functions and tests for SQL Server.
 
 Requires the SqlServer and DBATools modules.
