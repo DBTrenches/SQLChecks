@@ -1,6 +1,6 @@
 # SQLChecks
-![https://ci.appveyor.com/project/taddison/sqlchecks](https://img.shields.io/appveyor/ci/taddison/SQLChecks.svg)
-![https://ci.appveyor.com/project/taddison/sqlchecks/build/tests](https://img.shields.io/appveyor/tests/taddison/SQLChecks.svg)
+[![Build Status](https://img.shields.io/appveyor/ci/taddison/SQLChecks.svg)](https://ci.appveyor.com/project/taddison/sqlchecks)
+[![Test Status](https://img.shields.io/appveyor/tests/taddison/SQLChecks.svg)](https://ci.appveyor.com/project/taddison/sqlchecks/build/tests)
 
 Helper functions and tests for SQL Server.
 
