@@ -12,7 +12,7 @@ The example above checks for 3226 (suppress backup messages in the SQL Error log
 ## Number of error logs
 ```json
 "NumErrorLogs": 14
-``` 
+```
 
 Compares the configured number of SQL error logs against a configured value.
 

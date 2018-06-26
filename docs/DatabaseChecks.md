@@ -3,7 +3,7 @@
 ## Max transaction log fixed growth
 ```json
 "MaxTLogAutoGrowthInKB": 999000
-``` 
+```
 
 Reports on any database which has a fixed growth larger than the config value.
 
@@ -24,7 +24,7 @@ If the config value is set to false the check will be skipped.
     "TriggerName": "TR_LogDDLChanges",
     "ExcludedDatabases": ["ExcludedDatabase1"]
   }
-``` 
+```
 
 Reports on any database which does not contain the specified DDL trigger.  Excludes system databases.
 
