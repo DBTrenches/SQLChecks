@@ -14,7 +14,7 @@ For more information refer to [the documentation](./docs/Readme.md).
 (From the root)
 
 ```powershell
-#Requires -Modules SQLChecks
+Import-Module .\src\SQLChecks -Force
 
 cd .\examples\SingleCheck
 .\RunChecks.ps1
@@ -22,7 +22,7 @@ cd .\examples\SingleCheck
 
 ## Testing a single item from config
 ```powershell
-#Requires -Modules SQLChecks
+Import-Module .\src\SQLChecks -Force
 
 $config = Read-SqlChecksConfig -Path ".\examples\SingleCheck\localhost.config.json"
 Test-TraceFlags -ServerInstance $config.ServerInstance -ExpectedFlags $config.TraceFlags
