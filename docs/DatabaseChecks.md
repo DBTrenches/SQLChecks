@@ -54,7 +54,7 @@ Reports on any database which has oversized indexes - potential key size larger 
 ## Fixed-Size Files  
 ```json
 "ZeroAutoGrowthWhitelistFiles":{
-        ,"Whitelist": [
+        "Whitelist": [
                 "AdventureWorks2016CTP3_mod"
                 ,"templog"
         ]
