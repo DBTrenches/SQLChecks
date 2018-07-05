@@ -15,10 +15,9 @@ if($databasesToCheckConfig -eq "AGOnly") {
     if($config.AvailabilityGroup -ne $null) {
         $databasesToCheckParams.AvailabilityGroup = $config.AvailabilityGroup
     }
-
+    
 } elseif($databasesToCheckConfig -eq "LocalOnly") {
     $databasesToCheckParams.ExcludePrimary = $true
-    # Secondary databases are excluded by default
 }
 
 Describe "No large fixed growth transaction logs" -Tag MaxTLogAutoGrowthInKB {
