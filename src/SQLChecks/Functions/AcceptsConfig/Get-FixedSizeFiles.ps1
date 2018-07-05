@@ -31,6 +31,7 @@ select database_id
     ,f_path=physical_name
 from sys.master_files 
 where growth = 0
+and type_desc <> 'FILESTREAM'
 and database_id = db_id();
 "@
 

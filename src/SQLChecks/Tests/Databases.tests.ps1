@@ -142,14 +142,12 @@ Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
 }
 
 Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
-    Context "Testing for zero autogrowth files on $serverInstance" {
-        $whitelist = $config.ZeroAutoGrowthFiles.Whitelist
-        $databases = Get-DatabasesToCheck @databasesToCheckParams 
-        
-        foreach($database in $databases) {
-            It "$database has no zero autogrowth files on $serverInstance"{
-                @(Get-FixedSizeFiles -ServerInstance $serverInstance -WhitelistFiles $whitelist -Database $database).Count | Should Be 0
-            }
+    $whitelist = $config.ZeroAutoGrowthFiles.Whitelist
+    $databases = Get-DatabasesToCheck @databasesToCheckParams 
+    
+    foreach($database in $databases) {
+        It "$database has no zero autogrowth files on $serverInstance"{
+            @(Get-FixedSizeFiles -ServerInstance $serverInstance -WhitelistFiles $whitelist -Database $database).Count | Should Be 0
         }
     }
 }
