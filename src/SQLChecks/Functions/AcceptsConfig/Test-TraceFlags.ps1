@@ -1,12 +1,20 @@
 Function Test-TraceFlags {
     [cmdletbinding()]
     Param(
-        [int[]]
-        $ExpectedFlags,
-        
-        [string]
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
         $ServerInstance
+        
+        ,[Parameter(ParameterSetName="Values")]
+        $TraceFlags
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $TraceFlags = $Config.TraceFlags
+    }
 
     $dbFlags = Get-DbaTraceFlag -SqlInstance $serverInstance
     $flags = @()
@@ -16,9 +24,9 @@ Function Test-TraceFlags {
         $flags += $flag.TraceFlag
     }
 
-    $comparison = @(Compare-Object -ReferenceObject $expectedFlags -DifferenceObject $flags)
+    $comparison = @(Compare-Object -ReferenceObject $TraceFlags -DifferenceObject $flags)
 
-    foreach($delta in $comparison)     
+    foreach($delta in $comparison)
     {
         [pscustomobject]@{
             TraceFlag = $delta.InputObject
