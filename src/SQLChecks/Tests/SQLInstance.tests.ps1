@@ -24,17 +24,15 @@ Describe "Number of SQL error logs" -Tag NumErrorLogs {
     }
 }
 
-Describe "Number of SQL error logs" -Tag SpConfig {
-    Context "Testing for SPConfigure values on $serverInstance" {
-        $spconfig = $config.SpConfig
+Describe "SPConfigure values" -Tag SpConfig {
+    $spconfig = $config.SpConfig
 
-        foreach($configProperty in $spconfig.PSObject.Properties) {
-            $configName = $configProperty.Name
-            $expectedValue = $configProperty.Value
+    foreach($configProperty in $spconfig.PSObject.Properties) {
+        $configName = $configProperty.Name
+        $expectedValue = $configProperty.Value
 
-            It "Correct sp_configure setting $configName on $serverInstance " {
-                (Get-SpConfigValue -Server $serverInstance -ConfigName $configName).ConfiguredValue | Should Be $expectedValue
-            }
+        It "Correct sp_configure setting $configName on $serverInstance " {
+            (Get-SpConfigValue -Server $serverInstance -ConfigName $configName).ConfiguredValue | Should Be $expectedValue
         }
     }
 }
