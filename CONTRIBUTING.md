@@ -1,4 +1,6 @@
 # SQLChecks Contribution Guidelines
+- Ensure there are no Pester failures before committing (from .\tests run `Invoke-Pester`)
+- Ensure any functions which can be wholly driven from a `$Config` parameter have a parameter set that contains a `$Config` input
 - One file per PowerShell function
 - Update at least one example config with each new test
 - Add documentation for each new test
