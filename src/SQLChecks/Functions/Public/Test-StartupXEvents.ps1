@@ -1,12 +1,25 @@
 Function Test-StartupXEvents {
     [cmdletbinding()]
     Param(
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
+        $ServerInstance
         
+        ,[Parameter(ParameterSetName="Values")]
         [string[]]
         $ExpectedSessions
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $ExpectedSessions = $Config.ExpectedSessions
+
+        if($ExpectedSessions -eq $null) {
+            $ExpectedSessions = @()
+        }
+    }
 
     $query = @"
 select  s.name

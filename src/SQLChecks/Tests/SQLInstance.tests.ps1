@@ -32,13 +32,8 @@ Describe "SPConfigure values" -Tag SpConfig {
 }
 
 Describe "Startup Extended Events" -Tag StartupXEvents {
-    $xeConfig = $config.StartupXEvents
-    if($xeConfig -eq $null) {
-        continue
-    }
-
-    It "Correct set of startup extended event sessions on $serverInstance" {
-        @(Test-StartupXEvents -Server $serverInstance -ExpectedSessions $xeConfig).Count | Should Be 0
+    It "has correct set of startup extended event sessions on $serverInstance" {
+        @(Test-StartupXEvents -Config $Config).Count | Should Be 0
     }
 }
 
