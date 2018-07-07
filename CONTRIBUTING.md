@@ -11,7 +11,7 @@ Contributions are welcome!  If there isn't an existing issue you're tackling, pl
 - Add an example of the test configuration in the `examples` folder
 - Add the documentation to the `docs` folder
 - Each test is uniquely identified by its tag, which also serves as the configuration name
-- Most test functions should accept either Config or a set of parameters.  For an example see [Test-TraceFlags.ps1](/src/SQLChecks/Functions/Test-TraceFlags.ps1)
+- Most test functions should accept either Config or a set of parameters.  For an example see [Test-TraceFlags.ps1](/src/SQLChecks/Functions/Public/Test-TraceFlags.ps1)
 
 ## General guidelines
 - One file per PowerShell function
