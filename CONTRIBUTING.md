@@ -1,11 +1,19 @@
 # SQLChecks Contribution Guidelines
-- Ensure there are no Pester failures before committing (from .\tests run `Invoke-Pester`)
-- Ensure any functions which can be wholly driven from a `$Config` parameter have a parameter set that contains a `$Config` input
+
+Contributions are welcome!  If there isn't an existing issue you're tackling, please raise an issue before submitting a PR.
+
+## Before submitting a PR
+- Run `Invoke-Pester` from the `.\tests` folder
+
+## Contributing a new test
+- Add the test to the relevant `tests.ps1` file (Instance, Agent, etc.)
+- Add the supporting functions in the appropriate folder (public/private)
+- Add an example of the test configuration in the `examples` folder
+- Add the documentation to the `docs` folder
+- Each test is uniquely identified by its tag, which also serves as the configuration name
+- Most test functions should accept either Config or a set of parameters.  For an example see [Test-TraceFlags.ps1](.\src\SQLChecks\Functions\Test-TraceFlags.ps1)
+
+## General guidelines
 - One file per PowerShell function
-- Update at least one example config with each new test
-- Add documentation for each new test
-- Verb selection: Test if logic is being applied, Get if values from the target are being returned
-- Locate tests in the appropriate test file (instance, database, etc.)
-- Every test must be configurable (either what it tests, or a global on/off option)
 - Return objects from get/test functions (rather than writing to the host)
-- Don't use aliases (Get-Content vs. gc)
+- Don't use aliases (use `Get-Content` instead of `gc`)
