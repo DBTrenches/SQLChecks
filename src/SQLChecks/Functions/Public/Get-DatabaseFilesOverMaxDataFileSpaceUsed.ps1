@@ -1,18 +1,29 @@
 Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
     [cmdletbinding()]
     Param(
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
+        $ServerInstance
         
+        ,[Parameter(ParameterSetName="Values")]
         [int]
-        $MaxDataFileSpaceUsedPercent,
+        $MaxDataFileSpaceUsedPercent
         
+        ,[Parameter(ParameterSetName="Values")]
         [string[]]
-        $WhitelistFiles,
+        $WhitelistFiles
         
-        [string]
+        ,[string]
         $Database
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $MaxDataFileSpaceUsedPercent = $Config.MaxDataFileSize.SpaceUsedPercent
+        $WhitelistFiles = $Config.MaxDataFileSize.WhitelistFiles
+    }
     
     $WhitelistString = "''"
     if($WhitelistFiles -ne $null)
@@ -43,4 +54,3 @@ and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent;
         }
     }
 }
-

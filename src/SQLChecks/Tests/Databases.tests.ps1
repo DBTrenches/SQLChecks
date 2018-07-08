@@ -31,24 +31,12 @@ Describe "No large fixed growth transaction logs" -Tag MaxTLogAutoGrowthInKB {
 }
 
 Describe "Data file space used" -Tag MaxDataFileSize {
-    $maxDataConfig = $config.MaxDataFileSize
-    if($maxDataConfig  -eq $null) {
-        continue
-    }
-    
-    $spaceUsedPercentLimit = $maxDataConfig.SpaceUsedPercent
-    $MaxDataFileParams=@{
-        ServerInstance = $serverInstance
-        MaxDataFileSpaceUsedPercent = $spaceUsedPercentLimit
-        WhiteListFiles = $maxDataConfig.WhitelistFiles
-    }
-
+    $spaceUsedPercentLimit = $Config.MaxDataFileSize.SpaceUsedPercent
     
     $databases = Get-DatabasesToCheck @databasesToCheckParams 
     foreach($database in $databases) {
         It "$database files are all under $spaceUsedPercentLimit% full on $serverInstance" {
-            $MaxDataFileParams.Database = $database
-            @(Get-DatabaseFilesOverMaxDataFileSpaceUsed @MaxDataFileParams).Count | Should -Be 0
+            @(Get-DatabaseFilesOverMaxDataFileSpaceUsed -Config $Config -Database $database).Count | Should -Be 0
         }
     }
 }
