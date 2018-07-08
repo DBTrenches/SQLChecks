@@ -9,15 +9,15 @@ Function Test-StartupXEvents {
         
         ,[Parameter(ParameterSetName="Values")]
         [string[]]
-        $ExpectedSessions
+        $StartupXEvents
     )
 
     if($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
-        $ExpectedSessions = $Config.ExpectedSessions
+        $StartupXEvents = $Config.StartupXEvents
 
-        if($ExpectedSessions -eq $null) {
-            $ExpectedSessions = @()
+        if($StartupXEvents -eq $null) {
+            $StartupXEvents = @()
         }
     }
 
@@ -25,13 +25,13 @@ Function Test-StartupXEvents {
 select  s.name
 from    sys.server_event_sessions as s
 where   s.startup_state = 1; 
-"@  
+"@
 
     $sessions = @(Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query | Select-Object -ExpandProperty name)
 
-    $comparison = @(Compare-Object -ReferenceObject $ExpectedSessions -DifferenceObject $Sessions)
+    $comparison = @(Compare-Object -ReferenceObject $StartupXEvents -DifferenceObject $Sessions)
 
-    foreach($delta in $comparison)     
+    foreach($delta in $comparison)
     {
         [pscustomobject]@{
             EventSession = $delta.InputObject
