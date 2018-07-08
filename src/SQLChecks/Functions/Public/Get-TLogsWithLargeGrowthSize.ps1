@@ -1,15 +1,28 @@
 Function Get-TLogsWithLargeGrowthSize {
     [cmdletbinding()]
     Param(
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
+        $ServerInstance
         
-        [string]
-        $Database,
-        
+        ,[Parameter(ParameterSetName="Values")]
         [int]
-        $GrowthSizeKB
+        $MaxTLogAutoGrowthInKB
+
+        ,[string]
+        $Database
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $MaxTLogAutoGrowthInKB = $Config.MaxTLogAutoGrowthInKB
+
+        if($ExpectedSessions -eq $null) {
+            $ExpectedSessions = @()
+        }
+    }
 
     $query = @"
     select  d.name as DatabaseName
@@ -19,7 +32,7 @@ from    sys.master_files s
 join    sys.databases as d
 on      s.database_id = d.database_id
 where   s.type = 1
-and (( s.growth * 8 ) > $GrowthSizeKB and s.is_percent_growth = 0)
+and (( s.growth * 8 ) > $MaxTLogAutoGrowthInKB and s.is_percent_growth = 0)
 and s.database_id = db_id();
 "@
 

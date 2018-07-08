@@ -21,11 +21,11 @@ if($databasesToCheckConfig -eq "AGOnly") {
 }
 
 Describe "No large fixed growth transaction logs" -Tag MaxTLogAutoGrowthInKB {
-    $MaxTLogAutoGrowthInKB = $config.MaxTLogAutoGrowthInKB
+    $MaxTLogAutoGrowthInKB = $Config.MaxTLogAutoGrowthInKB
     $databases = Get-DatabasesToCheck @databasesToCheckParams 
     foreach($database in $databases) {
         It "$database has no log files with autogrowth greater than $MaxTLogAutoGrowthInKB KB on $serverInstance " {
-            @(Get-TLogsWithLargeGrowthSize -ServerInstance $serverInstance -GrowthSizeKB $MaxTLogAutoGrowthInKB -Database $database).Count | Should Be 0
+            @(Get-TLogsWithLargeGrowthSize -Config $Config -Database $database).Count | Should Be 0
         }
     }
 }
