@@ -26,3 +26,14 @@ Describe "Module test Describe tags are unique" {
       }
   }
 }
+
+Describe "Public functions that directly support tests" {
+    $commands = Get-Command -Module SqlChecks | where-object { 
+        $_.Name -notin @("Set-SpConfigValue", "Read-SqlChecksConfig", "Get-SpConfigValue")
+    }
+    foreach($command in $commands) {
+        It "$command should accept a Config parameter" {
+            $command.Parameters.Keys -contains "Config" | Should Be $true
+        }
+    }
+}
