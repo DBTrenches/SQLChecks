@@ -42,20 +42,14 @@ Describe "Data file space used" -Tag MaxDataFileSize {
 }
 
 Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
-    $MustHaveDDLTrigger = $config.MustHaveDDLTrigger
-    if($MustHaveDDLTrigger  -eq $null) {
-        continue
-    }
-
-    $triggerName = $MustHaveDDLTrigger.TriggerName
     $databasesToCheckParams.ExcludeSystemDatabases = $true
-    $databasesToCheckParams.ExcludedDatabases = $MustHaveDDLTrigger.ExcludedDatabases
+    $databasesToCheckParams.ExcludedDatabases = $Config.$MustHaveDDLTrigger.ExcludedDatabases
 
     $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach($database in $databases) {
         It "$database has required DDL triggers on $serverInstance" {  
-            Get-DatabaseTriggerStatus -ServerInstance $serverInstance -TriggerName $triggerName -Database $database | Should Be $true
+            Get-DatabaseTriggerStatus -Config $Config -Database $database | Should Be $true
         }
     }
 }

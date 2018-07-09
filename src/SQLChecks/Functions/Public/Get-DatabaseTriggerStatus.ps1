@@ -1,15 +1,24 @@
 Function Get-DatabaseTriggerStatus {
     [cmdletbinding()]
     Param(
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
+        $ServerInstance
         
+        ,[Parameter(ParameterSetName="Values")]
         [string]
         $TriggerName,
         
         [string]
         $Database
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $TriggerName = $Config.MustHaveDDLTrigger.TriggerName
+    }
 
     $query = @"
     select count(*) as TriggerCount
