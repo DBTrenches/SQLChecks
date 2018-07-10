@@ -1,10 +1,17 @@
 Function Get-SqlAgentJobsWithDisabledSchedule {
     [cmdletbinding()]
     Param (
-        [parameter(Mandatory=$true)]
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
         [string]
         $ServerInstance
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+    }
 
     $query = @"
 select	j.job_id as JobId
