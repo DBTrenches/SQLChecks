@@ -12,9 +12,9 @@ Describe "Trace flags" -Tag TraceFlags {
 
 Describe "Number of SQL error logs" -Tag NumErrorLogs {
     It "Correct number of SQL error logs on $serverInstance" {
-        $numErrorLogs = $config.NumErrorLogs
+        $numErrorLogs = $Config.NumErrorLogs
 
-        (Get-NumberOfErrorLogs -ServerInstance $serverInstance).NumberOfErrorLogs | Should Be $numErrorLogs
+        (Get-NumberOfErrorLogs -Config $Config).NumberOfErrorLogs | Should Be $numErrorLogs
     }
 }
 
