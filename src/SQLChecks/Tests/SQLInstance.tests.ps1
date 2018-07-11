@@ -6,7 +6,7 @@ $serverInstance = $config.ServerInstance
 
 Describe "Trace flags" -Tag TraceFlags {
     It "Correct global trace flags set on $serverInstance" {
-        @(Test-TraceFlags $config).Count | Should Be 0
+        @(Test-TraceFlags $Config).Count | Should Be 0
     }
 }
 
