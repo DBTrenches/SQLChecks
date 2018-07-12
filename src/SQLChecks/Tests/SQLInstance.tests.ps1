@@ -19,14 +19,14 @@ Describe "Number of SQL error logs" -Tag NumErrorLogs {
 }
 
 Describe "SPConfigure values" -Tag SpConfig {
-    $spconfig = $config.SpConfig
+    $spconfig = $Config.SpConfig
 
     foreach($configProperty in $spconfig.PSObject.Properties) {
         $configName = $configProperty.Name
         $expectedValue = $configProperty.Value
 
         It "Correct sp_configure setting $configName on $serverInstance " {
-            (Get-SpConfigValue -Server $serverInstance -ConfigName $configName).ConfiguredValue | Should Be $expectedValue
+            (Get-SpConfigValue -Config $Config -ConfigName $configName).ConfiguredValue | Should Be $expectedValue
         }
     }
 }

@@ -1,14 +1,21 @@
 Function Get-SpConfigValue {
     [cmdletbinding()]
     Param(
-        [parameter(Mandatory=$true)]
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
         [string]
-        $ServerInstance,
-        
-        [parameter(Mandatory=$true)]
+        $ServerInstance
+
+        ,[parameter(Mandatory=$true)]
         [string]
         $ConfigName
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+    }
 
     $query = @"
 select  c.name
@@ -18,7 +25,7 @@ select  c.name
 from    sys.configurations as c
 where   c.name = '$ConfigName'
 "@
-    
+
     (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) |
      ForEach-Object {
         [pscustomobject]@{
