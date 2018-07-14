@@ -3,7 +3,7 @@ Function Get-OversizedIndexes {
     Param(
         [string]
         $ServerInstance,
-        
+
         [string]
         $Database
     )

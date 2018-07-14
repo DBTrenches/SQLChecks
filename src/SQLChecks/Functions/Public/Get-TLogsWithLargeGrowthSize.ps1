@@ -6,7 +6,7 @@ Function Get-TLogsWithLargeGrowthSize {
 
         ,[Parameter(ParameterSetName="Values")]
         $ServerInstance
-        
+
         ,[Parameter(ParameterSetName="Values")]
         [int]
         $MaxTLogAutoGrowthInKB
@@ -18,10 +18,6 @@ Function Get-TLogsWithLargeGrowthSize {
     if($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
         $MaxTLogAutoGrowthInKB = $Config.MaxTLogAutoGrowthInKB
-
-        if($ExpectedSessions -eq $null) {
-            $ExpectedSessions = @()
-        }
     }
 
     $query = @"

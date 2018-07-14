@@ -25,11 +25,6 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
         $WhitelistFiles = $Config.MaxDataFileSize.WhitelistFiles
     }
 
-    $WhitelistString = "''"
-    if($null -ne $WhitelistFiles) {
-        $WhitelistString = "'$($WhitelistFiles -join "','")'"
-    }
-
     $query = @"
 select  a.name  [FileName],
         fg.name [FileGroup],
@@ -45,7 +40,9 @@ and     c.DBFile not in ($WhitelistString)
 and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | ForEach-Object {
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
+        $WhitelistFiles -notcontains $_.FileName
+    } | ForEach-Object {
         [pscustomobject]@{
             Database = $Database
             FileName = $_.FileName

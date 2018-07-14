@@ -4,7 +4,7 @@
         [parameter(Mandatory=$true)]
         [string]
         $ServerInstance,
-        
+
         [parameter(Mandatory=$true)]
         [string]
         $Database

@@ -3,7 +3,7 @@ Function Get-TLogWithPercentageGrowth {
     Param(
         [string]
         $ServerInstance,
-        
+
         [string]
         $Database
     )

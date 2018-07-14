@@ -4,22 +4,22 @@ Function Get-DatabasesToCheck {
         [parameter(Mandatory=$true)]
         [string]
         $ServerInstance,
-        
+
         [string[]]
         $ExcludedDatabases,
-        
+
         [switch]
         $IncludeSecondary = $false,
-        
+
         [switch]
         $ExcludeSystemDatabases,
-        
+
         [switch]
         $ExcludePrimary = $false,
-        
+
         [switch]
         $ExcludeLocal = $false,
-        
+
         [string]
         $AvailabilityGroup
     )

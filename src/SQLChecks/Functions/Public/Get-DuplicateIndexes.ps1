@@ -3,13 +3,13 @@ Function Get-DuplicateIndexes {
     Param(
         [string]
         $ServerInstance,
-        
+
         [string]
         $ExcludeDatabase,
-        
+
         [string]
         $ExcludeIndex,
-        
+
         [string]
         $Database
     )

@@ -7,14 +7,10 @@
 
         [string]
         $Database,
-        
+
+        [string[]]
         $WhitelistFiles # optional array or comma-delim string
     )
-
-    $whitelistedFiles=@()
-    if($WhitelistFiles -ne $null) {
-        $whitelistedFiles+=$WhitelistFiles.Split(",")
-    }
 
     $query=@"
 select database_id
@@ -36,7 +32,7 @@ and database_id = db_id();
 "@
 
     (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database $Database -Query $query) | Where-Object {
-        $whitelistedFiles -notcontains $_.f_name
+        $WhitelistFiles -notcontains $_.f_name
     } | ForEach-Object {
         [pscustomobject]@{
             DatabaseName = $_.db_name

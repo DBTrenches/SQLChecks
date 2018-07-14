@@ -6,7 +6,7 @@ Function Test-StartupXEvents {
 
         ,[Parameter(ParameterSetName="Values")]
         $ServerInstance
-        
+
         ,[Parameter(ParameterSetName="Values")]
         [string[]]
         $StartupXEvents
@@ -16,7 +16,7 @@ Function Test-StartupXEvents {
         $ServerInstance = $Config.ServerInstance
         $StartupXEvents = $Config.StartupXEvents
 
-        if($StartupXEvents -eq $null) {
+        if(!$StartupXEvents) {
             $StartupXEvents = @()
         }
     }

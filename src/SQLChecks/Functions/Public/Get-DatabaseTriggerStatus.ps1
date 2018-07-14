@@ -6,11 +6,11 @@ Function Get-DatabaseTriggerStatus {
 
         ,[Parameter(ParameterSetName="Values")]
         $ServerInstance
-        
+
         ,[Parameter(ParameterSetName="Values")]
         [string]
         $TriggerName,
-        
+
         [string]
         $Database
     )

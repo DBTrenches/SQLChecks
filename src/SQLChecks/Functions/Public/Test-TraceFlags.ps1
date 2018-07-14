@@ -6,7 +6,7 @@ Function Test-TraceFlags {
 
         ,[Parameter(ParameterSetName="Values")]
         $ServerInstance
-        
+
         ,[Parameter(ParameterSetName="Values")]
         $TraceFlags
     )
