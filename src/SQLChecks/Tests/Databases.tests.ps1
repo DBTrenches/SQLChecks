@@ -15,7 +15,7 @@ if($databasesToCheckConfig -eq "AGOnly") {
     if($config.AvailabilityGroup -ne $null) {
         $databasesToCheckParams.AvailabilityGroup = $config.AvailabilityGroup
     }
-    
+
 } elseif($databasesToCheckConfig -eq "LocalOnly") {
     $databasesToCheckParams.ExcludePrimary = $true
 }
@@ -32,7 +32,7 @@ Describe "No large fixed growth transaction logs" -Tag MaxTLogAutoGrowthInKB {
 
 Describe "Data file space used" -Tag MaxDataFileSize {
     $spaceUsedPercentLimit = $Config.MaxDataFileSize.SpaceUsedPercent
-    
+
     $databases = Get-DatabasesToCheck @databasesToCheckParams 
     foreach($database in $databases) {
         It "$database files are all under $spaceUsedPercentLimit% full on $serverInstance" {
@@ -96,7 +96,7 @@ Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
     $ExcludeIndexStr  = "'$($ExcludeIndex -join "','")'"
 
     $databases = Get-DatabasesToCheck @databasesToCheckParams 
-    
+
     foreach($database in $databases) {
         if($ExcludeDatabase -contains $database) {
             continue
@@ -111,7 +111,7 @@ Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
 Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
     $whitelist = $config.ZeroAutoGrowthFiles.Whitelist
     $databases = Get-DatabasesToCheck @databasesToCheckParams
-    
+
     foreach($database in $databases) {
         It "$database has no zero autogrowth files on $serverInstance"{
             @(Get-FixedSizeFiles -ServerInstance $serverInstance -WhitelistFiles $whitelist -Database $database).Count | Should Be 0
@@ -120,11 +120,11 @@ Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
 }
 
 Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
-    $databases = Get-DatabasesToCheck @databasesToCheckParams 
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach($database in $databases) {
         It "$database size-governed filegroups have space for their next growth on $serverInstance" {
-            @(Get-AutoGrowthRisks -ServerInstance $serverInstance -Database $database).Count | Should Be 0
+            @(Get-AutoGrowthRisks -Config $Config -Database $database).Count | Should Be 0
         }
     }
 }

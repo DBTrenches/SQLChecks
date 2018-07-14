@@ -1,19 +1,25 @@
 ﻿Function Get-AutoGrowthRisks {
     [cmdletbinding()]
     Param(
-        [parameter(Mandatory=$true)]
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
+        $ServerInstance
+
+        ,[parameter(Mandatory=$true)]
         [string]
-        $ServerInstance,
-         
-        [parameter(Mandatory=$true)]
-        [string]
-        $Database,
-        
-        $WhitelistFiles # optional array or comma-delim string
+        $Database
+
+        ,[parameter(ParameterSetName="Values")]
+        [string[]]
+        $WhitelistFiles
     )
 
-    $whitelistedFiles=@()
-    if($WhitelistFiles -ne $null){$whitelistedFiles+=$WhitelistFiles.Split(",")}
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $WhitelistFiles = $Config.ShouldCheckForAutoGrowthRisks.WhitelistFiles
+    }
 
     $query=@"
     ;with fileGrowth as (
@@ -60,9 +66,9 @@
     from fileGrowth fg
     where (size_mb+growth_mb)>max_size_mb; 
 "@
-    
+
     (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
-        $whitelistedFiles -notcontains $_.fName
+        $WhitelistFiles -notcontains $_.fName
     } | ForEach-Object {
         [pscustomobject]@{
             Server = $_.srvr

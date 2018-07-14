@@ -6,15 +6,15 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
 
         ,[Parameter(ParameterSetName="Values")]
         $ServerInstance
-        
+
         ,[Parameter(ParameterSetName="Values")]
         [int]
         $MaxDataFileSpaceUsedPercent
-        
+
         ,[Parameter(ParameterSetName="Values")]
         [string[]]
         $WhitelistFiles
-        
+
         ,[string]
         $Database
     )
@@ -24,13 +24,12 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
         $MaxDataFileSpaceUsedPercent = $Config.MaxDataFileSize.SpaceUsedPercent
         $WhitelistFiles = $Config.MaxDataFileSize.WhitelistFiles
     }
-    
+
     $WhitelistString = "''"
-    if($WhitelistFiles -ne $null)
-    {
+    if($WhitelistFiles -ne $null) {
         $WhitelistString = "'$($WhitelistFiles -join "','")'"
     }
-    
+
     $query = @"
 select  a.name  [FileName],
         fg.name [FileGroup], 
