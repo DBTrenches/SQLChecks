@@ -12,7 +12,7 @@ $databasesToCheckParams = @{
 if($databasesToCheckConfig -eq "AGOnly") {
     $databasesToCheckParams.ExcludeLocal = $true
 
-    if($config.AvailabilityGroup -ne $null) {
+    if($null -ne $config.AvailabilityGroup) {
         $databasesToCheckParams.AvailabilityGroup = $config.AvailabilityGroup
     }
 
@@ -22,7 +22,7 @@ if($databasesToCheckConfig -eq "AGOnly") {
 
 Describe "No large fixed growth transaction logs" -Tag MaxTLogAutoGrowthInKB {
     $MaxTLogAutoGrowthInKB = $Config.MaxTLogAutoGrowthInKB
-    $databases = Get-DatabasesToCheck @databasesToCheckParams 
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach($database in $databases) {
         It "$database has no log files with autogrowth greater than $MaxTLogAutoGrowthInKB KB on $serverInstance " {
             @(Get-TLogsWithLargeGrowthSize -Config $Config -Database $database).Count | Should Be 0
@@ -33,7 +33,7 @@ Describe "No large fixed growth transaction logs" -Tag MaxTLogAutoGrowthInKB {
 Describe "Data file space used" -Tag MaxDataFileSize {
     $spaceUsedPercentLimit = $Config.MaxDataFileSize.SpaceUsedPercent
 
-    $databases = Get-DatabasesToCheck @databasesToCheckParams 
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach($database in $databases) {
         It "$database files are all under $spaceUsedPercentLimit% full on $serverInstance" {
             @(Get-DatabaseFilesOverMaxDataFileSpaceUsed -Config $Config -Database $database).Count | Should -Be 0
@@ -48,7 +48,7 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach($database in $databases) {
-        It "$database has required DDL triggers on $serverInstance" {  
+        It "$database has required DDL triggers on $serverInstance" {
             Get-DatabaseTriggerStatus -Config $Config -Database $database | Should Be $true
         }
     }
@@ -66,7 +66,7 @@ Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
 }
 
 Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
-    $databases = Get-DatabasesToCheck @databasesToCheckParams 
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach($database in $databases) {
         It "$database has no percentage growth log files on $serverInstance" {
             @(Get-TLogWithPercentageGrowth -ServerInstance $serverInstance -Database $database).Count | Should Be 0
@@ -81,7 +81,7 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
     $excludedDbs += "tempdb"
     $databasesToCheckParams.ExcludedDatabases = $excludedDbs
 
-    $databases = Get-DatabasesToCheck @databasesToCheckParams 
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach($database in $databases) {
         It "$database had a successful CHECKDB in the last $maxDays days on $serverInstance"{
             (Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -Database $database).DaysSinceLastGoodCheckDB | Should -BeLessOrEqual $maxDays
@@ -95,7 +95,7 @@ Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
     $ExcludeIndex = $CheckDuplicateIndexesConfig.ExcludeIndex
     $ExcludeIndexStr  = "'$($ExcludeIndex -join "','")'"
 
-    $databases = Get-DatabasesToCheck @databasesToCheckParams 
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach($database in $databases) {
         if($ExcludeDatabase -contains $database) {

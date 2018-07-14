@@ -26,13 +26,13 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
     }
 
     $WhitelistString = "''"
-    if($WhitelistFiles -ne $null) {
+    if($null -ne $WhitelistFiles) {
         $WhitelistString = "'$($WhitelistFiles -join "','")'"
     }
 
     $query = @"
 select  a.name  [FileName],
-        fg.name [FileGroup], 
+        fg.name [FileGroup],
         c.SpaceUsed
 from    sys.database_files a
 left join sys.filegroups fg ON a.data_space_id = fg.data_space_id
