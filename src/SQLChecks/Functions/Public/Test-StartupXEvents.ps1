@@ -24,7 +24,7 @@ Function Test-StartupXEvents {
     $query = @"
 select  s.name
 from    sys.server_event_sessions as s
-where   s.startup_state = 1; 
+where   s.startup_state = 1;
 "@
 
     $sessions = @(Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query | Select-Object -ExpandProperty name)
