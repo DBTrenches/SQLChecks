@@ -14,7 +14,9 @@ Describe "Module test Describe tags are unique" {
       $ast.FindAll({
           param($node)
           $node -is [System.Management.Automation.Language.CommandAst] -and
-          $node.CommandElements[0].Value -eq "Describe"
+          $node.CommandElements[0].Value -eq "Describe" -and
+          $node.CommandElements[2] -is [System.Management.Automation.Language.CommandParameterAst] -and
+          $node.CommandElements[2].ParameterName -eq "Tag"
       }, $true) | ForEach-Object {
           $tags += $_.CommandElements[3].Value
       }
