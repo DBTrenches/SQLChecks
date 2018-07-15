@@ -15,7 +15,7 @@ Describe "Module test Describe tags are unique" {
           param($node)
           $node -is [System.Management.Automation.Language.CommandAst] -and
           $node.CommandElements[0].Value -eq "Describe"
-      }, $true) | ForEach-Object { 
+      }, $true) | ForEach-Object {
           $tags += $_.CommandElements[3].Value
       }
   }

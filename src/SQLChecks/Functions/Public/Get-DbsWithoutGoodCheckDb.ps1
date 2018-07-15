@@ -1,18 +1,25 @@
 ﻿Function Get-DbsWithoutGoodCheckDb{
     [cmdletbinding()]
     Param(
-        [parameter(Mandatory=$true)]
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
 
-        [parameter(Mandatory=$true)]
+        ,[Parameter(ParameterSetName="Values")]
+        [string]
+        $ServerInstance
+
+        ,[parameter(Mandatory=$true)]
         [string]
         $Database
     )
 
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+    }
+
     $query = @"
 drop table if exists #DBInfo;
-create table #DBInfo 
+create table #DBInfo
 (
     ParentObject varchar(255)
     ,[Object] varchar(255)
