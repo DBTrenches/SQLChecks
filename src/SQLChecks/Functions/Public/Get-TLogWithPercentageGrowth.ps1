@@ -1,12 +1,20 @@
 Function Get-TLogWithPercentageGrowth {
     [cmdletbinding()]
     Param(
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
+        $Config
 
+        ,[Parameter(ParameterSetName = "Values")]
         [string]
+        $ServerInstance
+
+        ,[string]
         $Database
     )
+
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+    }
 
     $query = @"
 select  d.name as DatabaseName

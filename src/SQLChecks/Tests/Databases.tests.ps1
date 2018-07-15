@@ -60,7 +60,7 @@ Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach($database in $databases) {
         It "$database has no oversized indexes on $serverInstance" {
-            @(Get-OversizedIndexes -ServerInstance $serverInstance -Database $database).Count | Should Be 0
+            @(Get-OversizedIndexes -Config $Config -Database $database).Count | Should Be 0
         }
     }
 }
@@ -69,7 +69,7 @@ Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach($database in $databases) {
         It "$database has no percentage growth log files on $serverInstance" {
-            @(Get-TLogWithPercentageGrowth -ServerInstance $serverInstance -Database $database).Count | Should Be 0
+            @(Get-TLogWithPercentageGrowth -Config $Config -Database $database).Count | Should Be 0
         }
     }
 }
