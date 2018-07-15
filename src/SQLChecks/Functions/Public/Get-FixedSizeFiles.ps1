@@ -1,16 +1,25 @@
 ﻿function Get-FixedSizeFiles {
     [cmdletbinding()]
     Param(
-        [parameter(Mandatory=$true)]
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
+        $Config
 
+        ,[Parameter(ParameterSetName = "Values")]
         [string]
-        $Database,
+        $ServerInstance
 
+        ,[Parameter(ParameterSetName = "Values")]
         [string[]]
-        $WhitelistFiles # optional array or comma-delim string
+        $WhitelistFiles
+
+        ,[string]
+        $Database
     )
+
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $WhitelistFiles = $Config.ZeroAutoGrowthFiles.WhitelistFiles
+    }
 
     $query=@"
 select database_id
