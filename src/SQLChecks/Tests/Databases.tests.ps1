@@ -12,7 +12,7 @@ $databasesToCheckParams = @{
 if($databasesToCheckConfig -eq "AGOnly") {
     $databasesToCheckParams.ExcludeLocal = $true
 
-    if($null -ne $config.AvailabilityGroup) {
+    if($config.AvailabilityGroup) {
         $databasesToCheckParams.AvailabilityGroup = $config.AvailabilityGroup
     }
 
