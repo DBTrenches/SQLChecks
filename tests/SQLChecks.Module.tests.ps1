@@ -28,8 +28,10 @@ Describe "Module test Describe tags are unique" {
 }
 
 Describe "Public functions that directly support tests" {
-    $commands = Get-Command -Module SqlChecks | where-object { 
-        $_.Name -notin @("Set-SpConfigValue", "Read-SqlChecksConfig", "Get-SpConfigValue")
+    $excludedFunctions = @("Set-SpConfigValue", "Read-SqlChecksConfig", "Get-SpConfigValue", "Get-DatabasesToCheck")
+
+    $commands = Get-Command -Module SqlChecks | where-object {
+        $_.Name -notin $excludedFunctions
     }
     foreach($command in $commands) {
         It "$command should accept a Config parameter" {
