@@ -1,20 +1,25 @@
 Function Get-DuplicateIndexes {
     [cmdletbinding()]
     Param(
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
+        $Config
 
+        ,[Parameter(ParameterSetName = "Values")]
         [string]
-        $ExcludeDatabase,
+        $ServerInstance
 
-        [string]
-        $ExcludeIndex,
+        ,[Parameter(ParameterSetName = "Values")]
+        [string[]]
+        $ExcludeIndex
 
-        [string]
+        ,[string]
         $Database
     )
 
-    if([string]::IsNullOrWhiteSpace($ExcludeIndex)){$ExcludeIndex="''"}
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+        $ExcludeIndex = $Config.CheckDuplicateIndexes.ExcludeIndex
+      }
 
     $query = @"
 SET LOCK_TIMEOUT 10000;
@@ -26,7 +31,7 @@ CREATE TABLE #tempResults
       [SchemaName] sysname ,
       [TableName] sysname ,
       [IndexName] sysname ,
-      [DuplicateIndexName] sysname 
+      [DuplicateIndexName] sysname
     );
 
 DECLARE @Cmd AS NVARCHAR(MAX)= '';
@@ -41,7 +46,7 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
                         x.using_xml_index_id ,
                         x.secondary_type ,
                         CONVERT(NVARCHAR(MAX), x.secondary_type_desc) AS secondary_type_desc ,
-                        ic.column_id 
+                        ic.column_id
                FROM     sys.xml_indexes x ( NOLOCK )
                         JOIN sys.dm_db_partition_stats AS s ON x.index_id = s.index_id
                                                               AND x.object_id = s.object_id
@@ -68,7 +73,7 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
                         x1.object_id ,
                         ROW_NUMBER() OVER ( ORDER BY x1.SchemaName, x1.TableName, x1.name, x2.name ) AS seq1 ,
                         ROW_NUMBER() OVER ( ORDER BY x1.SchemaName DESC, x1.TableName DESC, x1.name DESC, x2.name DESC ) AS seq2 ,
-                        NULL AS inc 
+                        NULL AS inc
                FROM     XMLTable x1
                         JOIN XMLTable x2 ON x1.object_id = x2.object_id
                                             AND x1.index_id < x2.index_id
@@ -128,8 +133,8 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
                                   FOR
                                     XML PATH('''')
                                   )
-                        END AS inc 
-						,isnull(i.filter_definition, '''') as FilterDefinition
+                        END AS inc
+            ,isnull(i.filter_definition, '''') as FilterDefinition
                FROM     sys.indexes (NOLOCK) AS i
                         INNER JOIN sys.dm_db_partition_stats AS s ON i.index_id = s.index_id
                                                               AND i.object_id = s.object_id
@@ -150,7 +155,7 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
                         i.name ,
                         i.index_id ,
                         i.type,
-						i.filter_definition
+            i.filter_definition
              ),
         DuplicatesTable
           AS ( SELECT   ic1.SchemaName ,
@@ -159,7 +164,7 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
                         ic1.object_id ,
                         ic2.IndexName AS DuplicateIndexName,
                         ROW_NUMBER() OVER ( ORDER BY ic1.SchemaName, ic1.TableName, ic1.IndexName, ic2.IndexName ) AS seq1 ,
-                        ROW_NUMBER() OVER ( ORDER BY ic1.SchemaName DESC, ic1.TableName DESC, ic1.IndexName DESC, ic2.IndexName DESC ) AS seq2 
+                        ROW_NUMBER() OVER ( ORDER BY ic1.SchemaName DESC, ic1.TableName DESC, ic1.IndexName DESC, ic2.IndexName DESC ) AS seq2
                FROM     IndexColumns ic1
                         JOIN IndexColumns ic2 ON ic1.object_id = ic2.object_id
                                                  AND ic1.index_id < ic2.index_id
@@ -174,7 +179,7 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
             SchemaName ,
             TableName ,
             IndexName ,
-            DuplicateIndexName 
+            DuplicateIndexName
     FROM    DuplicatesTable dt
     UNION ALL
     SELECT  @@SERVERNAME AS InstanceName ,
@@ -182,7 +187,7 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
             SchemaName ,
             TableName ,
             IndexName ,
-            DuplicateIndexName 
+            DuplicateIndexName
     FROM    DuplicatesXMLTable dtxml;';
 
         INSERT  INTO #tempResults
@@ -191,21 +196,22 @@ DECLARE @Cmd AS NVARCHAR(MAX)= '';
                   [SchemaName] ,
                   [TableName] ,
                   [IndexName] ,
-                  [DuplicateIndexName] 
+                  [DuplicateIndexName]
                 )
                 EXEC sys.sp_executesql @Cmd;
 
-SELECT  *
-FROM    #tempResults AS tr
-WHERE   ( CONCAT(tr.DatabaseName, '.', tr.SchemaName, '.', tr.TableName, '.',
-                 tr.IndexName) NOT IN (
-          $ExcludeIndex )
-          and CONCAT(tr.DatabaseName, '.', tr.SchemaName, '.', tr.TableName,
-                     '.', tr.DuplicateIndexName) NOT IN (
-          $ExcludeIndex )
-        );
+SELECT  concat_ws('.', tr.DatabaseName, tr.SchemaName, tr.TableName, tr.IndexName) as IndexName
+        ,concat_ws('.', tr.DatabaseName, tr.SchemaName, tr.TableName, tr.DuplicateIndexName) as DuplicateIndexName
+FROM    #tempResults AS tr;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 0 -Database $database
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 0 -Database $database | Where-Object {
+      $ExcludeIndex -notcontains $_.IndexName -and $ExcludeIndex -notcontains $_.DuplicateIndexName
+    } | ForEach-Object {
+      [PSCustomObject]@{
+        Index = $_.IndexName
+        DuplicateIndex = $_.DuplicateIndexName
+      }
+    }
 }
 

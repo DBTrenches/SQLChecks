@@ -90,20 +90,13 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
 }
 
 Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
-    $CheckDuplicateIndexesConfig = $config.CheckDuplicateIndexes
-    $ExcludeDatabase = $CheckDuplicateIndexesConfig.ExcludeDatabase
-    $ExcludeIndex = $CheckDuplicateIndexesConfig.ExcludeIndex
-    $ExcludeIndexStr  = "'$($ExcludeIndex -join "','")'"
+    $ExcludeDatabase = $Config.CheckDuplicateIndexes.ExcludeDatabase
 
-    $databases = Get-DatabasesToCheck @databasesToCheckParams
+    $databases = Get-DatabasesToCheck @databasesToCheckParams -ExcludedDatabases $ExcludeDatabase
 
     foreach($database in $databases) {
-        if($ExcludeDatabase -contains $database) {
-            continue
-        }
-
         It "$database has no duplicate indexes on $serverInstance" {
-            @(Get-DuplicateIndexes -ServerInstance $serverInstance -Database $database -ExcludeIndex $ExcludeIndexStr).Count | Should Be 0
+            @(Get-DuplicateIndexes -Config $Config -Database $database).Count | Should Be 0
         }
     }
 }

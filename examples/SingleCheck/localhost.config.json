@@ -33,6 +33,7 @@
     ,"ShouldCheckForAutoGrowthRisks": {}
     ,"CheckDuplicateIndexes": {
         "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
+        ,"ExcludeIndex": [ "SampleDB.dbo.Foo.IX_Dupe1" ]
     },"StartupXEvents" : [
             "system_health"
             ,"telemetry_xevents"
