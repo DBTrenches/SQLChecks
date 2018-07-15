@@ -1,12 +1,20 @@
 Function Get-OversizedIndexes {
     [cmdletbinding()]
     Param(
-        [string]
-        $ServerInstance,
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
+        $Config
 
+        ,[Parameter(ParameterSetName = "Values")]
         [string]
+        $ServerInstance
+
+        ,[string]
         $Database
     )
+
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+    }
 
     $query = @"
 DROP TABLE IF EXISTS #tempresults
@@ -24,7 +32,7 @@ DECLARE @cmd NVARCHAR(max)
 
 
  SET @cmd='
-  
+
 SELECT DB_NAME() as DatabaseName,SCHEMA_NAME (o.schema_id) AS ''SchemaName'',o.name AS TableName, i.name AS IndexName, i.type_desc AS IndexType,
 sum(max_length) AS RowLength, count (ic.index_id) AS ''ColumnCount''
 
