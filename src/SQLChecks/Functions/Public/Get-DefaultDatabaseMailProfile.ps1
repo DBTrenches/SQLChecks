@@ -1,9 +1,17 @@
 Function Get-DefaultDatabaseMailProfile {
     [cmdletbinding()]
     Param(
+        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        $Config
+
+        ,[Parameter(ParameterSetName="Values")]
         [string]
         $ServerInstance
     )
+
+    if($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+    }
 
     $query = @"
 select pp.profile_id

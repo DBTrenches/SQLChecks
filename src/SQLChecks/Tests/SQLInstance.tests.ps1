@@ -43,6 +43,6 @@ Describe "Database Mail is configured" -Tag DatabaseMail {
     }
 
     It "Database mail has a default profile configured on $serverInstance" {
-        @(Get-DefaultDatabaseMailProfile -Server $serverInstance).Count | Should Be 1
+        @(Get-DefaultDatabaseMailProfile -Config $Config).Count | Should Be 1
     }
 }
