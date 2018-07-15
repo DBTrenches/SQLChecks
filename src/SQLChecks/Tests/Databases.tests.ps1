@@ -90,9 +90,9 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
 }
 
 Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
-    $ExcludeDatabase = $Config.CheckDuplicateIndexes.ExcludeDatabase
+    $databasesToCheckParams.ExcludedDatabases = $Config.CheckDuplicateIndexes.ExcludeDatabase
 
-    $databases = Get-DatabasesToCheck @databasesToCheckParams -ExcludedDatabases $ExcludeDatabase
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach($database in $databases) {
         It "$database has no duplicate indexes on $serverInstance" {

@@ -36,8 +36,8 @@ cross apply (
             ,'$Database.'+a.name as DBFile
 ) as c
 WHERE   a.type != 1
-and     c.DBFile not in ($WhitelistString)
-and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent;
+and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
+;
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
