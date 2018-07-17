@@ -43,7 +43,7 @@ Describe "Data file space used" -Tag MaxDataFileSize {
 
 Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
     $databasesToCheckParams.ExcludeSystemDatabases = $true
-    $databasesToCheckParams.ExcludedDatabases = $Config.$MustHaveDDLTrigger.ExcludedDatabases
+    $databasesToCheckParams.ExcludedDatabases = $Config.MustHaveDDLTrigger.ExcludedDatabases
 
     $databases = Get-DatabasesToCheck @databasesToCheckParams
 

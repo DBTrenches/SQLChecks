@@ -18,7 +18,7 @@
 
     if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
-        $WhitelistFiles = $Config.ZeroAutoGrowthFiles.WhitelistFiles
+        $WhitelistFiles = $Config.ZeroAutoGrowthFiles.Whitelist
     }
 
     $query=@"
