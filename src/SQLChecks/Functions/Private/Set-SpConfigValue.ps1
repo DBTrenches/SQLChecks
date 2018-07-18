@@ -7,7 +7,7 @@ Function Set-SpConfigValue {
 
         [parameter(Mandatory=$true)]
         [string]$ConfigName,
-         
+
         [parameter(Mandatory=$true)]
         [string]
         $Value

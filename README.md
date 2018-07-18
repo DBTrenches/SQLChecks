@@ -4,7 +4,7 @@
 
 Helper functions and tests for SQL Server.
 
-Requires the SqlServer and DBATools modules.
+Requires the SqlServer module.
 
 The examples folder contains a few different ways of invoking the scripts - against a single instance (SingleCheck) or against a folder full of instances (FolderCheck).
 

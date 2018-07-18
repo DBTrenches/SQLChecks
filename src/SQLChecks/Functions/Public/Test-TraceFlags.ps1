@@ -16,13 +16,7 @@ Function Test-TraceFlags {
         $TraceFlags = $Config.TraceFlags
     }
 
-    $dbFlags = Get-DbaTraceFlag -SqlInstance $serverInstance
-    $flags = @()
-
-    foreach($flag in $dbFlags)
-    {
-        $flags += $flag.TraceFlag
-    }
+    $flags = @(Get-TraceFlags -ServerInstance $serverInstance)
 
     $comparison = @(Compare-Object -ReferenceObject $TraceFlags -DifferenceObject $flags)
 
