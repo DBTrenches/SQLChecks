@@ -6,10 +6,10 @@ Describe "Import-Module SQLChecks" {
   }
 }
 
-Describe "Module test Describe tags are unique" {
+Describe "Describe tags are unique" {
   $tags = @()
 
-  Get-ChildItem -Filter *.tests.ps1 -Path $PSScriptRoot\..\src\SQLChecks\Tests | Get-Content | ForEach-Object {
+  Get-ChildItem -Filter *.tests.ps1 -Path $PSScriptRoot\..\src\SQLChecks\Tests | Get-Content -Raw | ForEach-Object {
       $ast = [Management.Automation.Language.Parser]::ParseInput($_, [ref]$null, [ref]$null)
       $ast.FindAll({
           param($node)
@@ -38,6 +38,25 @@ Describe "Public functions that directly support tests" {
     foreach($command in $commands) {
         It "$command should accept a Config parameter" {
             $command.Parameters.Keys -contains "Config" | Should Be $true
+        }
+    }
+}
+
+Describe "Every test has a tag" {
+    Get-ChildItem -Filter *.tests.ps1 -Path $PSScriptRoot\..\src\SQLChecks\Tests | ForEach-Object {
+        $content = Get-Content $_.FullName -Raw
+        Context "$_" {
+            $ast = [Management.Automation.Language.Parser]::ParseInput($content, [ref]$null, [ref]$null)
+            $ast.FindAll({
+                param($node)
+                $node -is [System.Management.Automation.Language.CommandAst] -and
+                $node.CommandElements[0].Value -eq "Describe"
+            }, $true) | ForEach-Object {
+                It "$($_.CommandElements[1]) has a tag" {
+                    $_.CommandElements[2] -is [System.Management.Automation.Language.CommandParameterAst] -and
+                        $_.CommandElements[2].ParameterName -eq "Tag" | Should Be $true
+                }
+            }
         }
     }
 }

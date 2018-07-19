@@ -5,7 +5,7 @@ Describe "SQLChecks Manifest" {
 
   It "loads correctly" {
     {
-      $Script:manifest = Test-ModuleManifest -Path $manifestLocation -ErrorAction Stop 
+      $Script:manifest = Test-ModuleManifest -Path $manifestLocation -ErrorAction Stop
     } | Should Not Throw
   }
 }
