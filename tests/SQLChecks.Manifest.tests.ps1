@@ -1,6 +1,7 @@
 $manifestLocation = "$PSScriptRoot\..\src\SQLChecks\SQLChecks.psd1"
 
-Describe "SQLChecks Manifest" {  $manifest = $null
+Describe "SQLChecks Manifest" {
+  $manifest = $null
 
   It "loads correctly" {
     {
