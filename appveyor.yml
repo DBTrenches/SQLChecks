@@ -4,7 +4,6 @@ skip_commits:
 
 install:
   - cinst pester
-  - ps: Install-Module dbatools -AllowClobber -Force
   - ps: Install-Module SqlServer -AllowClobber -Force
 
 build: off
