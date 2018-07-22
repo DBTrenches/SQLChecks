@@ -22,7 +22,7 @@ The preferred way to leverage SQLChecks is to loop through a server configuratio
 ```powershell
 $config = Read-SqlChecksConfig -Path ".\examples\SingleCheck\localhost.config.json"
 
-foreach($check in (Get-SqlChecksFromConfig $config) {
+foreach($check in (Get-SqlChecksFromConfig $config)) {
     Invoke-SqlChecks -Config $config -Tag $check
 }
 ```
