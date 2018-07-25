@@ -1,4 +1,4 @@
-#Requires -Modules DBATools, SQLChecks
+#Requires -Modules SQLChecks
 
 $instances = Get-ChildItem -Path .\Instances -Filter *.config.json
 
