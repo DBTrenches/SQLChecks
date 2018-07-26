@@ -4,7 +4,7 @@ Function Get-SqlChecksFromConfig {
         [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
         $Config
     )
-    $Config | Get-Member -Type NoteProperty | Where-Object { 
+    $Config | Get-Member -Type NoteProperty | Where-Object {
         $_.Name -notin ("ServerInstance", "DatabasesToCheck")
     } | Select-Object -ExpandProperty Name
 }
