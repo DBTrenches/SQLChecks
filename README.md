@@ -47,7 +47,7 @@ Some checks also exclude system databases by default.
 ## Availability Group Support
 A config file can specify that databases for a specific availability group should be checked.  This is set with the `DatabasesToCheck` configuration value and the `AvailabilityGroup` value.
 
-To only run database-specific checks on databases that belong to the `AG1` availability group, your config would contain:
+To only run database-specific checks on databases that belong to the `AG1` availability group, your config might look like this:
 
 ```json
 {
@@ -58,6 +58,6 @@ To only run database-specific checks on databases that belong to the `AG1` avail
 }
 ```
 
-You can also specify a value of `"LocalOnly"` for `DatabasesToCheck`, which will cause database-specific checks to skip any database that belongs to an availability group.
+You can also specify a value of `LocalOnly` for `DatabasesToCheck`, which will cause database-specific checks to skip any database that belongs to an availability group.
 
 If you do not specify a value, then every database (except for default exclusions) is checked.
