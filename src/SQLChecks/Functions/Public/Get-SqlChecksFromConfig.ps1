@@ -5,6 +5,6 @@ Function Get-SqlChecksFromConfig {
         $Config
     )
     $Config | Get-Member -Type NoteProperty | Where-Object {
-        $_.Name -notin ("ServerInstance", "DatabasesToCheck")
+        $_.Name -notin ("ServerInstance", "DatabasesToCheck", "AvailabilityGroup")
     } | Select-Object -ExpandProperty Name
 }
