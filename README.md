@@ -35,3 +35,29 @@ Invoke-SqlChecks -Config $config -Tag CheckForOversizedIndexes
 ```
 
 You can find some example invocations and configuration files in the `examples` folder.
+
+## Database Specific Checks
+Some checks target a database (e.g. checking for oversized indexes).  By default these checks will skip:
+
+- Databases that are not ONLINE
+- Databases that are secondaries in an availability group
+
+Some checks also exclude system databases by default.
+
+## Availability Group Support
+A config file can specify that databases for a specific availability group should be checked.  This is set with the `DatabasesToCheck` configuration value and the `AvailabilityGroup` value.
+
+To only run database-specific checks on databases that belong to the `AG1` availability group, your config would contain:
+
+```json
+{
+    "ServerInstance": "localhost",
+    "DatabasesToCheck": "AGOnly",
+    "AvailabilityGroup": "AG1"
+    ...
+}
+```
+
+You can also specify a value of `"LocalOnly"` for `DatabasesToCheck`, which will cause database-specific checks to skip any database that belongs to an availability group.
+
+If you do not specify a value, then every database (except for default exclusions) is checked.
