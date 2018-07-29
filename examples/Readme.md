@@ -19,3 +19,14 @@ foreach($file in $files) {
     Invoke-SqlChecks -Config $config
 }
 ```
+
+## Example Configuration Files
+
+### minimal.config.json
+Contains only the `ServerInstance` configuration value.  No checks are executed when this configuration is used.
+
+### localhost.config.json
+Contains a broad selection of checks to execute, with examples of various exclusions/thresholds that can be set.
+
+### 127.0.0.1.config.json
+Runs a handful of instance-level checks.
