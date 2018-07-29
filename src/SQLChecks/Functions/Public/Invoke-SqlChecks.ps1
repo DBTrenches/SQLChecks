@@ -13,5 +13,12 @@ Function Invoke-SqlChecks {
     )
 
     $path = ($script:MyInvocation.MyCommand.Path | Split-Path) + '\Tests'
-    Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $Tag -PassThru:$PassThru
+
+    if($Tag) {
+        Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $Tag -PassThru:$PassThru
+    } else {
+        foreach($check in Get-SqlChecksFromConfig -Config $Config) {
+        Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $check -PassThru:$PassThru
+        }
+    }
 }

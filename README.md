@@ -20,7 +20,7 @@ Import-Module .\src\SQLChecks -Force
 The preferred way to leverage SQLChecks is to loop through a server configuration and test every specified check.
 
 ```powershell
-$config = Read-SqlChecksConfig -Path ".\examples\SingleCheck\localhost.config.json"
+$config = Read-SqlChecksConfig -Path ".\examples\localhost.config.json"
 
 foreach($check in (Get-SqlChecksFromConfig $config)) {
     Invoke-SqlChecks -Config $config -Tag $check
@@ -30,8 +30,15 @@ foreach($check in (Get-SqlChecksFromConfig $config)) {
 You can also test a single item based on its tag.
 
 ```powershell
-$config = Read-SqlChecksConfig -Path ".\examples\SingleCheck\localhost.config.json"
+$config = Read-SqlChecksConfig -Path ".\examples\localhost.config.json"
 Invoke-SqlChecks -Config $config -Tag CheckForOversizedIndexes
+```
+
+And if you pass a configuration file with no Tag, `Invoke-SqlChecks` will test everything configured in that config file.
+
+```powershell
+$config = Read-SqlChecksConfig -Path ".\examples\localhost.config.json"
+Invoke-SqlChecks -Config $config
 ```
 
 You can find some example invocations and configuration files in the `examples` folder.
