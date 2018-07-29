@@ -1,7 +1,7 @@
 Function Invoke-SqlChecks {
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true,Position=0,ValueFromPipeline=$true)]
         [Alias("Configs")]
         $Config,
 
