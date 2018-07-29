@@ -11,37 +11,38 @@ The examples folder contains a few different ways of invoking the scripts - agai
 For more information refer to [the documentation](./docs/Readme.md).
 
 ## Example Usage
-First of all import the module
+First of all import the module.
 
 ```powershell
 Import-Module .\src\SQLChecks -Force
 ```
 
-The preferred way to leverage SQLChecks is to loop through a server configuration and test every specified check.
+And then pass a configuration file to `Invoke-SqlChecks`.
 
 ```powershell
-$config = Read-SqlChecksConfig -Path ".\examples\localhost.config.json"
-
-foreach($check in (Get-SqlChecksFromConfig $config)) {
-    Invoke-SqlChecks -Config $config -Tag $check
-}
+Invoke-SqlChecks -ConfigPath .\examples\localhost.config.json
 ```
 
 You can also test a single item based on its tag.
 
 ```powershell
-$config = Read-SqlChecksConfig -Path ".\examples\localhost.config.json"
-Invoke-SqlChecks -Config $config -Tag CheckForOversizedIndexes
+Invoke-SqlChecks -ConfigPath .\examples\localhost.config.json -Tag CheckForOversizedIndexes
 ```
 
-And if you pass a configuration file with no Tag, `Invoke-SqlChecks` will test everything configured in that config file.
+Or loop through a set of configuration files (`Invoke-SqlChecks` accepts paths on the pipeline, as well as objects from `Get-ChildItem`).
 
 ```powershell
-$config = Read-SqlChecksConfig -Path ".\examples\localhost.config.json"
+Get-ChildItem -Filter *.config.json -Path .\examples | Invoke-SqlChecks
+```
+
+It is also possible to pass configurations to `Invoke-SqlChecks`.
+
+```powershell
+$config = Read-SqlChecksConfig .\examples\localhost.config.json
 Invoke-SqlChecks -Config $config
 ```
 
-You can find some example invocations and configuration files in the `examples` folder.
+You can find some example configuration files in the `examples` folder.
 
 ## Database Specific Checks
 Some checks target a database (e.g. checking for oversized indexes).  By default these checks will skip:
