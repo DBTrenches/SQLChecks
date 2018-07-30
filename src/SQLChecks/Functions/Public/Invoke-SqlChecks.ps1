@@ -16,7 +16,10 @@ Function Invoke-SqlChecks {
         [string[]] $Tag,
 
         [switch]
-        $PassThru
+        $PassThru,
+
+        [Pester.OutputTypes]
+        $Show = 'All'
     )
     Process{
 
@@ -27,10 +30,10 @@ Function Invoke-SqlChecks {
         $path = ($script:MyInvocation.MyCommand.Path | Split-Path) + '\Tests'
 
         if($Tag) {
-            Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $Tag -PassThru:$PassThru
+            Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $Tag -PassThru:$PassThru -Show $Show
         } else {
             foreach($check in Get-SqlChecksFromConfig -Config $Config) {
-                Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $check -PassThru:$PassThru
+                Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $check -PassThru:$PassThru -Show $Show
             }
         }
     }
