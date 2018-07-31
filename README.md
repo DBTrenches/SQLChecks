@@ -50,7 +50,7 @@ Some checks target a database (e.g. checking for oversized indexes).  By default
 - Databases that are not ONLINE
 - Databases that are secondaries in an availability group
 
-Some checks also exclude system databases by default.
+Some checks also exclude system databases by default - for more detail consult the test definitions in the `src/SQLChecks/Tests` folder.
 
 ## Availability Group Support
 A config file can specify that databases for a specific availability group should be checked.  This is set with the `DatabasesToCheck` configuration value and the `AvailabilityGroup` value.
