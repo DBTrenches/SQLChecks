@@ -21,13 +21,13 @@ Function Invoke-SqlChecks {
         [Pester.OutputTypes]
         $Show = 'All'
     )
-    Process{
-
+    Begin {
+        $path = ($script:MyInvocation.MyCommand.Path | Split-Path) + '\Tests'
+    }
+    Process {
         if ($PSCmdlet.ParameterSetName -eq "ConfigPath") {
             $Config = Read-SqlChecksConfig -Path $ConfigPath
         }
-
-        $path = ($script:MyInvocation.MyCommand.Path | Split-Path) + '\Tests'
 
         if($Tag) {
             Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $Tag -PassThru:$PassThru -Show $Show
