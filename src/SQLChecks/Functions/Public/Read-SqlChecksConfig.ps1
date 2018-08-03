@@ -5,6 +5,7 @@ Function Read-SqlChecksConfig {
         [System.IO.FileInfo]
         $Path
     )
-
-    Get-Content -Path $Path -Raw | ConvertFrom-Json
+    Process {
+        Get-Content -Path $Path -Raw | ConvertFrom-Json
+    }
 }
