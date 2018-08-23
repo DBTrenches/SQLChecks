@@ -2,6 +2,15 @@ Function Export-SqlChecksResultsToLogAnalytics {
     [cmdletbinding()]
     Param(
         [Parameter(Mandatory=$true)]
+        $CustomerId,
+
+        [Parameter(Mandatory=$true)]
+        $SharedKey,
+
+        [Parameter(Mandatory=$true)]
+        $LogType,
+
+        [Parameter(Mandatory=$true)]
         $BatchId,
 
         [Parameter(Mandatory=$true)]
@@ -44,5 +53,16 @@ Function Export-SqlChecksResultsToLogAnalytics {
     }
 
     # TODO: Upload it not echo it
-    Write-Output $results | Out-GridView
+    $payload = ConvertTo-Json $results
+    $encodedPayload = [System.Text.Encoding]::UTF8.GetBytes($payload)
+
+    $logAnalyticsArguments = @{
+        CustomerId = $CustomerId
+        SharedKey = $SharedKey
+        LogType = $LogType
+        TimeStampField = "InvocationStartTime"
+        Body = $encodedPayload
+    }
+
+    Post-LogAnalyticsData @logAnalyticsArguments
 }
