@@ -30,7 +30,8 @@ Describe "Describe tags are unique" {
 }
 
 Describe "Public functions that directly support tests" {
-    $excludedFunctions = @("Set-SpConfigValue", "Read-SqlChecksConfig", "Get-SpConfigValue", "Get-DatabasesToCheck")
+    $excludedFunctions = @("Set-SpConfigValue", "Read-SqlChecksConfig",
+        "Get-SpConfigValue", "Get-DatabasesToCheck", "Export-LogAnalytics", "Get-LogAnalyticsSignature")
 
     $commands = Get-Command -Module SqlChecks | where-object {
         $_.Name -notin $excludedFunctions
