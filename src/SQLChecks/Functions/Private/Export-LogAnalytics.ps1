@@ -1,20 +1,35 @@
 # Adapted from https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-data-collector-api
 # Create the function to create and post the request
-Function Post-LogAnalyticsData($customerId, $sharedKey, $body, $logType, $TimeStampField)
-{
+Function Export-LogAnalytics {
+    [cmdletbinding()]
+    Param(
+        $customerId,
+        $sharedKey,
+        $object,
+        $logType,
+        $TimeStampField
+    )
+    $bodyAsJson = ConvertTo-Json $object
+    $body = [System.Text.Encoding]::UTF8.GetBytes($bodyAsJson)
+
     $method = "POST"
     $contentType = "application/json"
     $resource = "/api/logs"
     $rfc1123date = [DateTime]::UtcNow.ToString("r")
     $contentLength = $body.Length
-    $signature = Build-Signature `
-        -customerId $customerId `
-        -sharedKey $sharedKey `
-        -date $rfc1123date `
-        -contentLength $contentLength `
-        -method $method `
-        -contentType $contentType `
-        -resource $resource
+
+    $signatureArguments = @{
+        CustomerId = $customerId
+        SharedKey = $sharedKey
+        Date = $rfc1123date
+        ContentLength = $contentLength
+        Method = $method
+        ContentType = $contentType
+        Resource = $resource
+    }
+
+    $signature = Get-LogAnalyticsSignature @signatureArguments
+    
     $uri = "https://" + $customerId + ".ods.opinsights.azure.com" + $resource + "?api-version=2016-04-01"
 
     $headers = @{

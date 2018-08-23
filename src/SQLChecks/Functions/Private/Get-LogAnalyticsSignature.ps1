@@ -1,6 +1,15 @@
-# Taken from https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-data-collector-api
-Function Build-Signature ($customerId, $sharedKey, $date, $contentLength, $method, $contentType, $resource)
-{
+# Adapted from https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-data-collector-api
+Function Get-LogAnalyticsSignature {
+    [cmdletbinding()]
+    Param (
+        $customerId,
+        $sharedKey,
+        $date,
+        $contentLength,
+        $method,
+        $contentType,
+        $resource
+    )
     $xHeaders = "x-ms-date:" + $date
     $stringToHash = $method + "`n" + $contentLength + "`n" + $contentType + "`n" + $xHeaders + "`n" + $resource
 
