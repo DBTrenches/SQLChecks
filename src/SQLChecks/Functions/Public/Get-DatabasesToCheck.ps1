@@ -64,7 +64,7 @@ where d.state_desc = 'ONLINE'
             $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
             $cache.Value[$serverInstance] = $results
         } else {
-            Write-Verbose "Found $serverInstance in the cache, populating"
+            Write-Verbose "Found $serverInstance in the cache"
             $results = $cache.Value[$serverInstance]
         }
 
