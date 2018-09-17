@@ -29,7 +29,7 @@ Function Invoke-SqlChecksToLogAnalytics {
                 InvocationStartTime = $InvocationStartTime
                 InvocationEndTime = $InvocationEndTime
                 HostComputer = $env:computername
-                TargetComputer = $config.ServerInstance
+                Target = $config.ServerInstance
                 TimeTaken = $testResult.Time.TotalMilliseconds
                 Passed = $testResult.Passed
                 Describe = $testResult.Describe
