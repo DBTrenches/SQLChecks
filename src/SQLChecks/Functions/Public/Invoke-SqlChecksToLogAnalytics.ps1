@@ -11,11 +11,13 @@ Function Invoke-SqlChecksToLogAnalytics {
         $CustomerId,
 
         [Parameter(Mandatory=$true)]
-        $SharedKey
+        $SharedKey,
+
+        $Tag
     )
 
     $invocationStartTime = [DateTime]::UtcNow
-    $results = Invoke-SqlChecks -Config $config -PassThru -Show None
+    $results = Invoke-SqlChecks -Config $config -PassThru -Show None -Tag $Tag
     $invocationEndTime = [DateTime]::UtcNow
 
     if($Results.Count -gt 0) {
