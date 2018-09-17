@@ -35,6 +35,7 @@ Function Invoke-SqlChecksToLogAnalytics {
                 Name = $testResult.Name
                 FailureMessage = $testResult.FailureMessage
                 Result = $testResult.Result
+                Identifier = "SQLChecks"
             }
         }
 
