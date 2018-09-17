@@ -20,14 +20,14 @@ Function Invoke-SqlChecksToLogAnalytics {
     $results = Invoke-SqlChecks -Config $config -PassThru -Show None -Tag $Tag
     $invocationEndTime = [DateTime]::UtcNow
 
-    if($Results.Count -gt 0) {
+    if($results.TestResult.Count -gt 0) {
         $pesterResults = @()
         foreach($testResult in $results.TestResult) {
             $pesterResults += [PSCustomObject]@{
-                BatchId = $BatchId
+                BatchId = $batchId
                 InvocationId = [System.Guid]::NewGuid()
-                InvocationStartTime = $InvocationStartTime
-                InvocationEndTime = $InvocationEndTime
+                InvocationStartTime = $invocationStartTime
+                InvocationEndTime = $invocationEndTime
                 HostComputer = $env:computername
                 Target = $config.ServerInstance
                 TimeTaken = $testResult.Time.TotalMilliseconds
