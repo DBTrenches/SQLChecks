@@ -70,7 +70,7 @@ where d.state_desc = 'ONLINE'
 
         $queryResults = $results
     } else {
-        $queryResults = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
+        $queryResults = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
     }
 
     $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {
