@@ -61,7 +61,7 @@ where d.state_desc = 'ONLINE'
         $cache = Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope global
         if(-not $cache.Value.ContainsKey($serverInstance)) {
             Write-Verbose "Did not find $serverInstance in the cache, populating"
-            $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query
+            $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
             $cache.Value[$serverInstance] = $results
         } else {
             Write-Verbose "Found $serverInstance in the cache"
