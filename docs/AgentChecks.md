@@ -13,3 +13,10 @@ Checks that every SQL Agent job has at least one active schedule.  Excludes jobs
 ```
 
 Checks that there is no agent job that has a disabled schedule attached to it.  Excludes jobs in the Report Server category.
+
+## SQL Agent is running
+```json
+"AgentIsRunning": {}
+```
+
+Ensures SQL Agent is running.

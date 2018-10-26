@@ -15,3 +15,9 @@ Describe "SQL Agent schedules" -Tag AgentJobNoDisabledSchedules {
         @(Get-SqlAgentJobsWithDisabledSchedule -Config $Config).Count | Should Be 0
     }
 }
+
+Describe "SQL Agent status" -Tag AgentIsRunning {
+    It "SQL Agent is running on $serverInstance" {
+        (Get-SqlAgentService -Config $Config).Status | Should Be "Running"
+    }
+}
