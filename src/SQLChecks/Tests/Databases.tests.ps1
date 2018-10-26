@@ -1,7 +1,7 @@
 Param(
     $Config
 )
-#/
+
 $serverInstance = $config.ServerInstance
 
 $databasesToCheckConfig = $config.DatabasesToCheck
