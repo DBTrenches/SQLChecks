@@ -3,10 +3,19 @@
 Function Export-LogAnalytics {
     [cmdletbinding()]
     Param(
-        $customerId,
-        $sharedKey,
-        $object,
-        $logType,
+        [Parameter(Mandatory=$true)]
+        $CustomerId,
+
+        [Parameter(Mandatory=$true)]
+        $SharedKey,
+
+        [Parameter(Mandatory=$true)]
+        $Object,
+
+        [Parameter(Mandatory=$true)]
+        $LogType,
+
+        [Parameter(Mandatory=$true)]
         $TimeStampField
     )
     $bodyAsJson = ConvertTo-Json $object

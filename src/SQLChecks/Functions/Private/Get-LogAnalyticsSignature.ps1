@@ -2,13 +2,26 @@
 Function Get-LogAnalyticsSignature {
     [cmdletbinding()]
     Param (
-        $customerId,
-        $sharedKey,
-        $date,
-        $contentLength,
-        $method,
-        $contentType,
-        $resource
+        [Parameter(Mandatory=$true)]
+        $CustomerId,
+
+        [Parameter(Mandatory=$true)]
+        $SharedKey,
+
+        [Parameter(Mandatory=$true)]
+        $Date,
+
+        [Parameter(Mandatory=$true)]
+        $ContentLength,
+
+        [Parameter(Mandatory=$true)]
+        $Method,
+
+        [Parameter(Mandatory=$true)]
+        $ContentType,
+
+        [Parameter(Mandatory=$true)]
+        $Resource
     )
     $xHeaders = "x-ms-date:" + $date
     $stringToHash = $method + "`n" + $contentLength + "`n" + $contentType + "`n" + $xHeaders + "`n" + $resource
