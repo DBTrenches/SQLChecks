@@ -41,15 +41,18 @@ Function Invoke-SqlChecksToLogAnalytics {
             }
         }
 
-        $exportArguments = @{
+        Write-Verbose "Exporting $($pesterResults.Count) results"
+
+        $resultJson = ConvertTo-Json $pesterResults
+        $sendArguments = @{
             CustomerId = $CustomerId
             SharedKey = $SharedKey
             LogType = "PesterResult"
             TimeStampField = "InvocationStartTime"
+            Body = $resultJson
         }
 
-        Write-Verbose "Exporting $($pesterResults.Count) results"
-        Export-LogAnalytics @exportArguments $pesterResults
+        Send-OMSAPIIngestionFile @sendArguments | Out-Null
     } else {
         Write-Verbose "No test results for $($config.ServerInstance)"
     }
