@@ -5,6 +5,7 @@ skip_commits:
 install:
   - cinst pester
   - ps: Install-Module SqlServer -AllowClobber -Force
+  - ps: Install-Module OMSIngestionAPI -Force
 
 build: off
 
