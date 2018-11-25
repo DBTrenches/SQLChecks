@@ -28,7 +28,7 @@ Function Get-DatabasesToCheck {
 select  d.name as DatabaseName
     ,ag.IsAvailabilityGroupDatabase
     ,ag.IsPrimaryReplica
-	,grp.name as AvailabilityGroup
+    ,grp.name as AvailabilityGroup
 from sys.databases as d
 left join sys.dm_hadr_database_replica_states as rs
 on d.database_id = rs.database_id
@@ -53,12 +53,12 @@ where d.state_desc = 'ONLINE'
 
     if($useCaching) {
         Write-Verbose "Get-DatabasesToCheck - Cache is enabled"
-        if(-not (Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope global -ErrorAction SilentlyContinue)) {
-            Write-Verbose "Did not find GetDatabasesToCheckSQLResultCache in the global scope"
-            Set-Variable -Name GetDatabasesToCheckSQLResultCache -Scope global -Value @{}
+        if(-not (Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -ErrorAction SilentlyContinue)) {
+            Write-Verbose "Did not find GetDatabasesToCheckSQLResultCache in the script scope"
+            Set-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -Value @{}
         }
 
-        $cache = Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope global
+        $cache = Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script
         if(-not $cache.Value.ContainsKey($serverInstance)) {
             Write-Verbose "Did not find $serverInstance in the cache, populating"
             $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
