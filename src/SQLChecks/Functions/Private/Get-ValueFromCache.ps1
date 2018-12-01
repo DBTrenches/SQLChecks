@@ -12,7 +12,7 @@ Function Get-ValueFromCache {
   $CACHE_VARIABLE_NAME = "SQLChecks_Cache"
 
   if (-not (Get-Variable -Name $CACHE_VARIABLE_NAME -Scope Global -ErrorAction SilentlyContinue)) {
-    Write-Verbose "Did not find CachedData in the script scope"
+    Write-Verbose "Did not find CachedData in the global scope"
     Set-Variable -Name $CACHE_VARIABLE_NAME -Scope Global -Value @{}
   }
 
