@@ -49,31 +49,9 @@ where d.state_desc = 'ONLINE'
     $ExcludedDatabases += "tempdb"
   }
 
-  $useCaching = $true
-
-  if ($useCaching) {
-    Write-Verbose "Get-DatabasesToCheck - Cache is enabled"
-    if (-not (Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -ErrorAction SilentlyContinue)) {
-      Write-Verbose "Did not find GetDatabasesToCheckSQLResultCache in the script scope"
-      Set-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -Value @{}
+  $queryResults = Get-ValueFromCache -Key $serverInstance -Value { 
+      Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60 
     }
-
-    $cache = Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script
-    if (-not $cache.Value.ContainsKey($serverInstance)) {
-      Write-Verbose "Did not find $serverInstance in the cache, populating"
-      $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
-      $cache.Value[$serverInstance] = $results
-    }
-    else {
-      Write-Verbose "Found $serverInstance in the cache"
-      $results = $cache.Value[$serverInstance]
-    }
-
-    $queryResults = $results
-  }
-  else {
-    $queryResults = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
-  }
 
   $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {
     if ($ExcludedDatabases -contains $_.DatabaseName) {
