@@ -1,30 +1,30 @@
 Function Get-DatabasesToCheck {
-    [cmdletbinding()]
-    Param(
-        [parameter(Mandatory=$true)]
-        [string]
-        $ServerInstance,
+  [cmdletbinding()]
+  Param(
+    [parameter(Mandatory = $true)]
+    [string]
+    $ServerInstance,
 
-        [string[]]
-        $ExcludedDatabases,
+    [string[]]
+    $ExcludedDatabases,
 
-        [switch]
-        $IncludeSecondary = $false,
+    [switch]
+    $IncludeSecondary = $false,
 
-        [switch]
-        $ExcludeSystemDatabases,
+    [switch]
+    $ExcludeSystemDatabases,
 
-        [switch]
-        $ExcludePrimary = $false,
+    [switch]
+    $ExcludePrimary = $false,
 
-        [switch]
-        $ExcludeLocal = $false,
+    [switch]
+    $ExcludeLocal = $false,
 
-        [string]
-        $AvailabilityGroup
-    )
+    [string]
+    $AvailabilityGroup
+  )
 
-    $query = @"
+  $query = @"
 select  d.name as DatabaseName
     ,ag.IsAvailabilityGroupDatabase
     ,ag.IsPrimaryReplica
@@ -42,53 +42,57 @@ select  case when rs.database_id is null then 0 else 1 end as IsAvailabilityGrou
 where d.state_desc = 'ONLINE'
 "@
 
-    if($ExcludeSystemDatabases) {
-        $ExcludedDatabases += "master"
-        $ExcludedDatabases += "model"
-        $ExcludedDatabases += "msdb"
-        $ExcludedDatabases += "tempdb"
+  if ($ExcludeSystemDatabases) {
+    $ExcludedDatabases += "master"
+    $ExcludedDatabases += "model"
+    $ExcludedDatabases += "msdb"
+    $ExcludedDatabases += "tempdb"
+  }
+
+  $useCaching = $true
+
+  if ($useCaching) {
+    Write-Verbose "Get-DatabasesToCheck - Cache is enabled"
+    if (-not (Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -ErrorAction SilentlyContinue)) {
+      Write-Verbose "Did not find GetDatabasesToCheckSQLResultCache in the script scope"
+      Set-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -Value @{}
     }
 
-    $useCaching = $true
-
-    if($useCaching) {
-        Write-Verbose "Get-DatabasesToCheck - Cache is enabled"
-        if(-not (Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -ErrorAction SilentlyContinue)) {
-            Write-Verbose "Did not find GetDatabasesToCheckSQLResultCache in the script scope"
-            Set-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script -Value @{}
-        }
-
-        $cache = Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script
-        if(-not $cache.Value.ContainsKey($serverInstance)) {
-            Write-Verbose "Did not find $serverInstance in the cache, populating"
-            $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
-            $cache.Value[$serverInstance] = $results
-        } else {
-            Write-Verbose "Found $serverInstance in the cache"
-            $results = $cache.Value[$serverInstance]
-        }
-
-        $queryResults = $results
-    } else {
-        $queryResults = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
+    $cache = Get-Variable -Name GetDatabasesToCheckSQLResultCache -Scope Script
+    if (-not $cache.Value.ContainsKey($serverInstance)) {
+      Write-Verbose "Did not find $serverInstance in the cache, populating"
+      $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
+      $cache.Value[$serverInstance] = $results
+    }
+    else {
+      Write-Verbose "Found $serverInstance in the cache"
+      $results = $cache.Value[$serverInstance]
     }
 
-    $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {
-        if($ExcludedDatabases -contains $_.DatabaseName) {
-            return
-        }
+    $queryResults = $results
+  }
+  else {
+    $queryResults = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
+  }
 
-        # If an AG is specified only process databases in this AG
-        if($AvailabilityGroup -ne "" -and $_.AvailabilityGroup -ne $AvailabilityGroup) {
-            return
-        }
-
-        if(-not $_.IsAvailabilityGroupDatabase -and -not $ExcludeLocal) {
-            $_.DatabaseName
-        } elseif ($_.IsPrimaryReplica -and -not $ExcludePrimary) {
-            $_.DatabaseName
-        } elseif ($_.IsAvailabilityGroupDatabase -and -not $_.IsPrimaryReplica -and $IncludeSecondary) {
-            $_.DatabaseName
-        }
+  $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {
+    if ($ExcludedDatabases -contains $_.DatabaseName) {
+      return
     }
+
+    # If an AG is specified only process databases in this AG
+    if ($AvailabilityGroup -ne "" -and $_.AvailabilityGroup -ne $AvailabilityGroup) {
+      return
+    }
+
+    if (-not $_.IsAvailabilityGroupDatabase -and -not $ExcludeLocal) {
+      $_.DatabaseName
+    }
+    elseif ($_.IsPrimaryReplica -and -not $ExcludePrimary) {
+      $_.DatabaseName
+    }
+    elseif ($_.IsAvailabilityGroupDatabase -and -not $_.IsPrimaryReplica -and $IncludeSecondary) {
+      $_.DatabaseName
+    }
+  }
 }
