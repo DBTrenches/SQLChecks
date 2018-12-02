@@ -49,9 +49,9 @@ where d.state_desc = 'ONLINE'
     $ExcludedDatabases += "tempdb"
   }
 
-  $queryResults = Get-ValueFromCache -Key $serverInstance -Value { 
-      Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60 
-    }
+  $queryResults = Get-ValueFromCache -Key $serverInstance -ScriptBlock {
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
+  }
 
   $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {
     if ($ExcludedDatabases -contains $_.DatabaseName) {
