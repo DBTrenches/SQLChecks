@@ -11,7 +11,7 @@ Describe "Get-CachedScriptBlockResult" {
     BeforeAll {
       Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
     }
-    
+
     It "lets values be added to the cache and returns them" {
       Get-CachedScriptBlockResult -Key "KeyOne" -ScriptBlock { "ValueOne" } | Should Be "ValueOne"
     }
