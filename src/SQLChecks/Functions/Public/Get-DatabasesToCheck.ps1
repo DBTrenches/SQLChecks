@@ -49,7 +49,7 @@ where d.state_desc = 'ONLINE'
     $ExcludedDatabases += "tempdb"
   }
 
-  $queryResults = Get-ValueFromCache -Key $serverInstance -ScriptBlock {
+  $queryResults = Get-CachedScriptBlockResult -Key $serverInstance -ScriptBlock {
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
   }
 

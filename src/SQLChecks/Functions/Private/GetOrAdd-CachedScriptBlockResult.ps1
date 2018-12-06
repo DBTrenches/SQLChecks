@@ -1,4 +1,4 @@
-Function Get-ValueFromCache {
+Function Get-CachedScriptBlockResult {
   [cmdletbinding()]
   Param(
     [Parameter(Mandatory = $true)]

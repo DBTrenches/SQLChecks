@@ -6,25 +6,25 @@ Function Get-ExpensiveToComputeValue {
 
 $SQLCHECKS_CACHE_VARIABLE = "SQLChecks_Cache"
 
-Describe "Get-ValueFromCache" {
+Describe "Get-CachedScriptBlockResult" {
   Context "adding and retrieving simple values" {
     BeforeAll {
       Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
     }
     
     It "lets values be added to the cache and returns them" {
-      Get-ValueFromCache -Key "KeyOne" -ScriptBlock { "ValueOne" } | Should Be "ValueOne"
+      Get-CachedScriptBlockResult -Key "KeyOne" -ScriptBlock { "ValueOne" } | Should Be "ValueOne"
     }
 
     It "retrieves values from the cache correctly when called a second time" {
-      Get-ValueFromCache -Key "KeyOne" -ScriptBlock { $null } | Should Be "ValueOne"
+      Get-CachedScriptBlockResult -Key "KeyOne" -ScriptBlock { $null } | Should Be "ValueOne"
     }
 
-    Get-ValueFromCache -Key "KeyTwo" -ScriptBlock { "ValueTwo" }
+    Get-CachedScriptBlockResult -Key "KeyTwo" -ScriptBlock { "ValueTwo" }
 
     It "retrieves the appropriate values from the cache when multiple items are present" {
-      Get-ValueFromCache -Key "KeyOne" -ScriptBlock { $null } | Should Be "ValueOne"
-      Get-ValueFromCache -Key "KeyTwo" -ScriptBlock { $null } | Should Be "ValueTwo"
+      Get-CachedScriptBlockResult -Key "KeyOne" -ScriptBlock { $null } | Should Be "ValueOne"
+      Get-CachedScriptBlockResult -Key "KeyTwo" -ScriptBlock { $null } | Should Be "ValueTwo"
     }
   }
 
@@ -35,13 +35,13 @@ Describe "Get-ValueFromCache" {
 
     Mock Get-ExpensiveToComputeValue { return "mocked" }
 
-    Get-ValueFromCache -Key "test" -ScriptBlock { Get-ExpensiveToComputeValue }
+    Get-CachedScriptBlockResult -Key "test" -ScriptBlock { Get-ExpensiveToComputeValue }
     
     It "calls the function once to populate the cache" {
       Assert-MockCalled -CommandName Get-ExpensiveToComputeValue -Times 1
     }
 
-    Get-ValueFromCache -Key "test" -ScriptBlock { Get-ExpensiveToComputeValue }
+    Get-CachedScriptBlockResult -Key "test" -ScriptBlock { Get-ExpensiveToComputeValue }
     
     It "doesnt call the function when the value is in the cache" {
       Assert-MockCalled -CommandName Get-ExpensiveToComputeValue -Exactly -Times 1
@@ -53,13 +53,13 @@ Describe "Get-ValueFromCache" {
       Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
     }
 
-    Get-ValueFromCache -Key "NoProcess" -ScriptBlock {
+    Get-CachedScriptBlockResult -Key "NoProcess" -ScriptBlock {
       Get-Process | Where-Object { $_.ProcessName -eq "does not exist" }
     }
 
     Mock Get-Process {}
 
-    Get-ValueFromCache -Key "NoProcess" -ScriptBlock {
+    Get-CachedScriptBlockResult -Key "NoProcess" -ScriptBlock {
       Get-Process | Where-Object { $_.ProcessName -eq "does not exist" }
     }
 
