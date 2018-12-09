@@ -69,3 +69,8 @@ To only run database-specific checks on databases that belong to the `AG1` avail
 You can also specify a value of `LocalOnly` for `DatabasesToCheck`, which will cause database-specific checks to skip any database that belongs to an availability group.
 
 If you do not specify a value, then every database (except for default exclusions) is checked.
+
+## PowerShell Core Support
+The `SqlServer` module does not currently expose `Invoke-SqlCmd` in PSCore.  Support for `Invoke-SqlCmd` is on the roadmap, and so Core support for SQLChecks will wait on that.
+
+All other dependencies (Pester, OMSIngestionApi) work on Core as of 6.1).
