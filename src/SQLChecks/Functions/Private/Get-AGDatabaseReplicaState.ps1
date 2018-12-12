@@ -27,7 +27,7 @@ where ag.name = '$availabilityGroup'
     Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query -QueryTimeout 60
   }
 
-  $queryResult | ForEach-Object {
+  $queryResults | ForEach-Object {
     [pscustomobject]@{
         ServerInstance = $ServerInstance
         AvailabilityGroup = $AvailabilityGroup
