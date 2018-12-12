@@ -12,7 +12,7 @@ Checks that the server instance is pingable.  The server instance for an AG shou
 ## Number of synchronized secondary replicas
 ```json
 "AGSyncCommitHealthStatus": {
-  NumberOfReplicas: 1
+  "NumberOfReplicas": 1
 }
 ```
 
