@@ -22,7 +22,12 @@ on    adc.group_database_id = drs.group_database_id
 where ag.name = '$availabilityGroup'
 "@
 
-  Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query | ForEach-Object {
+  $cacheKey = "AG-$serverInstance-$availabilityGroup"
+  $queryResults = Get-CachedScriptBlockResult -Key $cacheKey -ScriptBlock {
+    Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query -QueryTimeout 60
+  }
+
+  $queryResult | ForEach-Object {
     [pscustomobject]@{
         ServerInstance = $ServerInstance
         AvailabilityGroup = $AvailabilityGroup

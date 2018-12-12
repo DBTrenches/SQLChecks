@@ -11,13 +11,7 @@ InModuleScope -ModuleName SQLChecks {
     ("inst", "healthyAG", "db2", "SYNCHRONIZED", 0, $false)
   )
 
-  $SQLCHECKS_CACHE_VARIABLE = "SQLChecks_Cache"
-
   Describe "Get-AGDatabaseSummary" {
-    BeforeAll {
-      Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
-    }
-
     Context "HealthyAG" {
       Mock -CommandName Get-AGDatabaseReplicaState -MockWith {
         return $healthyAG | ForEach-Object {
@@ -33,7 +27,7 @@ InModuleScope -ModuleName SQLChecks {
       }
 
       $databases = Get-AGDatabaseSummary -ServerInstance "localhost" -AvailabilityGroup "test"
-      
+
       It "should have two databases in the summary record" {
         $databases.Count | Should -Be 2
       }
