@@ -29,7 +29,7 @@ where ag.name = '$availabilityGroup'
         DatabaseName = $_.database_name
         SynchronizationState = $_.synchronization_state_desc
         RedoQueueSize = $_.redo_queue_size
-        IsPrimaryReplica = $_.is_primary_replica
+        IsPrimaryReplica =  [bool] $_.is_primary_replica
     }
   }
 }
