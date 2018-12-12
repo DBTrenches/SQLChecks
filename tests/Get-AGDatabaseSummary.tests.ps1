@@ -32,9 +32,16 @@ InModuleScope -ModuleName SQLChecks {
         }
       }
 
-      $databases = Get-AGDatabaseReplicaState -ServerInstance "localhost" -AvailabilityGroup "test"
-      It "should have two databases" {
+      $databases = Get-AGDatabaseSummary -ServerInstance "localhost" -AvailabilityGroup "test"
+      
+      It "should have two databases in the summary record" {
         $databases.Count | Should -Be 2
+      }
+
+      foreach($db in $databases) {
+        It "$($db.DatabaseName) should have one synchronized secondary" {
+          $db.SynchronizedReplicas | Should -Be 1
+        }
       }
     }
   }
