@@ -25,8 +25,11 @@ Function Get-AGDatabaseSummary {
       AvailabilityGroup = $AvailabilityGroup
       DatabaseName = $db
       SynchronizedReplicas = @($replicas | Where-Object {
-          $_.DatabaseName -eq $db -and $_.SynchronizationState -eq "SYNCHRONIZED" -and -not $_.IsPrimaryReplica
-        }).Count
+        $_.DatabaseName -eq $db -and $_.SynchronizationState -eq "SYNCHRONIZED" -and -not $_.IsPrimaryReplica
+      }).Count
+      PrimarySynchronizationState = ($replicas | Where-Object {
+        $_.DatabaseName -eq $db -and $_.IsPrimaryReplica
+      }).SynchronizationState
     }
   }
 

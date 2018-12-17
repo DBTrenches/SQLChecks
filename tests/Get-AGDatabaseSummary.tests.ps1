@@ -36,6 +36,10 @@ InModuleScope -ModuleName SQLChecks {
         It "$($db.DatabaseName) should have one synchronized secondary" {
           $db.SynchronizedReplicas | Should -Be 1
         }
+
+        It "$($db.DatabaseName) should report the primary is synchronized" {
+          $db.PrimarySynchronizationState | Should -Be "SYNCHRONIZED"
+        } 
       }
     }
   }
