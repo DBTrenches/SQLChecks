@@ -9,6 +9,14 @@ These checks all require the config to have an `AvailabilityGroup` set.
 
 Checks that the server instance is pingable.  The server instance for an AG should typically be the listener.
 
+## Primary synchronization status
+
+```json
+"AGPrimaryHealthStatus": {}
+```
+
+Checks the status of the primary replica is `SYNCHRONIZED`.
+
 ## Number of synchronized secondary replicas
 ```json
 "AGSyncCommitHealthStatus": {

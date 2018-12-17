@@ -13,6 +13,16 @@ Describe "AG Instance connectivity" -Tag AGInstanceConnectivity {
   }
 }
 
+Describe "All primaries are healthy" -Tag AGPrimaryHealthStatus {
+  $dbSummary = Get-AGDatabaseSummary $config
+
+  foreach($db in $dbSummary) {
+    It "$($db.DatabaseName) is health on the primary for $availabilityGroup on $serverInstance" {
+      $db.PrimarySynchronizationState | Should -Be "SYNCHRONIZED"
+    }
+  }
+}
+
 Describe "All synchronous commit secondaries are healthy" -Tag AGSyncCommitHealthStatus {
   $dbSummary = Get-AGDatabaseSummary $config
 
