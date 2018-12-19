@@ -1,6 +1,6 @@
 # Availability Group Checks
 
-These checks all require the config to have an `AvailabilityGroup` set.
+These checks all require the config to have an `AvailabilityGroup` set.  Some of these checks execute at the instance level, some at the AG level, and some for each database in the AG.  All checks are related to the health and/or configuration of the AG and its constituent databases.
 
 ## Can connect to the AG instance
 ```json
