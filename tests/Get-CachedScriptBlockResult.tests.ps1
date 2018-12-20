@@ -4,12 +4,10 @@ Function Get-ExpensiveToComputeValue {
   "Non-mocked"
 }
 
-$SQLCHECKS_CACHE_VARIABLE = "SQLChecks_Cache"
-
 Describe "Get-CachedScriptBlockResult" {
   Context "adding and retrieving simple values" {
     BeforeAll {
-      Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
+      Remove-SQLChecksCache
     }
 
     It "lets values be added to the cache and returns them" {
@@ -30,7 +28,7 @@ Describe "Get-CachedScriptBlockResult" {
 
   Context "calls script block the correct number of times " {
     BeforeAll {
-      Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
+      Remove-SQLChecksCache
     }
 
     Mock Get-ExpensiveToComputeValue { return "mocked" }
@@ -50,7 +48,7 @@ Describe "Get-CachedScriptBlockResult" {
 
   Context "adding and retrieving empty values" {
     BeforeAll {
-      Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
+      Remove-SQLChecksCache
     }
 
     Get-CachedScriptBlockResult -Key "NoProcess" -ScriptBlock {

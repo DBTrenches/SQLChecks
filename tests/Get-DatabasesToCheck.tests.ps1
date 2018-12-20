@@ -20,11 +20,9 @@ InModuleScope -ModuleName SQLChecks {
     ("ag2db2", $true, $false, "ag2")
   )
 
-  $SQLCHECKS_CACHE_VARIABLE = "SQLChecks_Cache"
-
   Describe "Get-DatabasesToCheck" {
     BeforeAll {
-      Remove-Variable -Scope Global -Name $SQLCHECKS_CACHE_VARIABLE -ErrorAction SilentlyContinue
+      Remove-SQLChecksCache
     }
 
     Context "FakeServer instance" {
