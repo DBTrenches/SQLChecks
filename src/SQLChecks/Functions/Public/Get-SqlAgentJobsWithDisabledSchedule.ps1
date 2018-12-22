@@ -1,15 +1,15 @@
 Function Get-SqlAgentJobsWithDisabledSchedule {
     [cmdletbinding()]
     Param (
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
     }
 
@@ -32,8 +32,8 @@ where c.name <> 'Report Server'
 "@
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database msdb | ForEach-Object {
         [pscustomobject]@{
-            JobId = $_.JobId
-            JobName = $_.JobName
+            JobId                     = $_.JobId
+            JobName                   = $_.JobName
             FirstDisabledScheduleName = $_.DisabledScheduleName
         }
     }

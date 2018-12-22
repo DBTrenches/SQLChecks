@@ -4,11 +4,11 @@ Function Get-OversizedIndexes {
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName = "Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
 
-        ,[string]
+        , [string]
         $Database
     )
 
@@ -74,12 +74,12 @@ SELECT tr.DatabaseName ,
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | ForEach-Object {
         [pscustomobject]@{
-            Database = $_.DatabaseName
-            Schema = $_.SchemaName
-            Table = $_.TableName
-            Index = $_.IndexName
-            IndexType = $_.IndexType
-            RowLength = $_.RowLength
+            Database    = $_.DatabaseName
+            Schema      = $_.SchemaName
+            Table       = $_.TableName
+            Index       = $_.IndexName
+            IndexType   = $_.IndexType
+            RowLength   = $_.RowLength
             ColumnCount = $_.ColumnCount
         }
     }

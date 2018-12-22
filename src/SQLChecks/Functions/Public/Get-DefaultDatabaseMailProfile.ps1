@@ -1,15 +1,15 @@
 Function Get-DefaultDatabaseMailProfile {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
     }
 

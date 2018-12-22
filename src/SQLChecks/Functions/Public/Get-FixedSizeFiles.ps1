@@ -4,15 +4,15 @@
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName = "Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
 
-        ,[Parameter(ParameterSetName = "Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string[]]
         $WhitelistFiles
 
-        ,[string]
+        , [string]
         $Database
     )
 
@@ -21,7 +21,7 @@
         $WhitelistFiles = $Config.ZeroAutoGrowthFiles.Whitelist
     }
 
-    $query=@"
+    $query = @"
 select database_id
     ,[file_id]
     ,[type]
@@ -45,11 +45,11 @@ and database_id = db_id();
     } | ForEach-Object {
         [pscustomobject]@{
             DatabaseName = $_.db_name
-            FileName = $_.f_name
-            FileType = $_.type_desc
-            FileState = $_.state_desc
-            SizeMB = $_.size_mb
-            FilePath = $_.f_path
+            FileName     = $_.f_name
+            FileType     = $_.type_desc
+            FileState    = $_.state_desc
+            SizeMB       = $_.size_mb
+            FilePath     = $_.f_path
         }
     }
 }

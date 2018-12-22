@@ -1,13 +1,13 @@
 Function Get-DatabaseTriggerStatus {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $TriggerName,
 
@@ -15,7 +15,7 @@ Function Get-DatabaseTriggerStatus {
         $Database
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
         $TriggerName = $Config.MustHaveDDLTrigger.TriggerName
     }
@@ -28,9 +28,10 @@ Function Get-DatabaseTriggerStatus {
 "@
 
     $result = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database
-    if($result.TriggerCount -eq 0) {
+    if ($result.TriggerCount -eq 0) {
         $false
-    } else {
+    }
+    else {
         $true
     }
 }

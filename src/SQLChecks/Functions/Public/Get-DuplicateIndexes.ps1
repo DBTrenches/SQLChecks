@@ -4,22 +4,22 @@ Function Get-DuplicateIndexes {
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName = "Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
 
-        ,[Parameter(ParameterSetName = "Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string[]]
         $ExcludeIndex
 
-        ,[string]
+        , [string]
         $Database
     )
 
     if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
         $ExcludeIndex = $Config.CheckDuplicateIndexes.ExcludeIndex
-      }
+    }
 
     $query = @"
 SET LOCK_TIMEOUT 10000;
@@ -206,12 +206,12 @@ FROM    #tempResults AS tr;
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 0 -Database $database | Where-Object {
-      $ExcludeIndex -notcontains $_.IndexName -and $ExcludeIndex -notcontains $_.DuplicateIndexName
+        $ExcludeIndex -notcontains $_.IndexName -and $ExcludeIndex -notcontains $_.DuplicateIndexName
     } | ForEach-Object {
-      [PSCustomObject]@{
-        Index = $_.IndexName
-        DuplicateIndex = $_.DuplicateIndexName
-      }
+        [PSCustomObject]@{
+            Index          = $_.IndexName
+            DuplicateIndex = $_.DuplicateIndexName
+        }
     }
 }
 

@@ -1,21 +1,21 @@
 Function Get-TLogsWithLargeGrowthSize {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [int]
         $MaxTLogAutoGrowthInKB
 
-        ,[string]
+        , [string]
         $Database
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
         $MaxTLogAutoGrowthInKB = $Config.MaxTLogAutoGrowthInKB
     }

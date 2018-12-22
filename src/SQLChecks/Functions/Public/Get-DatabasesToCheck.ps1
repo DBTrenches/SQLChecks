@@ -1,30 +1,30 @@
 Function Get-DatabasesToCheck {
-  [cmdletbinding()]
-  Param(
-    [parameter(Mandatory = $true)]
-    [string]
-    $ServerInstance,
+    [cmdletbinding()]
+    Param(
+        [parameter(Mandatory = $true)]
+        [string]
+        $ServerInstance,
 
-    [string[]]
-    $ExcludedDatabases,
+        [string[]]
+        $ExcludedDatabases,
 
-    [switch]
-    $IncludeSecondary = $false,
+        [switch]
+        $IncludeSecondary = $false,
 
-    [switch]
-    $ExcludeSystemDatabases,
+        [switch]
+        $ExcludeSystemDatabases,
 
-    [switch]
-    $ExcludePrimary = $false,
+        [switch]
+        $ExcludePrimary = $false,
 
-    [switch]
-    $ExcludeLocal = $false,
+        [switch]
+        $ExcludeLocal = $false,
 
-    [string]
-    $AvailabilityGroup
-  )
+        [string]
+        $AvailabilityGroup
+    )
 
-  $query = @"
+    $query = @"
 select  d.name as DatabaseName
     ,ag.IsAvailabilityGroupDatabase
     ,ag.IsPrimaryReplica
@@ -42,35 +42,35 @@ select  case when rs.database_id is null then 0 else 1 end as IsAvailabilityGrou
 where d.state_desc = 'ONLINE'
 "@
 
-  if ($ExcludeSystemDatabases) {
-    $ExcludedDatabases += "master"
-    $ExcludedDatabases += "model"
-    $ExcludedDatabases += "msdb"
-    $ExcludedDatabases += "tempdb"
-  }
-
-  $queryResults = Get-CachedScriptBlockResult -Key $serverInstance -ScriptBlock {
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
-  }
-
-  $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {
-    if ($ExcludedDatabases -contains $_.DatabaseName) {
-      return
+    if ($ExcludeSystemDatabases) {
+        $ExcludedDatabases += "master"
+        $ExcludedDatabases += "model"
+        $ExcludedDatabases += "msdb"
+        $ExcludedDatabases += "tempdb"
     }
 
-    # If an AG is specified only process databases in this AG
-    if ($AvailabilityGroup -ne "" -and $_.AvailabilityGroup -ne $AvailabilityGroup) {
-      return
+    $queryResults = Get-CachedScriptBlockResult -Key $serverInstance -ScriptBlock {
+        Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 60
     }
 
-    if (-not $_.IsAvailabilityGroupDatabase -and -not $ExcludeLocal) {
-      $_.DatabaseName
+    $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {
+        if ($ExcludedDatabases -contains $_.DatabaseName) {
+            return
+        }
+
+        # If an AG is specified only process databases in this AG
+        if ($AvailabilityGroup -ne "" -and $_.AvailabilityGroup -ne $AvailabilityGroup) {
+            return
+        }
+
+        if (-not $_.IsAvailabilityGroupDatabase -and -not $ExcludeLocal) {
+            $_.DatabaseName
+        }
+        elseif ($_.IsPrimaryReplica -and -not $ExcludePrimary) {
+            $_.DatabaseName
+        }
+        elseif ($_.IsAvailabilityGroupDatabase -and -not $_.IsPrimaryReplica -and $IncludeSecondary) {
+            $_.DatabaseName
+        }
     }
-    elseif ($_.IsPrimaryReplica -and -not $ExcludePrimary) {
-      $_.DatabaseName
-    }
-    elseif ($_.IsAvailabilityGroupDatabase -and -not $_.IsPrimaryReplica -and $IncludeSecondary) {
-      $_.DatabaseName
-    }
-  }
 }

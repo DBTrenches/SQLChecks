@@ -1,22 +1,22 @@
 Function Test-StartupXEvents {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string[]]
         $StartupXEvents
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
         $StartupXEvents = $Config.StartupXEvents
 
-        if(!$StartupXEvents) {
+        if (!$StartupXEvents) {
             $StartupXEvents = @()
         }
     }
@@ -31,11 +31,10 @@ where   s.startup_state = 1;
 
     $comparison = @(Compare-Object -ReferenceObject $StartupXEvents -DifferenceObject $Sessions)
 
-    foreach($delta in $comparison)
-    {
+    foreach ($delta in $comparison) {
         [pscustomobject]@{
             EventSession = $delta.InputObject
-            Issue = if($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
+            Issue        = if ($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
         }
     }
 }

@@ -1,19 +1,19 @@
-﻿Function Get-DbsWithoutGoodCheckDb{
+﻿Function Get-DbsWithoutGoodCheckDb {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
 
-        ,[parameter(Mandatory=$true)]
+        , [parameter(Mandatory = $true)]
         [string]
         $Database
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
     }
 
@@ -37,8 +37,8 @@ where   dbi.Field = 'dbi_dbccLastKnownGood'
 "@
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $database | ForEach-Object {
         [pscustomobject]@{
-            Database = $database
-            LastGoodCheckDb = $_.LastGoodCheckDbDate
+            Database                 = $database
+            LastGoodCheckDb          = $_.LastGoodCheckDbDate
             DaysSinceLastGoodCheckDB = $_.DaysSinceLastGoodCheckDb
         }
     }

@@ -1,14 +1,14 @@
 Function Invoke-SqlChecks {
-    [CmdletBinding(DefaultParameterSetName="ConfigVariable")]
+    [CmdletBinding(DefaultParameterSetName = "ConfigVariable")]
     Param(
-        [Parameter(ParameterSetName="ConfigVariable",Mandatory=$true,Position=0)]
+        [Parameter(ParameterSetName = "ConfigVariable", Mandatory = $true, Position = 0)]
         $Config,
 
-        [Parameter(ParameterSetName="ConfigPath",Mandatory=$true,Position=0,ValueFromPipeline=$true,ValueFromPipelineByPropertyName)]
+        [Parameter(ParameterSetName = "ConfigPath", Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName)]
         [Alias("FullName")]
-        [ValidateScript({
-            Test-Path -Path $_ -PathType Leaf
-        })]
+        [ValidateScript( {
+                Test-Path -Path $_ -PathType Leaf
+            })]
         [string]
         $ConfigPath,
 
@@ -29,11 +29,12 @@ Function Invoke-SqlChecks {
             $Config = Read-SqlChecksConfig -Path $ConfigPath
         }
 
-        if($Tag) {
-            Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $Tag -PassThru:$PassThru -Show $Show
-        } else {
-            foreach($check in Get-SqlChecksFromConfig -Config $Config) {
-                Invoke-Pester -Script @{Path=$path;Parameters= @{config=$Config}} -Tag $check -PassThru:$PassThru -Show $Show
+        if ($Tag) {
+            Invoke-Pester -Script @{Path = $path; Parameters = @{config = $Config}} -Tag $Tag -PassThru:$PassThru -Show $Show
+        }
+        else {
+            foreach ($check in Get-SqlChecksFromConfig -Config $Config) {
+                Invoke-Pester -Script @{Path = $path; Parameters = @{config = $Config}} -Tag $check -PassThru:$PassThru -Show $Show
             }
         }
     }

@@ -1,16 +1,16 @@
 Function Invoke-SqlChecksToLogAnalytics {
     [cmdletbinding()]
     Param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $BatchId,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $CustomerId,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $SharedKey,
 
         $Tag
@@ -20,24 +20,24 @@ Function Invoke-SqlChecksToLogAnalytics {
     $results = Invoke-SqlChecks -Config $config -PassThru -Show None -Tag $Tag
     $invocationEndTime = [DateTime]::UtcNow
 
-    if($results.TestResult.Count -gt 0) {
+    if ($results.TestResult.Count -gt 0) {
         $pesterResults = @()
-        foreach($testResult in $results.TestResult) {
+        foreach ($testResult in $results.TestResult) {
             $pesterResults += [PSCustomObject]@{
-                BatchId = $batchId
-                InvocationId = [System.Guid]::NewGuid()
+                BatchId             = $batchId
+                InvocationId        = [System.Guid]::NewGuid()
                 InvocationStartTime = $invocationStartTime
-                InvocationEndTime = $invocationEndTime
-                HostComputer = $env:computername
-                Target = $config.ServerInstance
-                TimeTaken = $testResult.Time.TotalMilliseconds
-                Passed = $testResult.Passed
-                Describe = $testResult.Describe
-                Context = $testResult.Context
-                Name = $testResult.Name
-                FailureMessage = $testResult.FailureMessage
-                Result = $testResult.Result
-                Identifier = "SQLChecks"
+                InvocationEndTime   = $invocationEndTime
+                HostComputer        = $env:computername
+                Target              = $config.ServerInstance
+                TimeTaken           = $testResult.Time.TotalMilliseconds
+                Passed              = $testResult.Passed
+                Describe            = $testResult.Describe
+                Context             = $testResult.Context
+                Name                = $testResult.Name
+                FailureMessage      = $testResult.FailureMessage
+                Result              = $testResult.Result
+                Identifier          = "SQLChecks"
             }
         }
 
@@ -45,15 +45,16 @@ Function Invoke-SqlChecksToLogAnalytics {
 
         $resultJson = ConvertTo-Json $pesterResults
         $sendArguments = @{
-            CustomerId = $CustomerId
-            SharedKey = $SharedKey
-            LogType = "PesterResult"
+            CustomerId     = $CustomerId
+            SharedKey      = $SharedKey
+            LogType        = "PesterResult"
             TimeStampField = "InvocationStartTime"
-            Body = $resultJson
+            Body           = $resultJson
         }
 
         Send-OMSAPIIngestionFile @sendArguments | Out-Null
-    } else {
+    }
+    else {
         Write-Verbose "No test results for $($config.ServerInstance)"
     }
 }

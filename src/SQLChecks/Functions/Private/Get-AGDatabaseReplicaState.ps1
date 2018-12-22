@@ -1,15 +1,15 @@
 Function Get-AGDatabaseReplicaState {
-  [cmdletbinding()]
-  Param(
-      [Parameter(Mandatory=$true)]
-      $ServerInstance
+    [cmdletbinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        $ServerInstance
 
-      ,[parameter(Mandatory=$true)]
-      [string]
-      $AvailabilityGroup
-  )
+        , [parameter(Mandatory = $true)]
+        [string]
+        $AvailabilityGroup
+    )
 
-  $query=@"
+    $query = @"
 select  adc.database_name
       ,drs.synchronization_state_desc
       ,drs.redo_queue_size
@@ -22,19 +22,19 @@ on    adc.group_database_id = drs.group_database_id
 where ag.name = '$availabilityGroup'
 "@
 
-  $cacheKey = "AG-$serverInstance-$availabilityGroup"
-  $queryResults = Get-CachedScriptBlockResult -Key $cacheKey -ScriptBlock {
-    Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query -QueryTimeout 60
-  }
-
-  $queryResults | ForEach-Object {
-    [pscustomobject]@{
-        ServerInstance = $ServerInstance
-        AvailabilityGroup = $AvailabilityGroup
-        DatabaseName = $_.database_name
-        SynchronizationState = $_.synchronization_state_desc
-        RedoQueueSize = $_.redo_queue_size
-        IsPrimaryReplica =  [bool] $_.is_primary_replica
+    $cacheKey = "AG-$serverInstance-$availabilityGroup"
+    $queryResults = Get-CachedScriptBlockResult -Key $cacheKey -ScriptBlock {
+        Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query -QueryTimeout 60
     }
-  }
+
+    $queryResults | ForEach-Object {
+        [pscustomobject]@{
+            ServerInstance       = $ServerInstance
+            AvailabilityGroup    = $AvailabilityGroup
+            DatabaseName         = $_.database_name
+            SynchronizationState = $_.synchronization_state_desc
+            RedoQueueSize        = $_.redo_queue_size
+            IsPrimaryReplica     = [bool] $_.is_primary_replica
+        }
+    }
 }

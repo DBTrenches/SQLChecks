@@ -1,19 +1,19 @@
 Function Get-SpConfigValue {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
 
-        ,[parameter(Mandatory=$true)]
+        , [parameter(Mandatory = $true)]
         [string]
         $ConfigName
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
     }
 
@@ -27,12 +27,12 @@ where   c.name = '$ConfigName'
 "@
 
     (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) |
-     ForEach-Object {
+        ForEach-Object {
         [pscustomobject]@{
-            ConfigName = $_.name
+            ConfigName      = $_.name
             ConfiguredValue = $_.value
-            RuntimeValue = $_.value_in_use
-            IsAdvanced = $_.is_advanced
+            RuntimeValue    = $_.value_in_use
+            IsAdvanced      = $_.is_advanced
         }
     }
 }

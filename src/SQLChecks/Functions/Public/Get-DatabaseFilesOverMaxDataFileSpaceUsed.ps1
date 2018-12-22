@@ -1,25 +1,25 @@
 Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [int]
         $MaxDataFileSpaceUsedPercent
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string[]]
         $WhitelistFiles
 
-        ,[string]
+        , [string]
         $Database
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
         $MaxDataFileSpaceUsedPercent = $Config.MaxDataFileSize.SpaceUsedPercent
         $WhitelistFiles = $Config.MaxDataFileSize.WhitelistFiles
@@ -44,8 +44,8 @@ and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
         $WhitelistFiles -notcontains $_.FileName
     } | ForEach-Object {
         [pscustomobject]@{
-            Database = $Database
-            FileName = $_.FileName
+            Database  = $Database
+            FileName  = $_.FileName
             SpaceUsed = $_.SpaceUsed
         }
     }

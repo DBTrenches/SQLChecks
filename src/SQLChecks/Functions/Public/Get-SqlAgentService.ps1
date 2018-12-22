@@ -1,15 +1,15 @@
 Function Get-SqlAgentService {
     [cmdletbinding()]
     Param (
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
     }
 
@@ -21,7 +21,7 @@ where   dss.servicename like 'SQL Server Agent%'
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master | ForEach-Object {
         [pscustomobject]@{
-            Status = $_.status_desc
+            Status      = $_.status_desc
             StartupType = $_.startup_type_desc
         }
     }

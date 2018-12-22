@@ -1,27 +1,27 @@
 ﻿Function Get-AutoGrowthRisks {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
 
-        ,[parameter(Mandatory=$true)]
+        , [parameter(Mandatory = $true)]
         [string]
         $Database
 
-        ,[parameter(ParameterSetName="Values")]
+        , [parameter(ParameterSetName = "Values")]
         [string[]]
         $WhitelistFiles
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
         $WhitelistFiles = $Config.ShouldCheckForAutoGrowthRisks.WhitelistFiles
     }
 
-    $query=@"
+    $query = @"
     ;with fileGrowth as (
         select mf.database_id
               ,mf.[file_id]
@@ -71,14 +71,14 @@
         $WhitelistFiles -notcontains $_.fName
     } | ForEach-Object {
         [pscustomobject]@{
-            Server = $_.srvr
-            Database = $_.db_name
-            FileName = $_.FileName
-            Growth = $_.growth
-            CurrentSizeMB = $_.cur_size_mb
-            MaxSizeMB = $_.max_size_mb
+            Server           = $_.srvr
+            Database         = $_.db_name
+            FileName         = $_.FileName
+            Growth           = $_.growth
+            CurrentSizeMB    = $_.cur_size_mb
+            MaxSizeMB        = $_.max_size_mb
             NextGrowthSizeMB = $_.next_growth_size_mb
-            GrowFileCommand = $_.grow_file_cmd
+            GrowFileCommand  = $_.grow_file_cmd
         }
     }
 }

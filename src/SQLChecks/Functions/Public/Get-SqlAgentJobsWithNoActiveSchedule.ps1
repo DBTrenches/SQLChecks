@@ -1,15 +1,15 @@
 Function Get-SqlAgentJobsWithNoActiveSchedule {
     [cmdletbinding()]
     Param (
-        [Parameter(ParameterSetName="Config",ValueFromPipeline=$true,Position=0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName="Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
     )
 
-    if($PSCmdlet.ParameterSetName -eq "Config") {
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
     }
 
@@ -31,7 +31,7 @@ and s.enabled = 1
 "@
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database msdb | ForEach-Object {
         [pscustomobject]@{
-            JobId = $_.JobId
+            JobId   = $_.JobId
             JobName = $_.JobName
         }
     }

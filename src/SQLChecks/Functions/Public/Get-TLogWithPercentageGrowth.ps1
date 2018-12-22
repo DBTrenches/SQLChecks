@@ -4,11 +4,11 @@ Function Get-TLogWithPercentageGrowth {
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName = "Values")]
+        , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
 
-        ,[string]
+        , [string]
         $Database
     )
 
@@ -30,8 +30,8 @@ and s.database_id = db_id();
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | ForEach-Object {
         [pscustomobject]@{
-            Database = $_.DatabaseName
-            FileName = $_.FileName
+            Database         = $_.DatabaseName
+            FileName         = $_.FileName
             GrowthPercentage = $_.GrowthPercentage
         }
     }
