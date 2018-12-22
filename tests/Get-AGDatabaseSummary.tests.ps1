@@ -26,12 +26,12 @@ InModuleScope -ModuleName SQLChecks {
       Mock -CommandName Get-AGDatabaseReplicaState -MockWith {
         return $healthyAG | ForEach-Object {
           [PSCustomObject]@{
-            ServerInstance = $_[0]
-            AvailabilityGroup = $_[1]
-            DatabaseName = $_[2]
+            ServerInstance       = $_[0]
+            AvailabilityGroup    = $_[1]
+            DatabaseName         = $_[2]
             SynchronizationState = $_[3]
-            RedoQueueSize = $_[4]
-            IsPrimaryReplica = $_[5]
+            RedoQueueSize        = $_[4]
+            IsPrimaryReplica     = $_[5]
           }
         }
       }
@@ -42,7 +42,7 @@ InModuleScope -ModuleName SQLChecks {
         $databases.Count | Should -Be 2
       }
 
-      foreach($db in $databases) {
+      foreach ($db in $databases) {
         It "$($db.DatabaseName) should have one synchronized secondary" {
           $db.SynchronizedReplicas | Should -Be 1
         }
@@ -61,19 +61,19 @@ InModuleScope -ModuleName SQLChecks {
       Mock -CommandName Get-AGDatabaseReplicaState -MockWith {
         return $longRedoAG | ForEach-Object {
           [PSCustomObject]@{
-            ServerInstance = $_[0]
-            AvailabilityGroup = $_[1]
-            DatabaseName = $_[2]
+            ServerInstance       = $_[0]
+            AvailabilityGroup    = $_[1]
+            DatabaseName         = $_[2]
             SynchronizationState = $_[3]
-            RedoQueueSize = $_[4]
-            IsPrimaryReplica = $_[5]
+            RedoQueueSize        = $_[4]
+            IsPrimaryReplica     = $_[5]
           }
         }
       }
 
       $databases = Get-AGDatabaseSummary -ServerInstance "localhost" -AvailabilityGroup "test"
 
-      foreach($db in $databases) {
+      foreach ($db in $databases) {
         It "$($db.DatabaseName) should report the largest secondary redo" {
           $db.LongestRedoQueue | Should -Be 150
         }
