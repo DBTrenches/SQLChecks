@@ -32,7 +32,7 @@ Function Get-AGDatabaseSummary {
                 }).SynchronizationState
             LongestRedoQueue            = ($replicas | Where-Object {
                     $_.DatabaseName -eq $db -and -not $_.IsPrimaryReplica
-                } | Select-Object RedoQueueSize | Sort-Object -Descending | Select-Object -First 1).RedoQueueSize
+                } | Sort-Object { $_.RedoQueueSize -as [int] } -Descending | Select-Object RedoQueueSize -First 1).RedoQueueSize
         }
     }
 

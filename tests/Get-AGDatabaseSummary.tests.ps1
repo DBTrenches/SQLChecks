@@ -72,7 +72,7 @@ InModuleScope -ModuleName SQLChecks {
             }
 
             $databases = Get-AGDatabaseSummary -ServerInstance "localhost" -AvailabilityGroup "test"
-            Write-Host $databases
+
             foreach ($db in $databases) {
                 It "$($db.DatabaseName) should report the largest secondary redo" {
                     $db.LongestRedoQueue | Should -Be 150
