@@ -45,4 +45,8 @@ Describe "Database Mail is configured" -Tag DatabaseMail {
     It "Database mail has a default profile configured on $serverInstance" {
         @(Get-DefaultDatabaseMailProfile -Config $Config).Count | Should Be 1
     }
+	
+	It "Database mail is running on $serverInstance" {
+		@(Get-DatabaseMailStatus -Config $Config).Status | Should Be "STARTED"
+	}
 }
