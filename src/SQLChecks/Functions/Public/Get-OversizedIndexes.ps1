@@ -14,6 +14,7 @@ Function Get-OversizedIndexes {
 
     if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
+		$ExcludeIndex = $Config.CheckForOversizedIndexes.ExcludeIndex
     }
 
     $query = @"
@@ -72,7 +73,9 @@ SELECT tr.DatabaseName ,
        tr.ColumnCount FROM #tempResults AS tr;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | ForEach-Object {
+    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
+        $ExcludeIndex -notcontains $_.DatabaseName+"."+$_.SchemaName+"."+$_.TableName+"."+$_.IndexName
+    } | ForEach-Object {
         [pscustomobject]@{
             Database    = $_.DatabaseName
             Schema      = $_.SchemaName
