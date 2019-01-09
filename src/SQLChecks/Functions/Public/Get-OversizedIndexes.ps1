@@ -7,6 +7,10 @@ Function Get-OversizedIndexes {
         , [Parameter(ParameterSetName = "Values")]
         [string]
         $ServerInstance
+		
+		, [Parameter(ParameterSetName = "Values")]
+        [string[]]
+        $ExcludeIndex
 
         , [string]
         $Database
