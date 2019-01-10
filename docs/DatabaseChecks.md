@@ -45,7 +45,8 @@ Polls for files above a certain percentage of fullness. This can help alert you 
 ## Oversized indexes
 ```json
 "CheckForOversizedIndexes": {
-    "ExcludedDatabases": ["tempdb"]
+    "ExcludedDatabases": ["tempdb"],
+    "ExcludeIndex": ["DB1.dbo.BigTable.IX_DuplicateByChoice"]
 }
 ```
 
