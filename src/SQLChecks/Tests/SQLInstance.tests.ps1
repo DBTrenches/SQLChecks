@@ -50,3 +50,9 @@ Describe "Database Mail is configured" -Tag DatabaseMail {
 		@(Get-DatabaseMailStatus -Config $Config).Status | Should Be "STARTED"
 	}
 }
+
+Describe "SQL Alerts" -Tag SQLAlerts {
+    It "Alerts are enabled and have alert notification on $serverInstance" {
+        @(Get-UnconfiguredAlerts -Config $Config).Count | Should Be 0
+    }
+}
