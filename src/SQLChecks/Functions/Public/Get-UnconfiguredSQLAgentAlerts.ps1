@@ -1,4 +1,4 @@
-Function Get-UnconfiguredAlerts {
+Function Get-UnconfiguredSQLAgentAlerts {
     [cmdletbinding()]
     Param(
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
