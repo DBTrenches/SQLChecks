@@ -21,3 +21,9 @@ Describe "SQL Agent status" -Tag AgentIsRunning {
         (Get-SqlAgentService -Config $Config).Status | Should Be "Running"
     }
 }
+
+Describe "Unconfigured SQL Agent Alerts" -Tag UnconfiguredSQLAgentAlerts {
+    It "Alerts are enabled and have alert notification on $serverInstance" {
+        @(Get-UnconfiguredSQLAgentAlerts -Config $Config).Count | Should Be 0
+    }
+}

@@ -15,7 +15,7 @@ Function Get-UnconfiguredAlerts {
 
     if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
-        $ExcludeAlert = $Config.CheckUnconfiguredAlerts.ExcludeAlert
+        $ExcludeAlert = $Config.CheckUnconfiguredSQLAgentAlerts.ExcludeAlert
     }
 
     $query = @"
@@ -29,7 +29,7 @@ WHERE [enabled] = 0 OR [has_notification] = 0;
 		[pscustomobject]@{
 			Name      = $_.name
             Enabled   = $_.enabled
-            Has_Notification = $_.has_notification
+            HasNotification = $_.has_notification
 		}
 	}	
 }
