@@ -20,3 +20,12 @@ Checks that there is no agent job that has a disabled schedule attached to it.  
 ```
 
 Ensures SQL Agent is running.
+
+## Alerts are enabled and have alert notifications
+```json
+"CheckUnconfiguredSQLAgentAlerts": {
+	 "ExcludeAlert": ["ExcludeAlert1"]
+  }
+```
+
+Checks all SQL Agent alerts for any alerts that are either disabled or does not have an alert notification enabled.
