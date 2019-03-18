@@ -71,6 +71,6 @@ You can also specify a value of `LocalOnly` for `DatabasesToCheck`, which will c
 If you do not specify a value, then every database (except for default exclusions) is checked.
 
 ## PowerShell Core Support
-The `SqlServer` module does not currently expose `Invoke-SqlCmd` in PSCore.  Support for `Invoke-SqlCmd` is on the roadmap, and so Core support for SQLChecks will wait on that.
+`SQLChecks` :heart: PSCore!  Tested and working with `PSCore 6.2.1rc and `SqlServer` 21.1.18095preview.
 
 All other dependencies (Pester, OMSIngestionApi) work on Core as of 6.1.
