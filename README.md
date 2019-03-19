@@ -6,8 +6,6 @@ Helper functions and tests for SQL Server.
 
 Requires the `SqlServer`, `Pester`, and `OMSIngestionAPI` modules.
 
-The examples folder contains a few different ways of invoking the scripts - against a single instance (SingleCheck) or against a folder full of instances (FolderCheck).
-
 For more information refer to [the documentation](./docs/Readme.md).
 
 ## Example Usage
