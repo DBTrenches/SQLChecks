@@ -47,3 +47,10 @@ Checks that the extended event sessions configured to run at startup.  If you wa
 ```
 
 Checks that the database mail SpConfigure option is set, and that a default global profile has been set.
+
+## Sysadmins
+```json
+"Sysadmins": ["sa"]
+```
+
+Checks that the members of the `sysadmin` server role matches the configuration.

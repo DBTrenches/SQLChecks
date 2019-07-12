@@ -42,4 +42,5 @@
     ,"AgentJobNoDisabledSchedules": {}
     ,"DatabaseMail": {}
     ,"AgentIsRunning": {}
+    ,"Sysadmins": ["sa"]
 }
