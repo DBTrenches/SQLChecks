@@ -40,6 +40,7 @@ select  case when rs.database_id is null then 0 else 1 end as IsAvailabilityGrou
         ,case when rs.is_primary_replica = 1 then 1 else 0 end as IsPrimaryReplica
 ) as ag
 where d.state_desc = 'ONLINE'
+and d.is_read_only = 0
 "@
 
     if ($ExcludeSystemDatabases) {
