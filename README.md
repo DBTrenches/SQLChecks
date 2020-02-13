@@ -18,25 +18,25 @@ Import-Module .\src\SQLChecks -Force
 And then pass a configuration file to `Invoke-SqlChecks`.
 
 ```powershell
-Invoke-SqlChecks -ConfigPath .\examples\localhost.config.json
+Invoke-SqlChecks -ConfigPath .\examples\simple\localhost.config.json
 ```
 
 You can also test a single item based on its tag.
 
 ```powershell
-Invoke-SqlChecks -ConfigPath .\examples\localhost.config.json -Tag CheckForOversizedIndexes
+Invoke-SqlChecks -ConfigPath .\examples\simple\localhost.config.json -Tag CheckForOversizedIndexes
 ```
 
 Or loop through a set of configuration files (`Invoke-SqlChecks` accepts paths on the pipeline, as well as objects from `Get-ChildItem`).
 
 ```powershell
-Get-ChildItem -Filter *.config.json -Path .\examples | Invoke-SqlChecks
+Get-ChildItem -Filter *.config.json -Path .\examples\simple | Invoke-SqlChecks
 ```
 
 It is also possible to pass configurations to `Invoke-SqlChecks`.
 
 ```powershell
-$config = Read-SqlChecksConfig .\examples\localhost.config.json
+$config = Read-SqlChecksConfig .\examples\simple\localhost.config.json
 Invoke-SqlChecks -Config $config
 ```
 
