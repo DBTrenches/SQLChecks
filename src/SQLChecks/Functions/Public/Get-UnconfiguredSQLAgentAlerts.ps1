@@ -19,17 +19,20 @@ Function Get-UnconfiguredSQLAgentAlerts {
     }
 
     $query = @"
-SELECT [name], [enabled], [has_notification] FROM msdb.dbo.sysalerts
-WHERE [enabled] = 0 OR [has_notification] = 0;
+select  [name]
+        ,[enabled]
+        ,[has_notification]
+from msdb.dbo.sysalerts
+where [enabled] = 0 or [has_notification] = 0;
 "@
 
     (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) | Where-Object {
         $ExcludeAlert -notcontains $_.name
       } | ForEach-Object {
-		[pscustomobject]@{
-			Name      = $_.name
+        [pscustomobject]@{
+            Name      = $_.name
             Enabled   = $_.enabled
             HasNotification = $_.has_notification
-		}
-	}	
+        }
+    }
 }

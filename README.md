@@ -6,8 +6,6 @@ Helper functions and tests for SQL Server.
 
 Requires the `SqlServer`, `Pester`, and `OMSIngestionAPI` modules.
 
-The examples folder contains a few different ways of invoking the scripts - against a single instance (SingleCheck) or against a folder full of instances (FolderCheck).
-
 For more information refer to [the documentation](./docs/Readme.md).
 
 ## Example Usage
@@ -20,25 +18,25 @@ Import-Module .\src\SQLChecks -Force
 And then pass a configuration file to `Invoke-SqlChecks`.
 
 ```powershell
-Invoke-SqlChecks -ConfigPath .\examples\localhost.config.json
+Invoke-SqlChecks -ConfigPath .\examples\simple\localhost.config.json
 ```
 
 You can also test a single item based on its tag.
 
 ```powershell
-Invoke-SqlChecks -ConfigPath .\examples\localhost.config.json -Tag CheckForOversizedIndexes
+Invoke-SqlChecks -ConfigPath .\examples\simple\localhost.config.json -Tag CheckForOversizedIndexes
 ```
 
 Or loop through a set of configuration files (`Invoke-SqlChecks` accepts paths on the pipeline, as well as objects from `Get-ChildItem`).
 
 ```powershell
-Get-ChildItem -Filter *.config.json -Path .\examples | Invoke-SqlChecks
+Get-ChildItem -Filter *.config.json -Path .\examples\simple | Invoke-SqlChecks
 ```
 
 It is also possible to pass configurations to `Invoke-SqlChecks`.
 
 ```powershell
-$config = Read-SqlChecksConfig .\examples\localhost.config.json
+$config = Read-SqlChecksConfig .\examples\simple\localhost.config.json
 Invoke-SqlChecks -Config $config
 ```
 
@@ -71,6 +69,6 @@ You can also specify a value of `LocalOnly` for `DatabasesToCheck`, which will c
 If you do not specify a value, then every database (except for default exclusions) is checked.
 
 ## PowerShell Core Support
-The `SqlServer` module does not currently expose `Invoke-SqlCmd` in PSCore.  Support for `Invoke-SqlCmd` is on the roadmap, and so Core support for SQLChecks will wait on that.
+SQLChecks :heart: PSCore!  Tested and working with `PSCore 6.2.1rc` and `SqlServer 21.1.18095preview`.
 
 All other dependencies (Pester, OMSIngestionApi) work on Core as of 6.1.

@@ -2,6 +2,6 @@
 
 See:
 - [Database Checks](./DatabaseChecks.md)
-- [Instance Checks](./InstanceChecks.md)
-- [SQL Agent Checks](./AgentChecks.md)
+- [Instance Checks](./SQLInstanceChecks.md)
+- [SQL Agent Checks](./SQLAgentChecks.md)
 - [Availability Group Checks](./AvailabilityGroupChecks.md)

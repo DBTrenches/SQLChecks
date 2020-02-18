@@ -28,7 +28,8 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
     $query = @"
 select  a.name  [FileName],
         fg.name [FileGroup],
-        c.SpaceUsed
+        c.SpaceUsed,
+        c.DBFile
 from    sys.database_files a
 left join sys.filegroups fg ON a.data_space_id = fg.data_space_id
 cross apply (
@@ -41,7 +42,7 @@ and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
-        $WhitelistFiles -notcontains $_.FileName
+        $WhitelistFiles -notcontains $_.DBFile
     } | ForEach-Object {
         [pscustomobject]@{
             Database  = $Database

@@ -17,7 +17,7 @@ Describe "All primaries are healthy" -Tag AGPrimaryHealthStatus {
     $dbSummary = Get-AGDatabaseSummary $config
 
     foreach ($db in $dbSummary) {
-        It "$($db.DatabaseName) is health on the primary for $availabilityGroup on $serverInstance" {
+        It "$($db.DatabaseName) is healthy on the primary for $availabilityGroup on $serverInstance" {
             $db.PrimarySynchronizationState | Should -Be "SYNCHRONIZED"
         }
     }
