@@ -1,6 +1,6 @@
 Import-Module $PSScriptRoot\..\src\SQLChecks -Force
 
-# Can't mock Invoke-SqlCmd if we're not in module scope - ultimately invoked in a 
+# Can't mock Invoke-SqlCmd if we're not in module scope - ultimately invoked in a
 # private function (Get-CachedScriptBlockResult)
 InModuleScope -ModuleName SQLChecks {
     # FakeServer has:
@@ -8,16 +8,17 @@ InModuleScope -ModuleName SQLChecks {
     # - Primary replica for AG1
     # - Secondary replica for AG2
     $fakeServer = @(
-        ("master", $false, $false, ""),
-        ("model", $false, $false, ""),
-        ("tempdb", $false, $false, ""),
-        ("msdb", $false, $false, ""),
-        ("standalonedb1", $false, $false, ""),
-        ("standalonedb2", $false, $false, ""),
-        ("ag1db1", $true, $true, "ag1"),
-        ("ag1db2", $true, $true, "ag1"),
-        ("ag2db1", $true, $false, "ag2"),
-        ("ag2db2", $true, $false, "ag2")
+        ("master", $false, $false, "", $false),
+        ("model", $false, $false, "", $false),
+        ("tempdb", $false, $false, "", $false),
+        ("msdb", $false, $false, "", $false),
+        ("standalonedb1", $false, $false, "", $false),
+        ("standalonedb2", $false, $false, "", $false),
+        ("readonlydb", $false, $false, "", $true),
+        ("ag1db1", $true, $true, "ag1", $false),
+        ("ag1db2", $true, $true, "ag1", $false),
+        ("ag2db1", $true, $false, "ag2", $false),
+        ("ag2db2", $true, $false, "ag2", $false)
     )
 
     Describe "Get-DatabasesToCheck" {
@@ -33,6 +34,7 @@ InModuleScope -ModuleName SQLChecks {
                         IsAvailabilityGroupDatabase = $_[1]
                         IsPrimaryReplica            = $_[2]
                         AvailabilityGroup           = $_[3]
+                        IsReadOnly                  = $_[4]
                     }
                 }
             }
@@ -52,7 +54,7 @@ InModuleScope -ModuleName SQLChecks {
                 "msdb" | Should -Not -BeIn $databases
                 "tempdb" | Should -Not -BeIn $databases
             }
-      
+
             $databases = Get-DatabasesToCheck -ServerInstance "localhost"
             It "should include standalonedb1 and standalonedb2 by default" {
                 "standalonedb1" | Should -BeIn $databases
@@ -77,6 +79,7 @@ InModuleScope -ModuleName SQLChecks {
                 "ag2db2" | Should -Not -BeIn $databases
             }
 
+            $databases = Get-DatabasesToCheck -ServerInstance "localhost"
             It "should include primary ag databases by default" {
                 "ag1db1" | Should -BeIn $databases
                 "ag1db2" | Should -BeIn $databases
@@ -93,6 +96,7 @@ InModuleScope -ModuleName SQLChecks {
                 "ag1db2" | Should -Not -BeIn $databases
             }
 
+            $databases = Get-DatabasesToCheck -ServerInstance "localhost"
             It "should include standalonedbs when ExcludePrimary is specified" {
                 "standalonedb1" | Should -BeIn $databases
                 "standalonedb2" | Should -BeIn $databases
@@ -102,6 +106,16 @@ InModuleScope -ModuleName SQLChecks {
             It "should not include standalonedbs when ExcludeLocal is specified" {
                 "standalonedb1" | Should -Not -BeIn $databases
                 "standalonedb2" | Should -Not -BeIn $databases
+            }
+
+            $databases = Get-DatabasesToCheck -ServerInstance "localhost"
+            It "should not include read only databases by default" {
+                "readonlydb" | Should -Not -BeIn $databases
+            }
+
+            $databases = Get-DatabasesToCheck -ServerInstance "localhost" -IncludeReadOnly
+            It "should include read only databases by when IncludeReadOnly is specified" {
+                "readonlydb" | Should -BeIn $databases
             }
         }
     }
