@@ -9,19 +9,19 @@ Function Get-DatabasesToCheck {
         $ExcludedDatabases,
 
         [switch]
-        $IncludeSecondary = $false,
+        $IncludeSecondary,
 
         [switch]
         $ExcludeSystemDatabases,
 
         [switch]
-        $ExcludePrimary = $false,
+        $ExcludePrimary,
 
         [switch]
-        $ExcludeLocal = $false,
+        $ExcludeLocal,
 
         [switch]
-        $IncludeReadOnly = $false,
+        $IncludeReadOnly,
 
         [string]
         $AvailabilityGroup
