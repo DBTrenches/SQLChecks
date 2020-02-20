@@ -1,9 +1,17 @@
 Function New-ResourceGovernorJSONConfig {
     [cmdletbinding()]
     Param(
-        [Parameter(ParameterSetName = "Values", ValueFromPipeline = $true, Position = 0)]
+        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
+        $Config
+
+        , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
+   
     )
+
+    if ($PSCmdlet.ParameterSetName -eq "Config") {
+        $ServerInstance = $Config.ServerInstance
+    }
 
     $query = @"
 declare @RG_JSON nvarchar(max)

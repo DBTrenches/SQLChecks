@@ -6,22 +6,11 @@ Function Get-TempDBConfiguration {
 
         , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
-
-        , [Parameter(ParameterSetName = "Values")]
-        [int]
-        $NumberOfFiles
-
-        , [Parameter(ParameterSetName = "Values")]
-        [int]
-        $TotalSizeMB
-
    
     )
 
     if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
-        $NumberOfFiles = $Config.TempDBConfiguration.NumberOfFiles
-        $TotalSizeMB = $Config.TempDBConfiguration.$TotalSizeMB
     }
 
     $query = @"

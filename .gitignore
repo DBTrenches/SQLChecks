@@ -1,2 +1,4 @@
 **/*.local.test.config.json
 /.vs/slnx.sqlite
+/.vs/SQLChecks/v15/.suo
+/.vs/VSWorkspaceState.json
