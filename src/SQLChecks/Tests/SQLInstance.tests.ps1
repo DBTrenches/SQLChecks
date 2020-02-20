@@ -56,3 +56,45 @@ Describe "Sysadmins" -Tag Sysadmins {
         (Test-Sysadmins $Config).Count | Should -Be 0
     }
 }
+
+Describe "Tempdb Configuration" -Tag TempdbConfiguration {
+	
+    $NumberOfFiles = $config.TempDBConfiguration.NumberOfFiles
+    $TotalSizeMB = $config.TempDBConfiguration.TotalSizeMB
+	
+    It "Correct number of TempDB files on $serverInstance" {
+        (Get-TempDBConfiguration -Config $Config).NumberOfFiles | Should Be $NumberOfFiles
+    }
+
+    It "Correct TempDB size on $serverInstance" {
+        (Get-TempDBConfiguration -Config $Config).TotalSizeMB | Should Be $TotalSizeMB
+    }
+
+}
+
+Describe "Resource Governor" -Tag ResourceGovernor {
+    It "Resource Governor settings match template config on $serverInstance" {
+        @(Test-ResourceGovernorConfig $Config).Count | Should Be 0
+    }
+}
+
+Describe "Lock Pages In Memory" -Tag LockPagesInMemoryEnabled {
+    $LPIMConfig = $config.LockPagesInMemoryEnabled
+    It "Lock Pages In Memory is enabled on $serverInstance" {
+        (Get-LockPagesInMemory $Config).LPIMConfig | Should Be $LPIMConfig
+    }
+}
+
+Describe "SQL Services are set to automatic startup" -Tag SQLServicesStartup {
+    It "SQL Engine and Agent services are set to automatic startup on $serverInstance" {
+        (Get-AutoStartupSQLServices $Config).Count | Should Be 0
+    }
+}
+
+Describe "Instant File Initialization Config" -Tag IFIEnabled {
+    $IFIConfig = $config.IFIEnabled
+    It "Instant File Initialization is enabled on on $serverInstance" {
+        (Get-InstantFileInitialization $Config).IFIEnabled | Should Be $IFIConfig
+    }
+}
+
