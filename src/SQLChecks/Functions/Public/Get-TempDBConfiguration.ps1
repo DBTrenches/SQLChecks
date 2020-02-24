@@ -15,9 +15,9 @@ Function Get-TempDBConfiguration {
 
     $query = @"
     select  count(*) NumberOfFiles
-       ,sum(size / 128) [TotalSizeMB]
-    from    tempdb.dbo.sysfiles
-    where   groupid = 1;
+            ,sum(size / 128) [TotalSizeMB]
+    from    tempdb.sys.database_files
+    where   [type] = 0;
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database tempdb | ForEach-Object {

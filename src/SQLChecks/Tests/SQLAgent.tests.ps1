@@ -23,7 +23,19 @@ Describe "SQL Agent status" -Tag AgentIsRunning {
 }
 
 Describe "Unconfigured SQL Agent Alerts" -Tag CheckUnconfiguredSQLAgentAlerts {
-    It "Alerts are enabled and have alert notification on $serverInstance" {
+    It "All Alerts are enabled and have alert notification on $serverInstance" {
         @(Get-UnconfiguredSQLAgentAlerts -Config $Config).Count | Should Be 0
+    }
+}
+
+Describe "SQL Agent Alerts" -Tag SQLAgentAlerts {
+    It "Alerts in config are identical to alerts on $serverInstance" {
+        @(Get-SQLAgentAlerts -Config $Config).Count | Should Be 0
+    }
+}
+
+Describe "SQL Agent Operators" -Tag SQLAgentOperators {
+    It "Operators in config match enabled operators on $serverInstance" {
+        @(Test-SQLAgentOperators $Config).Count | Should Be 0
     }
 }
