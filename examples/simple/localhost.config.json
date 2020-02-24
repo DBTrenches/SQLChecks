@@ -43,4 +43,19 @@
     ,"DatabaseMail": {}
     ,"AgentIsRunning": {}
     ,"Sysadmins": ["sa"]
+    ,"SQLAgentAlerts": [
+        "Error Number 823 - OS returned an Error",
+        "Severity Level 22: SQL Server Fatal Error Table Integrity Suspect",
+        "Severity Level 23: SQL Server Fatal Error: Database Integrity Suspect"
+    ],
+    "SQLAgentOperators": [
+        {
+            "OperatorName": "AppTeam1",
+            "OperatorEmail": "appteam1@mycompany.com"
+        },
+        {
+            "OperatorName": "DBA",
+            "OperatorEmail": "DBA@mycompany.com"
+        }
+    ]
 }

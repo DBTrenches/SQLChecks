@@ -72,9 +72,24 @@ Describe "Tempdb Configuration" -Tag TempdbConfiguration {
 
 }
 
-Describe "Resource Governor" -Tag ResourceGovernor {
-    It "Resource Governor settings match template config on $serverInstance" {
-        @(Test-ResourceGovernorConfig $Config).Count | Should Be 0
+Describe "Resource Governor Settings" -Tag ResourceGovernorSetting {
+    [bool]$IsEnabled = $config.ResourceGovernorSetting.IsEnabled
+    $ClassifierFunction = $config.ResourceGovernorSetting.ClassifierFunction
+
+    It "Resource Governor is enabled on $serverInstance" {
+        @(Get-ResourceGovernorConfig $Config).IsEnabled | Should Be $IsEnabled
+    }
+    
+    if ($IsEnabled -eq $true) {
+        It "Resource Governor classifier function is set correctly on $serverInstance" {
+            @(Get-ResourceGovernorConfig $Config).ClassifierFunction | Should Be $ClassifierFunction
+        }
+    }
+
+}
+Describe "Resource Governor Pool and Workload Group Configuration" -Tag ResourceGovernorPools {
+    It "Resource Governor pool/group configuration match template config on $serverInstance" {
+        @(Test-ResourceGovernorPoolConfig $Config).Count | Should Be 0
     }
 }
 
@@ -93,8 +108,14 @@ Describe "SQL Services are set to automatic startup" -Tag SQLServicesStartup {
 
 Describe "Instant File Initialization Config" -Tag IFIEnabled {
     $IFIConfig = $config.IFIEnabled
-    It "Instant File Initialization is enabled on on $serverInstance" {
+    It "Instant File Initialization is enabled on $serverInstance" {
         (Get-InstantFileInitialization $Config).IFIEnabled | Should Be $IFIConfig
+    }
+}
+
+Describe "SQL Endpoints" -Tag SQLEndpoints {
+    It "SQL Endpoints are started on $serverInstance" {
+        (Get-SQLEndpoints $Config).Count | Should Be 0
     }
 }
 

@@ -1,4 +1,4 @@
-Function New-ResourceGovernorJSONConfig {
+Function Get-ResourceGovernorPoolConfig {
     [cmdletbinding()]
     Param(
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
@@ -14,10 +14,7 @@ Function New-ResourceGovernorJSONConfig {
     }
 
     $query = @"
-declare @RG_JSON nvarchar(max)
-    =
-        (
-            select      rp.name as ResourcePoolName
+    select      rp.name as ResourcePoolName
                        ,wg.name as WorkloadGroupName
                        ,rp.cap_cpu_percent as PoolCapCpuPercent
                        ,rp.min_cpu_percent as PoolMinCpuPercent
@@ -29,16 +26,26 @@ declare @RG_JSON nvarchar(max)
             from        sys.dm_resource_governor_workload_groups wg
             join        sys.dm_resource_governor_resource_pools rp
             on          rp.pool_id = wg.pool_id
-            order by    wg.name
-            for json path, root('ResourceGovernorPools')
-        );
-
-select  @RG_JSON as ResourceGovernorOutput;
+            order by    wg.name;
 "@
 
-    $results = Invoke-Sqlcmd -ServerInstance $ServerInstance -query $query -Database master -MaxCharLength 1000000
+    $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master 
 
-    return $results.ResourceGovernorOutput
+    $Properties = $results | Get-Member | Where-Object MemberType -eq Property | Sort-Object -Property Name -Descending
 
+    $RGConfigs = @()
+    foreach ($result in $results) {
+  
+        foreach ($property in $Properties) {
+            [string]$PropertyName = $property.Name
+            $RG += $PropertyName + "="
+            $RG += $result.$PropertyName
+            $RG += ","
+        }        
+        $RGConfigs += $RG -replace ".$"
+        $RG = ""
+    }
 
+    return $RGConfigs
+    
 }
