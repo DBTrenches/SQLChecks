@@ -55,4 +55,4 @@ Performs a full comparison of alerts between config and target server and report
     ]
 ```
 
-Performs a full comparison of operators between config and target server and reports on any discrepencies (operators in config but not on the server, or on the server but not in config). This test is only compares operators that are enabled on the target.
+Performs a full comparison of operators between config and target server and reports on any discrepencies (operators in config but not on the server, or on the server but not in config). This test only compares operators that are enabled on the target. `New-SQLAgentOperatorsJSONConfig` can be used to output the operators on a server to the correct JSON format shown above.
