@@ -29,3 +29,30 @@ Ensures SQL Agent is running.
 ```
 
 Checks all SQL Agent alerts for any alerts that are either disabled or does not have an alert notification enabled.
+
+## Compare alerts in config to alerts on server
+```json
+"SQLAgentAlerts": [
+        "Error Number 823 - OS returned an Error",
+        "Severity Level 22: SQL Server Fatal Error Table Integrity Suspect",
+        "Severity Level 23: SQL Server Fatal Error: Database Integrity Suspect"
+    ]
+```
+
+Performs a full comparison of alerts between config and target server and reports on any discrepencies (alerts in config but not on the server, or on the server but not in config). This test is only compares alerts that are enabled and have an alert notification on the target.
+
+## SQL Agent Operators
+```json
+"SQLAgentOperators": [
+        {
+            "OperatorName": "AppTeam1",
+            "OperatorEmail": "appteam1@mycompany.com"
+        },
+        {
+            "OperatorName": "DBA",
+            "OperatorEmail": "DBA@mycompany.com"
+        }
+    ]
+```
+
+Performs a full comparison of operators between config and target server and reports on any discrepencies (operators in config but not on the server, or on the server but not in config). This test is only compares operators that are enabled on the target.
