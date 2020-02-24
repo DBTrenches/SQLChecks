@@ -1,4 +1,4 @@
-Function Test-ResourceGovernorConfig {
+Function Test-ResourceGovernorPoolConfig {
     [cmdletbinding()]
     Param(
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
@@ -6,19 +6,23 @@ Function Test-ResourceGovernorConfig {
 
         , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
+
+        , [Parameter(ParameterSetName = "Values")]
+        $ResourceGovernorPoolConfig
     )
 
     if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
+        $ResourceGovernorPoolConfig = $Config.ResourceGovernorPools
     }
 
     #Get Target Config
-    $TargetRGConfig = @(Get-ResourceGovernorConfig -ServerInstance $serverInstance)
+    $TargetRGConfig = @(Get-ResourceGovernorPoolConfig -ServerInstance $serverInstance)
 
     #Parse SQLChecks RG config
-    $Properties = $config.ResourceGovernor | Get-Member | Where-Object MemberType -eq NoteProperty | Sort-Object -Property Name -Descending
+    $Properties = $ResourceGovernorPoolConfig | Get-Member | Where-Object MemberType -eq NoteProperty | Sort-Object -Property Name -Descending
     $SQLCheckRGConfig = @()
-    foreach ($RGConfig in $config.ResourceGovernor) {
+    foreach ($RGConfig in $ResourceGovernorPoolConfig) {
   
         foreach ($property in $Properties) {
             [string]$PropertyName = $property.Name

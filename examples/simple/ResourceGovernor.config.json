@@ -1,0 +1,52 @@
+{
+    "ResourceGovernorSetting": {
+        "IsEnabled": 1,
+        "ClassifierFunction": "dbo.ResourceGovernorClassifierFunction"
+    },
+    "ResourceGovernorPools": [
+        {
+            "ResourcePoolName": "AppPool",
+            "WorkloadGroupName": "AppGroup",
+            "PoolCapCpuPercent": 20,
+            "PoolMinCpuPercent": 0,
+            "PoolMaxCpuPercent": 100,
+            "PoolMinMemoryPercent": 0,
+            "PoolMaxMemoryPercent": 100,
+            "GroupRequestMaxMemoryGrantPercent": 25,
+            "GroupMaxDop": 1
+        },
+        {
+            "ResourcePoolName": "SQLAgentPool",
+            "WorkloadGroupName": "SQLAgentGroup",
+            "PoolCapCpuPercent": 20,
+            "PoolMinCpuPercent": 0,
+            "PoolMaxCpuPercent": 100,
+            "PoolMinMemoryPercent": 0,
+            "PoolMaxMemoryPercent": 100,
+            "GroupRequestMaxMemoryGrantPercent": 25,
+            "GroupMaxDop": 1
+        },
+        {
+            "ResourcePoolName": "default",
+            "WorkloadGroupName": "default",
+            "PoolCapCpuPercent": 100,
+            "PoolMinCpuPercent": 0,
+            "PoolMaxCpuPercent": 100,
+            "PoolMinMemoryPercent": 0,
+            "PoolMaxMemoryPercent": 100,
+            "GroupRequestMaxMemoryGrantPercent": 25,
+            "GroupMaxDop": 1
+        },
+        {
+            "ResourcePoolName": "internal",
+            "WorkloadGroupName": "internal",
+            "PoolCapCpuPercent": 100,
+            "PoolMinCpuPercent": 0,
+            "PoolMaxCpuPercent": 100,
+            "PoolMinMemoryPercent": 0,
+            "PoolMaxMemoryPercent": 100,
+            "GroupRequestMaxMemoryGrantPercent": 25,
+            "GroupMaxDop": 0
+        }
+    ]
+}
