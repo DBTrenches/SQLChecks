@@ -34,3 +34,14 @@ Describe "All synchronous commit secondaries are healthy" -Tag AGSyncCommitHealt
         }
     }
 }
+
+Describe "AG is located on preferred node" -Tag AGPreferredNode {
+    
+    $preferredNode = $config.AGPreferredNode
+    
+    It "$serverInstance is primary on preferred node - $preferredNode" {
+        $SQLResult = Invoke-SqlCmd -ServerInstance $serverInstance -Query "select @@servername as ServerName" -Database master 
+        $SQLResult.ServerName | Should -Be $preferredNode
+    }
+    
+}
