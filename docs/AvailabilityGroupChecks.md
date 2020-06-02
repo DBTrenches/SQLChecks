@@ -25,3 +25,11 @@ Checks the status of the primary replica is `SYNCHRONIZED`.
 ```
 
 Verifies that there are least `NumberOfReplicas` in a `SYNCHRONIZED` state.  This does not count the primary, so in a toplogy with a single sync-commit secondary, the value to test for would be 1.
+
+## AG is located on preferred node
+
+```json
+"AGPreferredNode": "DBServer1"
+```
+
+Checks if the AG is located on its preferred node. Servername in config should match `select @@servername` on server.
