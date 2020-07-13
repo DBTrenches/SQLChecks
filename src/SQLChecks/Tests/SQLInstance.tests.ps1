@@ -119,3 +119,10 @@ Describe "SQL Endpoints" -Tag SQLEndpoints {
     }
 }
 
+Describe "Unconfigured Managed Backup databases" -Tag UnconfiguredManagedBackups {
+    It "Managed Backup is configured on all databases on $serverInstance" {
+        (Get-UnconfiguredManagedBackupDatabases $Config).Count | Should Be 0
+    }
+}
+
+
