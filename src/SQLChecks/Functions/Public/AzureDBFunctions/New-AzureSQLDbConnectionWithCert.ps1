@@ -15,7 +15,7 @@ Function New-AzureSQLDbConnectionWithCert {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         $DatabaseName,
-    
+
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         $TenantID,
@@ -29,21 +29,17 @@ Function New-AzureSQLDbConnectionWithCert {
         $FullCertificatePath
 
     )
-  
-    
     try {
-
-        # To install the latest AzureRM.profile version execute 
+        # To install the latest AzureRM.profile version execute
         ####Install-Module -Name AzureRM.profile -Force -AllowClobber
 
         Import-Module AzureRM.profile
         $version = (Get-Module -Name AzureRM.profile).Version.toString()
 
         $Certificate = Get-Item $FullCertificatePath
-  
+
         $adalPath = "${env:ProgramFiles}\WindowsPowerShell\Modules\AzureRM.profile\${version}"
         $adal = "$adalPath\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
-        $adalforms = "$adalPath\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll"
         [System.Reflection.Assembly]::LoadFrom($adal) | Out-Null
 
         $resourceAppIdURI = 'https://database.windows.net/'
@@ -58,22 +54,19 @@ Function New-AzureSQLDbConnectionWithCert {
         $Tok = $Tok.Replace("Bearer ", "")
 
         #Create connection object
-        $conn = New-Object System.Data.SqlClient.SQLConnection 
+        $conn = New-Object System.Data.SqlClient.SQLConnection
         $conn.ConnectionString = "Data Source=$AzureSQLDBServerName;Initial Catalog=$DatabaseName;Connect Timeout=30"
         $conn.AccessToken = $Tok
 
         $conn.Open()
 
         return $conn
-        
+
     }
-    
+
     catch {
         Write-Error "Failed to create connection to Azure DB Server: $AzureSQLDBServerName"
         Write-Error "Error Message: $_.Exception.Message"
         return
     }
-
-    
-    
 }
