@@ -1,0 +1,10 @@
+{
+    "AzureDBMaxDataFileSize": {
+        "SpaceUsedPercent": 90
+      },
+    "AzureDBCheckDuplicateIndexes": {
+        "ExcludeDatabase": ["master"],
+        "ExcludeIndex": []
+      }
+   
+  }
