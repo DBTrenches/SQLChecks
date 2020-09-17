@@ -17,4 +17,4 @@ Polls for files above a certain percentage of fullness. This can help alert you 
         "ExcludeDatabase": [ "msdb", "master", "tempdb", "model" ]
     }
 ```
-This checks for any indexes with duplicate definitions.  You can optionally exclude one or more databases from the check.
+This checks for any indexes with duplicate definitions.  You can optionally exclude one or more databases from the check. 
