@@ -17,12 +17,30 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
 
         , [string]
         $Database
+
+        , [Parameter(ParameterSetName = "Values", Mandatory = $false)]
+        [pscredential]
+        $TargetCredential
+
+        , [Parameter(ParameterSetName = "Values", Mandatory = $false)]
+        $AzureDBCertificateAuth
     )
 
     if ($PSCmdlet.ParameterSetName -eq "Config") {
         $ServerInstance = $Config.ServerInstance
-        $MaxDataFileSpaceUsedPercent = $Config.MaxDataFileSize.SpaceUsedPercent
-        $WhitelistFiles = $Config.MaxDataFileSize.WhitelistFiles
+        $TargetCredential = $Config.TargetCredential
+        $AzureDBCertificateAuth = $Config.AzureDBCertificateAuth
+
+        if($Config.MaxDataFileSize){
+            $MaxDataFileSpaceUsedPercent = $Config.MaxDataFileSize.SpaceUsedPercent
+            $WhitelistFiles = $Config.MaxDataFileSize.WhitelistFiles
+        }
+
+        #Support AzureDB configs
+        else {
+            $MaxDataFileSpaceUsedPercent = $Config.AzureDBMaxDataFileSize.SpaceUsedPercent
+            $WhitelistFiles = $Config.AzureDBMaxDataFileSize.WhitelistFiles
+        }
     }
 
     $query = @"
@@ -41,7 +59,46 @@ and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
 ;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
+    if ($AzureDBCertificateAuth) {
+
+        try {
+
+
+            $conn = New-AzureSQLDbConnectionWithCert -AzureSQLDBServerName $ServerInstance `
+                -DatabaseName $Database `
+                -TenantID $AzureDBCertificateAuth.TenantID `
+                -ClientID $AzureDBCertificateAuth.ClientID `
+                -FullCertificatePath $AzureDBCertificateAuth.FullCertificatePath
+
+            #Using Invoke-Sqlcmd2 to be able to pass in an existing connection
+            $DBFiles = Invoke-Sqlcmd2 -SQLConnection $conn -query $query -ErrorAction Stop
+            $conn.Close()
+
+        }
+        catch {
+
+            if ($conn) {
+                $conn.Close()
+
+            }
+        }
+    
+    }
+
+    elseif ($TargetCredential) {
+        $DBFiles = Invoke-Sqlcmd -ServerInstance $ServerInstance `
+            -query $query `
+            -Database $Database `
+            -Credential $TargetCredential `
+            -ErrorAction Stop
+    }
+
+    else {
+        $DBFiles = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database -ErrorAction Stop
+    }
+
+
+    $DBFiles | Where-Object {
         $WhitelistFiles -notcontains $_.DBFile
     } | ForEach-Object {
         [pscustomobject]@{

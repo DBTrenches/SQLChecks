@@ -1,27 +1,45 @@
 Function Get-DuplicateIndexes {
-    [cmdletbinding()]
-    Param(
-        [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
-        $Config
+  [cmdletbinding()]
+  Param(
+    [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
+    $Config
 
-        , [Parameter(ParameterSetName = "Values")]
-        [string]
-        $ServerInstance
+    , [Parameter(ParameterSetName = "Values")]
+    [string]
+    $ServerInstance
 
-        , [Parameter(ParameterSetName = "Values")]
-        [string[]]
-        $ExcludeIndex
+    , [Parameter(ParameterSetName = "Values")]
+    [string[]]
+    $ExcludeIndex
 
-        , [string]
-        $Database
-    )
+    , [string]
+    $Database
 
-    if ($PSCmdlet.ParameterSetName -eq "Config") {
-        $ServerInstance = $Config.ServerInstance
-        $ExcludeIndex = $Config.CheckDuplicateIndexes.ExcludeIndex
+    , [Parameter(ParameterSetName = "Values", Mandatory = $false)]
+    [pscredential]
+    $TargetCredential
+
+    , [Parameter(ParameterSetName = "Values", Mandatory = $false)]
+    $AzureDBCertificateAuth
+  )
+
+  if ($PSCmdlet.ParameterSetName -eq "Config") {
+    $ServerInstance = $Config.ServerInstance
+    $TargetCredential = $Config.TargetCredential
+    $AzureDBCertificateAuth = $Config.AzureDBCertificateAuth
+
+    if ($Config.CheckDuplicateIndexes){
+      $ExcludeIndex = $Config.CheckDuplicateIndexes.ExcludeIndex
     }
 
-    $query = @"
+    #Support AzureDB configs
+    else {
+      $ExcludeIndex = $Config.AzureDBCheckDuplicateIndexes.ExcludeIndex
+    }
+
+  }
+
+  $query = @"
 SET LOCK_TIMEOUT 10000;
 
 CREATE TABLE #tempResults
@@ -205,13 +223,52 @@ SELECT  concat_ws('.', tr.DatabaseName, tr.SchemaName, tr.TableName, tr.IndexNam
 FROM    #tempResults AS tr;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 0 -Database $database | Where-Object {
-        $ExcludeIndex -notcontains $_.IndexName -and $ExcludeIndex -notcontains $_.DuplicateIndexName
-    } | ForEach-Object {
-        [PSCustomObject]@{
-            Index          = $_.IndexName
-            DuplicateIndex = $_.DuplicateIndexName
-        }
+  if ($AzureDBCertificateAuth) {
+
+    try {
+
+
+      $conn = New-AzureSQLDbConnectionWithCert -AzureSQLDBServerName $ServerInstance `
+        -DatabaseName $Database `
+        -TenantID $AzureDBCertificateAuth.TenantID `
+        -ClientID $AzureDBCertificateAuth.ClientID `
+        -FullCertificatePath $AzureDBCertificateAuth.FullCertificatePath
+
+      #Using Invoke-Sqlcmd2 to be able to pass in an existing connection
+      $DuplicateIndexes = Invoke-Sqlcmd2 -SQLConnection $conn -query $query -QueryTimeout 0 -ErrorAction Stop
+      $conn.Close()
+
     }
+    catch {
+
+      if ($conn) {
+        $conn.Close()
+
+      }
+    }
+  
+  }
+
+  elseif ($TargetCredential) {
+    $DuplicateIndexes = Invoke-Sqlcmd -ServerInstance $ServerInstance `
+      -query $query `
+      -QueryTimeout 0 `
+      -Database $Database `
+      -Credential $TargetCredential `
+      -ErrorAction Stop
+  }
+
+  else {
+    $DuplicateIndexes = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database -QueryTimeout 0 -ErrorAction Stop
+  }
+
+  $DuplicateIndexes | Where-Object {
+    $ExcludeIndex -notcontains $_.IndexName -and $ExcludeIndex -notcontains $_.DuplicateIndexName
+  } | ForEach-Object {
+    [PSCustomObject]@{
+      Index          = $_.IndexName
+      DuplicateIndex = $_.DuplicateIndexName
+    }
+  }
 }
 

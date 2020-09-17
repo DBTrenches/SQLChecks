@@ -1,0 +1,11 @@
+{
+    "ServerInstances": [
+        "myazuredbserver-prod.database.windows.net",
+        "myazuredbserver2-prod.database.windows.net"
+    ],
+    "AzureDBCertificateAuth": {
+        "TenantID": "myTenantIDHere",
+        "ClientID": "MyClientIDHere",
+        "FullCertificatePath": "Cert:\\LocalMachine\\My\\CertificateThumprintHere"
+    }
+}
