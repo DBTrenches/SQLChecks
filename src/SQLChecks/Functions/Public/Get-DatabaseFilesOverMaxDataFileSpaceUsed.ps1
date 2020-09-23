@@ -15,6 +15,10 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
         [string[]]
         $WhitelistFiles
 
+        , [Parameter(ParameterSetName = "Values", Mandatory = $false)]
+        [bool]
+        $CalculateUsingMaxSize = 0
+
         , [string]
         $Database
 
@@ -34,12 +38,14 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
         if($Config.MaxDataFileSize){
             $MaxDataFileSpaceUsedPercent = $Config.MaxDataFileSize.SpaceUsedPercent
             $WhitelistFiles = $Config.MaxDataFileSize.WhitelistFiles
+            $CalculateUsingMaxSize = $Config.MaxDataFileSize.CalculateUsingMaxSize
         }
 
         #Support AzureDB configs
         else {
             $MaxDataFileSpaceUsedPercent = $Config.AzureDBMaxDataFileSize.SpaceUsedPercent
             $WhitelistFiles = $Config.AzureDBMaxDataFileSize.WhitelistFiles
+            $CalculateUsingMaxSize = $Config.AzureDBMaxDataFileSize.CalculateUsingMaxSize
         }
     }
 
@@ -47,17 +53,32 @@ Function Get-DatabaseFilesOverMaxDataFileSpaceUsed {
 select  a.name  [FileName],
         fg.name [FileGroup],
         c.SpaceUsed,
+        c.SpaceUsedByMaxSize,
         c.DBFile
 from    sys.database_files a
 left join sys.filegroups fg ON a.data_space_id = fg.data_space_id
 cross apply (
     select  (FILEPROPERTY(a.name, 'SPACEUSED')  /  (a.size * 1.0)  ) * 100 as SpaceUsed
+            ,(FILEPROPERTY(a.name, 'SPACEUSED')  /  (a.max_size * 1.0)  ) * 100 as SpaceUsedByMaxSize
             ,'$Database.'+a.name as DBFile
 ) as c
 WHERE   a.type != 1
+
+"@
+
+    if ($CalculateUsingMaxSize){
+        $query += @"
+and     c.SpaceUsedByMaxSize > $MaxDataFileSpaceUsedPercent
+;
+"@
+    }
+
+    else {
+        $query += @"
 and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
 ;
 "@
+    }
 
     if ($AzureDBCertificateAuth) {
 
