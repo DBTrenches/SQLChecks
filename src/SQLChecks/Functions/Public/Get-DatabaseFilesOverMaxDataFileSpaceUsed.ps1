@@ -59,7 +59,10 @@ from    sys.database_files a
 left join sys.filegroups fg ON a.data_space_id = fg.data_space_id
 cross apply (
     select  (FILEPROPERTY(a.name, 'SPACEUSED')  /  (a.size * 1.0)  ) * 100 as SpaceUsed
-            ,(FILEPROPERTY(a.name, 'SPACEUSED')  /  (a.max_size * 1.0)  ) * 100 as SpaceUsedByMaxSize
+            ,case 
+                when a.max_size = -1 then 0.00
+                else (FILEPROPERTY(a.name, 'SPACEUSED')  /  (a.max_size * 1.0)  ) * 100 
+            end SpaceUsedByMaxSize
             ,'$Database.'+a.name as DBFile
 ) as c
 WHERE   a.type != 1
