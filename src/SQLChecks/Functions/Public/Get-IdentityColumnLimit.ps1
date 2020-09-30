@@ -98,7 +98,7 @@ and (tr.DataType <>'bigint'  or (tr.NoRows>tr.MaxValue and tr.LastValue<0 and tr
 "@
 
     Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
-        $ExcludeIndex -notcontains $_.DatabaseName+"."+$_.SchemaName+"."+$_.TableName
+        $ExcludedTables -notcontains $_.DatabaseName+"."+$_.SchemaName+"."+$_.TableName
     } | ForEach-Object {
         [pscustomobject]@{
             Database    = $_.DatabaseName
