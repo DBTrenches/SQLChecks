@@ -66,6 +66,17 @@ Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
     }
 }
 
+Describe "Check For Identity Column Limit" -Tag CheckForIdentityColumnLimit {
+    $databasesToCheckParams.ExcludedDatabases = $config.CheckForIdentityColumnLimit.ExcludedDatabases
+    $PercentThreshold = $config.CheckForIdentityColumnLimit.PercentThreshold
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
+    foreach ($database in $databases) {
+        It "$database has no tables with identity column limit over $PercentThreshold percent on $serverInstance" {
+            @(Get-IdentityColumnLimit -Config $Config -Database $database).Count | Should Be 0
+        }
+    }
+}
+
 Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
