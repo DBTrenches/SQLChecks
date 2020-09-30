@@ -53,6 +53,17 @@ Polls for files above a certain percentage of fullness. This can help alert you 
 
 Reports on any database which has oversized indexes - potential key size larger than 1700 bytes for a nonclustered index, or 900 bytes for a clustered index. (These values are for SQL 2016+).
 
+## Identity Column Limit
+```json
+ "CheckForIdentityColumnLimit": {
+    "PercentThreshold": 80,
+    "ExcludedDatabases": [ "tempdb", "master","model","msdb" ],
+    "ExcludedTables": ["DB1.dbo.Excludedtable"]
+  }
+```
+
+Reports on any database which has identity columns reaching their limits.
+
 ## Fixed-Size Files  
 ```json
 "ZeroAutoGrowthWhitelistFiles":{
