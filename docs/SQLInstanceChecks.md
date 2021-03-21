@@ -114,7 +114,7 @@ Checks resource governor is enabled/disabled. If json configuration is set to `"
     ]
 ```
 
-Compares the resource governor pool and workload group settings between source and target and reports any discrepencies (changes in values or number of pool/groups). `New-ResourceGovernorJSONConfig` can be used to output the settings of a server to the correct JSON format shown above.
+Compares the resource governor pool and workload group settings between source and target and reports any discrepancies (changes in values or number of pool/groups). `New-ResourceGovernorJSONConfig` can be used to output the settings of a server to the correct JSON format shown above.
 
 ## Lock Pages in Memory (LPIM)
 ```json

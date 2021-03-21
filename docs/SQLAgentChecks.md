@@ -39,7 +39,7 @@ Checks all SQL Agent alerts for any alerts that are either disabled or does not 
     ]
 ```
 
-Performs a full comparison of alerts between config and target server and reports on any discrepencies (alerts in config but not on the server, or on the server but not in config). This test is only compares alerts that are enabled and have an alert notification on the target.
+Performs a full comparison of alerts between config and target server and reports on any discrepancies (alerts in config but not on the server, or on the server but not in config). This test is only compares alerts that are enabled and have an alert notification on the target.
 
 ## SQL Agent Operators
 ```json
@@ -55,4 +55,4 @@ Performs a full comparison of alerts between config and target server and report
     ]
 ```
 
-Performs a full comparison of operators between config and target server and reports on any discrepencies (operators in config but not on the server, or on the server but not in config). This test only compares operators that are enabled on the target. `New-SQLAgentOperatorsJSONConfig` can be used to output the operators on a server to the correct JSON format shown above.
+Performs a full comparison of operators between config and target server and reports on any discrepancies (operators in config but not on the server, or on the server but not in config). This test only compares operators that are enabled on the target. `New-SQLAgentOperatorsJSONConfig` can be used to output the operators on a server to the correct JSON format shown above.
