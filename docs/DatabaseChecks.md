@@ -35,12 +35,13 @@ If for example you had a trigger which logged all DDL changes, you might mandate
 ```json
 "MaxDataFileSize":{
     "Check":true
+    ,"CalculateUsingMaxSize": 1
     ,"SpaceUsedPercent": 90
     ,"WhitelistFiles": ["MyVLDB.ReadOnly_FG1","MyVLDB.ReadOnly_FG2"]
 }
 ```
 
-Polls for files above a certain percentage of fullness. This can help alert you if an autogrow is about to occur. You can opt of this check for on a per-file basis. 
+Polls for files above a certain percentage of fullness. This can help alert you if an autogrow is about to occur. You can opt of this check for on a per-file basis. Set `"CalculateUsingMaxSize": 1` if you want to check space based on file max size instead of current size (default). 
 
 ## Oversized indexes
 ```json
@@ -51,6 +52,17 @@ Polls for files above a certain percentage of fullness. This can help alert you 
 ```
 
 Reports on any database which has oversized indexes - potential key size larger than 1700 bytes for a nonclustered index, or 900 bytes for a clustered index. (These values are for SQL 2016+).
+
+## Identity Column Limit
+```json
+ "CheckForIdentityColumnLimit": {
+    "PercentThreshold": 80,
+    "ExcludedDatabases": [ "tempdb", "master","model","msdb" ],
+    "ExcludedTables": ["DB1.dbo.Excludedtable"]
+  }
+```
+
+Reports on any database which has identity columns reaching their limits.
 
 ## Fixed-Size Files  
 ```json

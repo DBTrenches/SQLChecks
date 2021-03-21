@@ -28,7 +28,7 @@ CREATE TABLE #tempResults
 DatabaseName NVARCHAR(100),
 SchemaName NVARCHAR(100),
 TableName NVARCHAR(100),
-IndexName NVARCHAR(100),
+IndexName NVARCHAR(500),
 IndexType  NVARCHAR(100),
 RowLength INT,
 ColumnCount TINYINT
