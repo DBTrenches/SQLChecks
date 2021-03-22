@@ -3,7 +3,7 @@ skip_commits:
     - '**/*.md'
 
 install:
-  - cinst pester
+  - choco install pester --version=4.10.1
   - ps: Install-Module SqlServer -AllowClobber -Force
   - ps: Install-Module OMSIngestionAPI -Force
 
