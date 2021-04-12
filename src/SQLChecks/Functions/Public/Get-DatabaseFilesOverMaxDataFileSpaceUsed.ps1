@@ -105,6 +105,8 @@ and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
                 $conn.Close()
 
             }
+
+            throw
         }
     
     }
