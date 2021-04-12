@@ -245,6 +245,8 @@ FROM    #tempResults AS tr;
         $conn.Close()
 
       }
+
+      throw
     }
   
   }
