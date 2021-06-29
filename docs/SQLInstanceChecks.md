@@ -163,5 +163,5 @@ Checks that all databases on the server are configured with SQL managed backups 
     },
 ```
 
-Checks that all databases on the server that are configured with SQL managed backups to Azure have encryption enabled
+Checks all databases on the server that are configured with SQL managed backups to Azure have encryption enabled
 
