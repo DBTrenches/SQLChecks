@@ -147,7 +147,7 @@ Checks that the SQL Engine and SQL Agent services are set to automatic startup.
 
 Checks that the list of endpoints in the config are started successfully on the server.
 
-## SQL Managed Backups
+## SQL Managed Backups are configured
 ```json
 "UnconfiguredManagedBackups": {
       "ExcludeDatabases": [ "DB1", "DB2" ]
@@ -155,4 +155,13 @@ Checks that the list of endpoints in the config are started successfully on the 
 ```
 
 Checks that all databases on the server are configured with SQL managed backups to Azure. Option available to exclude databases from the check.
+
+## SQL Managed Backups are encrypted
+```json
+"ManagedBackupDatabasesWithoutEncryption": {
+      "ExcludeDatabases": [ "DB1", "DB2" ]
+    },
+```
+
+Checks all databases on the server that are configured with SQL managed backups to Azure have encryption enabled
 
