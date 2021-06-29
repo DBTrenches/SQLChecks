@@ -102,7 +102,7 @@ Describe "Lock Pages In Memory" -Tag LockPagesInMemoryEnabled {
 
 Describe "SQL Services are set to automatic startup" -Tag SQLServicesStartup {
     It "SQL Engine and Agent services are set to automatic startup on $serverInstance" {
-        (Get-AutoStartupSQLServices $Config).Count | Should Be 0
+        @(Get-AutoStartupSQLServices $Config).Count | Should Be 0
     }
 }
 
@@ -115,13 +115,19 @@ Describe "Instant File Initialization Config" -Tag IFIEnabled {
 
 Describe "SQL Endpoints" -Tag SQLEndpoints {
     It "SQL Endpoints are started on $serverInstance" {
-        (Get-SQLEndpoints $Config).Count | Should Be 0
+        @(Get-SQLEndpoints $Config).Count | Should Be 0
     }
 }
 
 Describe "Unconfigured Managed Backup databases" -Tag UnconfiguredManagedBackups {
     It "Managed Backup is configured on all databases on $serverInstance" {
-        (Get-UnconfiguredManagedBackupDatabases $Config).Count | Should Be 0
+        @(Get-UnconfiguredManagedBackupDatabases $Config).Count | Should Be 0
+    }
+}
+
+Describe "Databases with managed backups that are not encrypted" -Tag ManagedBackupDatabasesWithoutEncryption {
+    It "Managed Backups are encryted on all databases on $serverInstance" {
+        @(Get-ManagedBackupDatabasesWithoutEncryption $Config).Count | Should Be 0
     }
 }
 
