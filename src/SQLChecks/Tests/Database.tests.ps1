@@ -66,6 +66,17 @@ Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
     }
 }
 
+Describe "Orphaned Resumable Index Rebuild" -Tag CheckForOrphanedResumableIndexRebuild {
+    $databasesToCheckParams.ExcludedDatabases = $config.CheckForOrphanedResumableIndexRebuild.ExcludedDatabases
+
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
+    foreach ($database in $databases) {
+        It "$database has no orphaned resumable index rebuild on $serverInstance" {
+            @(Get-OrphanedResumableIndexRebuild -Config $Config -Database $database).Count | Should Be 0
+        }
+    }
+}
+
 Describe "Check For Identity Column Limit" -Tag CheckForIdentityColumnLimit {
     $databasesToCheckParams.ExcludedDatabases = $config.CheckForIdentityColumnLimit.ExcludedDatabases
     $PercentThreshold = $config.CheckForIdentityColumnLimit.PercentThreshold
