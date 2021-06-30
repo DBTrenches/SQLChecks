@@ -98,3 +98,12 @@ This checks the last good CheckDB date for each databases, based on the threshol
     }
 ```
 This checks for any indexes with duplicate definitions.  You can optionally exclude one or more databases from the check.
+
+## Orphaned Resumable Index rebuild
+```json
+"CheckForOrphanedResumableIndexRebuild": {
+      "MaxPausedTimeInMinutes": 120,
+      "ExcludedDatabases": []
+    }
+```
+This checks for any resumable index rebuild that has been in a Pause state for longer than x minutes.  You can optionally exclude one or more databases from the check.
