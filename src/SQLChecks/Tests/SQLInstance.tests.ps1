@@ -102,7 +102,7 @@ Describe "Lock Pages In Memory" -Tag LockPagesInMemoryEnabled {
 
 Describe "SQL Services are set to automatic startup" -Tag SQLServicesStartup {
     It "SQL Engine and Agent services are set to automatic startup on $serverInstance" {
-        @(Get-AutoStartupSQLServices $Config).Count | Should Be 0
+        (Get-AutoStartupSQLServices $Config).Count | Should Be 0
     }
 }
 
