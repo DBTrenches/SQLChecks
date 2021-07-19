@@ -15,11 +15,12 @@ Function Get-ResourceGovernorConfig {
 
     $query = @"
     select  is_enabled as IsEnabled
-       ,concat(
-                  object_schema_name(classifier_function_id)
-                 ,'.'
-                 ,object_name(classifier_function_id)
-              ) as ClassifierFunction
+       ,concat (
+            object_schema_name (classifier_function_id)
+           ,'.'
+           ,object_name (classifier_function_id)) as ClassifierFunction
+       ,(   select  drgc.is_reconfiguration_pending
+            from    sys.dm_resource_governor_configuration as drgc) as IsReconfigurationPending
     from    sys.resource_governor_configuration;
 "@
 

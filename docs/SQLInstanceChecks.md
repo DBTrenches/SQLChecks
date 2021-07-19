@@ -73,7 +73,7 @@ Checks that the number of tempdb files and total size matches the configuration.
     }
 ```
 
-Checks resource governor is enabled/disabled. If json configuration is set to `"IsEnabled": 1`, then an additional check will run to ensure the correct classifier function is set.
+Checks resource governor is enabled/disabled. If json configuration is set to `"IsEnabled": 1`, then 2 additional checks will run to ensure the correct classifier function is set and reconfiguration is not pending.
 
 ## Resource Governor Pool / Workload Group Configuration
 ```json
