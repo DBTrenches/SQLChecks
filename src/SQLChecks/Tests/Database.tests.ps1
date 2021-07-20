@@ -143,3 +143,15 @@ Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
         }
     }
 }
+
+Describe "Service Broker is enabled" -Tag ServiceBrokerShouldBeEnabled {
+    $DatabasesInConfig = $Config.ServiceBrokerShouldBeEnabled.Databases
+    $databases = Get-DatabasesToCheck @databasesToCheckParams
+    $databasesToCheck = $DatabasesInConfig | Where-Object {$databases -contains $_}
+
+    foreach ($database in $databasesToCheck) {
+        It "$database is service broker enabled on $serverInstance" {
+            Get-DatabaseServiceBrokerStatus -Config $Config -Database $database | Should Be $true
+        }
+    }
+}

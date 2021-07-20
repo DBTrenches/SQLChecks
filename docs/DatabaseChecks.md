@@ -107,3 +107,11 @@ This checks for any indexes with duplicate definitions.  You can optionally excl
     }
 ```
 This checks for any resumable index rebuild that has been in a Pause state for longer than x minutes.  You can optionally exclude one or more databases from the check.
+
+## Service Broker is enabled
+```json
+"ServiceBrokerShouldBeEnabled": {
+    "Databases": [ "MyDB1", "MyDB2" ]
+  }
+```
+This checks that databases listed in the config are service broker enabled.

@@ -86,6 +86,13 @@ Describe "Resource Governor Settings" -Tag ResourceGovernorSetting {
         }
     }
 
+    if ($IsEnabled -eq $true) {
+        It "Resource Governor classifier function is is not pending reconfiguration on $serverInstance" {
+            @(Get-ResourceGovernorConfig $Config).IsReconfigurationPending | Should Be 0
+        }
+    }
+
+
 }
 Describe "Resource Governor Pool and Workload Group Configuration" -Tag ResourceGovernorPools {
     It "Resource Governor pool/group configuration match template config on $serverInstance" {
