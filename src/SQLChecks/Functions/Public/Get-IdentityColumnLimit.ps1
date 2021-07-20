@@ -88,7 +88,7 @@ select tr.DatabaseName,
        tr.NoRows 
 from   #tempResults AS tr
 cross apply (select Case 
-					when tr.LastValue < 0 Then (tr.MaxValue+ cast(tr.LastValue as decimal(19,2)))/tr.MaxValue /*Assumes maxes out at zero*/
+					when tr.LastValue < 0 Then (tr.MaxValue+tr.LastValue)/TRY_CONVERT(decimal(21,2),tr.MaxValue)/2 /*Assumes maxes out at cap, not zero*/
 					else  cast(tr.LastValue as decimal(19,2))  / tr.MaxValue
 			end * 100    as [PercentageFull]) x
 
