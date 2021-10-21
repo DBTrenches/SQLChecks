@@ -30,15 +30,15 @@ Function Get-AzureSQLDatabasesToCheck {
 
 
     if ($AzureDBCertificateAuth) {
-
-        try {
-     
-            $conn = New-AzureSQLDbConnectionWithCert -AzureSQLDBServerName $ServerInstance `
+        
+        $conn = New-AzureSQLDbConnectionWithCert -AzureSQLDBServerName $ServerInstance `
                 -DatabaseName "master" `
                 -TenantID $AzureDBCertificateAuth.TenantID `
                 -ClientID $AzureDBCertificateAuth.ClientID `
                 -FullCertificatePath $AzureDBCertificateAuth.FullCertificatePath
-    
+                
+        try {
+        
             #Using Invoke-Sqlcmd2 to be able to pass in an existing connection
             $queryResults = Invoke-Sqlcmd2 -SQLConnection $conn -query $query -ErrorAction Stop
             $conn.Close()
