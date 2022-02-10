@@ -39,3 +39,9 @@ Describe "SQL Agent Operators" -Tag SQLAgentOperators {
         @(Test-SQLAgentOperators $Config).Count | Should Be 0
     }
 }
+
+Describe "Custom Check - NonDeployedSchedulerTasks" -Tag CustomCheck_NonDeployedSchedulerTasks {
+    It "Utility.GetNonDeployedSchedulerTasks returns no rows on $serverInstance" {
+        @(Get-NonDeployedSchedulerTasks -Config $Config).Count | Should Be 0
+    }
+}
