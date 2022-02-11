@@ -30,9 +30,22 @@ Describe "Describe tags are unique" {
 }
 
 Describe "Public functions that directly support tests" {
-    $excludedFunctions = @("Set-SpConfigValue", "Read-SqlChecksConfig",
-        "Get-SpConfigValue", "Get-DatabasesToCheck", "Get-CachedScriptBlockResult",
-        "Get-AGDatabaseReplicaState", "Remove-SQLChecksCache", "Get-AzureSQLDatabasesToCheck", "New-AzureSQLDbConnectionWithCert")
+    $excludedFunctions = @(
+        "Set-SpConfigValue", 
+        "Read-SqlChecksConfig",
+        "Get-SpConfigValue", 
+        "Get-DatabasesToCheck", 
+        "Get-CachedScriptBlockResult",
+        "Get-AGDatabaseReplicaState", 
+        "Remove-SQLChecksCache", 
+        "Get-AzureSQLDatabasesToCheck", 
+        "New-AzureSQLDbConnectionWithCert",
+        "Get-AGDBBackupHistory",
+        "Get-AGNodes",
+        "Get-DBBackupHistory",
+        "Get-DBSettings",
+        "Get-ReadWriteDatabases"
+    )
 
     $commands = Get-Command -Module SqlChecks | where-object {
         $_.Name -notin $excludedFunctions
