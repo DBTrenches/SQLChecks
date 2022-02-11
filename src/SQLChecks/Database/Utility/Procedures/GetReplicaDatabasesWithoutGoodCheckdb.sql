@@ -1,3 +1,5 @@
+-- depends on https://github.com/olahallengren/sql-server-maintenance-solution
+-- for dbo.CommandLog
 
 create proc Utility.GetReplicaDatabasesWithoutGoodCheckdb @days int  --find database without good checkdb greater than this value
 as

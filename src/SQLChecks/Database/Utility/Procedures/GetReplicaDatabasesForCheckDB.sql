@@ -1,4 +1,5 @@
-
+-- depends on https://github.com/olahallengren/sql-server-maintenance-solution
+-- for dbo.CommandLog
 
 CREATE proc Utility.GetReplicaDatabasesForCheckDB
 as

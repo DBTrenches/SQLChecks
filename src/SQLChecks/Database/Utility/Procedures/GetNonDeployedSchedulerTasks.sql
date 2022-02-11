@@ -1,3 +1,6 @@
+-- depends on https://github.com/DBTrenches/tsqlscheduler/
+-- for scheduler.Task
+
 CREATE proc Utility.GetNonDeployedSchedulerTasks
 as
 
