@@ -91,9 +91,8 @@ Describe "Resource Governor Settings" -Tag ResourceGovernorSetting {
             @(Get-ResourceGovernorConfig $Config).IsReconfigurationPending | Should Be 0
         }
     }
-
-
 }
+
 Describe "Resource Governor Pool and Workload Group Configuration" -Tag ResourceGovernorPools {
     It "Resource Governor pool/group configuration match template config on $serverInstance" {
         @(Test-ResourceGovernorPoolConfig $Config).Count | Should Be 0
@@ -138,4 +137,114 @@ Describe "Databases with managed backups that are not encrypted" -Tag ManagedBac
     }
 }
 
+Describe "Custom Check - Last good checkdb for secondary replicas" -Tag CustomCheck_LastGoodSecondaryReplicaCheckDb {
+    $replicacheckDbConfig = $config.CustomCheck_LastGoodSecondaryReplicaCheckDb
+    $maxDays = $replicacheckDbConfig.MaxDaysSinceLastGoodCheckDB
+    It "Successful CHECKDB for secondary replicas in the last $maxDays days on $serverInstance" {
+        @(Get-SecondaryCheckDBStatus -Config $Config).Count | Should Be 0
+    }
+}
 
+Describe "Custom Check - Last good full managed backup" -Tag CustomCheck_LastGoodManagedBackup {
+    $LastGoodBackupConfig = $config.CustomCheck_LastGoodManagedBackup
+    $maxHours = $LastGoodBackupConfig.MaxHoursSinceLastGoodBackup
+    It "Successful backup for databases in the last $maxHours hours on $serverInstance" {
+        @(Get-DBsWithoutLastGoodManagedBackup -Config $Config).Count | Should Be 0
+    }
+}
+
+Describe "Custom Check - Last good full backup" -Tag CustomCheck_LastGoodFullBackup {
+
+    $LastGoodBackupConfig = $config.CustomCheck_LastGoodFullBackup
+    $DefaultMaxHoursSinceLastBackup = $LastGoodBackupConfig.DefaultMaxHoursSinceLastBackup
+    $ExcludedDatabases = $LastGoodBackupConfig.ExcludedDatabases
+    $Overrides = $LastGoodBackupConfig.Overrides
+
+    $DBsToCheck = Get-DatabasesToCheck -ServerInstance $serverInstance -IncludeReadOnly -ExcludedDatabases $ExcludedDatabases
+
+    foreach ($DBName in $DBsToCheck) {
+
+        $maxHours = $DefaultMaxHoursSinceLastBackup
+        if ($Overrides.Database -contains $DBName){
+            $maxHours = ($Overrides | Where-Object {$_.Database -eq $DBName}).MaxHoursSinceLastBackup
+        }
+
+        It "Successful full backup on $DBName in the last $maxHours hours on $serverInstance" {
+            
+            $CompleteHistory = Get-CompleteDBBackupHistory -ServerInstance $serverInstance -DatabaseName $DBName -MaxHours $maxHours
+            $FullBackupsFound = @($CompleteHistory | Where-Object { $_.BackupType -eq "Full" })
+            $FullBackupsFound.Count | Should BeGreaterThan 0
+        }
+    }
+}
+
+Describe "Custom Check - Last good Ola Diff backup" -Tag CustomCheck_LastGoodDiffOlaBackup {
+    $LastGoodBackupConfig = $config.CustomCheck_LastGoodDiffOlaBackup
+
+    foreach ($configItem in $LastGoodBackupConfig) {
+        $DBName = $configItem.Database
+        $maxHours = $configItem.MaxHoursSinceLastBackup
+
+        It "Successful Ola Diff backup on $DBName in the last $maxHours hours on $serverInstance" {
+            
+            $CompleteHistory = Get-CompleteDBBackupHistory -ServerInstance $serverInstance -DatabaseName $DBName -MaxHours $maxHours
+            $DiffBackupsFound = @($CompleteHistory | Where-Object { $_.BackupType -eq "Diff" })
+            $DiffBackupsFound.Count | Should BeGreaterThan 0
+        }
+    }
+}
+
+Describe "Custom Check - Last good Restored Backup Check" -Tag CustomCheck_LastGoodRestoredBackupCheck {
+
+    $lastGoodRestoredBackupCheckConfig = $config.CustomCheck_LastGoodRestoredBackupCheck
+    $maxHours = $lastGoodRestoredBackupCheckConfig.MaxHoursSinceLastGoodRestoredBackup
+    $databases = $lastGoodRestoredBackupCheckConfig.Databases
+    $targetRestoreServer = $lastGoodRestoredBackupCheckConfig.TargetRestoredBackupServer
+    foreach ($database in $Databases) {
+        $DBName = $database
+        
+        It "Successful restored backup on $DBName in the last $maxHours hours on $targetRestoreServer" {
+            
+        $LastRestoredBackup = @(Get-LastRestoredBackup -Config $config -Database $DBName)
+        $LastRestoredBackup.Count | Should BeGreaterThan 0
+        }
+    }
+}
+
+Describe "Custom Check - Last good Restored Backup Integrity Check" -Tag CustomCheck_LastGoodIntegrityCheck {
+
+    $lastGoodIntegrityCheckConfig = $config.CustomCheck_LastGoodIntegrityCheck
+    $maxHours = $lastGoodIntegrityCheckConfig.MaxHoursSinceLastGoodIntegrityCheck
+    $databases = $lastGoodIntegrityCheckConfig.Databases
+    $targetRestoreServer = $lastGoodIntegrityCheckConfig.TargetRestoredBackupServer
+    foreach ($database in $Databases) {
+        $DBName = $database
+        
+        It "Successful Integrity Check on $DBName in the last $maxHours hours on $targetRestoreServer" {
+            
+        $LastIntegrityCheck = @(Get-LastIntegrityCheck -Config $config -Database $DBName)
+        $LastIntegrityCheck.Count | Should BeGreaterThan 0
+        }
+    }
+}
+
+Describe "Custom Check - Log backups are running" -Tag CustomCheck_RunningLogBackups {
+
+    $DatabasesToCheck = @(Get-ReadWriteDatabases -ServerInstance $serverInstance | Where-Object { $_.RecoveryModel -eq "FULL" })
+
+    foreach ($database in $DatabasesToCheck.DatabaseName) {
+        It "Log backups are running for $database database on $serverInstance" {
+            
+            $CompleteHistory = Get-CompleteDBBackupHistory -ServerInstance $serverInstance -DatabaseName $database -MaxHours 1
+            $LogBackupsFound = @($CompleteHistory | Where-Object { $_.BackupType -eq "Log" })
+            $LogBackupsFound.Count | Should BeGreaterThan 0
+        }
+    }
+}
+
+Describe "Custom Check - Non Allowed Logins" -Tag CustomCheck_NonAllowedLogins {
+
+    It "Non Allowed logins found on $serverInstance" {
+        @(Get-NonAllowedLogins -Config $Config).Count | Should Be 0
+    }
+}
