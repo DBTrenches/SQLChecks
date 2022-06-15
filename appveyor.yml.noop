@@ -1,3 +1,6 @@
+# during the build of v2, we expect very few builds to succeed
+# no-opp'ing the appveyor pipeline during this time
+
 skip_commits:
   files:
     - '**/*.md'
