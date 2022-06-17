@@ -10,5 +10,11 @@ function Get-DxState {
 
     $DxQuery = Get-DxQuery -Tag $Tag
 
-    Invoke-DbaQuery -Query $DxQuery -SqlInstance $SqlInstance
+    $DxState = Invoke-DbaQuery -Query $DxQuery -SqlInstance $SqlInstance
+
+    if(0 -eq $DxState.Count){
+        Write-Verbose "Empty resultset for [$Tag] query against [$SqlInstance]"
+    }
+
+    $DxState
 }
