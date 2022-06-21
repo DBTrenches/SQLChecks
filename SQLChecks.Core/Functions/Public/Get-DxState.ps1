@@ -5,6 +5,7 @@ function Get-DxState {
         [ValidateSet([ValidDxTagGenerator])]
         [string]$Tag,
 
+        [Parameter(Mandatory)]
         [DbaInstance]$SqlInstance
     )
 

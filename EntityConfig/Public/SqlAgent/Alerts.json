@@ -1,0 +1,17 @@
+{
+    "EnabledAlerts": [
+        "Error Number 823 - OS returned an Error",
+        "Error Number 824 - SQL Server detected a logical consistency-based I/O error",
+        "Error Number 825 - Errors 823 and 824 successfully averted but need to check what happened",
+        "Severity Level 17: Insufficient Resources",
+        "Severity Level 18: Nonfatal Internal Error Detected",
+        "Severity Level 19: SQL Server Error in Resource",
+        "Severity Level 20: SQL Server Fatal Error in Current Process",
+        "Severity Level 21: SQL Server Fatal Error in Database (dbid) Processes",
+        "Severity Level 22: SQL Server Fatal Error Table Integrity Suspect",
+        "Severity Level 23: SQL Server Fatal Error: Database Integrity Suspect",
+        "Severity Level 24: Hardware Error",
+        "Severity Level 25: Miscellaneous Fatal Error"
+    ],
+    "DisabledAlerts": []
+}

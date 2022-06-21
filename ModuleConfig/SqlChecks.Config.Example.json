@@ -1,0 +1,8 @@
+{
+    "TemplateConfig": {
+        "PathExpression": "./ModuleConfig/SqlChecks.Config.Example.json"
+    },
+    "EntityConfig": {
+      "PathExpression": "./EntityConfig/Public"
+    }
+}
