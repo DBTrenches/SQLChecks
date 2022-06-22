@@ -30,8 +30,8 @@ Describe "SQL Agent" -Tag SqlAgent {
     # uncomment for hunt-and-peck debugging. Variables defined in runtime not available to text titles assigned in discovery
     # It "Value of `$SqlInstance variable is 'data-1'." {$SqlInstance | Should -Be 'data-1'}
 
-    Context "Enabled SqlAgent Alerts" -ForEach (Get-DxConfig SqlAgent.Alerts).EnabledAlerts {
-        It "'<_>'" {
+    Context "SqlAgent.Alerts.EnabledAlerts" {
+        It "'<_>'" -ForEach (Get-DxConfig SqlAgent.Alerts).EnabledAlerts {
             $ServerEnabledAlerts | Should -Contain $_
         }
     }
