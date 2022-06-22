@@ -19,7 +19,7 @@ BeforeAll {
 
 }
 
-Describe "SQL Agent Alerts on [$SqlInstance]" -Tag SqlAgent.Alerts {
+Describe "SQL Agent" -Tag SqlAgent {
 
     BeforeAll {
         $ServerEnabledAlerts = (Get-DxState -Tag SqlAgent.Alerts).AlertName
@@ -30,7 +30,7 @@ Describe "SQL Agent Alerts on [$SqlInstance]" -Tag SqlAgent.Alerts {
     # uncomment for hunt-and-peck debugging. Variables defined in runtime not available to text titles assigned in discovery
     # It "Value of `$SqlInstance variable is 'data-1'." {$SqlInstance | Should -Be 'data-1'}
 
-    Context "Enabled SqlAgent Alerts" -ForEach $DxEntityConfig.SqlAgent.Alerts.EnabledAlerts {
+    Context "Enabled SqlAgent Alerts" -ForEach (Get-DxConfig SqlAgent.Alerts).EnabledAlerts {
         It "'<_>'" {
             $ServerEnabledAlerts | Should -Contain $_
         }
