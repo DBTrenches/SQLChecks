@@ -18,15 +18,16 @@ BeforeAll {
     $PSDefaultParameterValues.Add('*:SqlInstance',$SqlInstance)
 
 }
+
 Describe "SQL Agent Alerts on [$SqlInstance]" -Tag SqlAgent.Alerts {
 
     BeforeAll {
         $ServerEnabledAlerts = (Get-DxState -Tag SqlAgent.Alerts).AlertName
         Write-Host "Examining Enabled Alerts on $SqlInstance"
+        $ServerEnabledAlerts | Out-Null # quiesce false postive for linter PSScriptAnalyzer(PSUseDeclaredVarsMoreThanAssignments)
     }
 
-    # uncomment for hunt-and-peck debugging. Variables defined in runtime not available
-    #   to text titles assigned in discovery
+    # uncomment for hunt-and-peck debugging. Variables defined in runtime not available to text titles assigned in discovery
     # It "Value of `$SqlInstance variable is 'data-1'." {$SqlInstance | Should -Be 'data-1'}
 
     Context "Enabled SqlAgent Alerts" -ForEach $DxEntityConfig.SqlAgent.Alerts.EnabledAlerts {
