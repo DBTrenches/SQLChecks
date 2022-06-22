@@ -4,5 +4,8 @@
     },
     "EntityConfig": {
       "PathExpression": "./EntityConfig/Public"
+    },
+    "Default": {
+        "ConnectionString": "localhost"
     }
 }

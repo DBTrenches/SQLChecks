@@ -18,12 +18,17 @@ $Global:DxEntityConfig = @{}
 
         Get-ChildItem . -Recurse -Filter *.json | ForEach-Object {
             $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
-    
-            $DxEntityConfig.Add(
-                $_.Directory.Name,
-                @{$_.BaseName = $ConfigObject}
-            )
+            
+            $RootKey = $_.Directory.Name
+            
+            if(-not $DxEntityConfig.$RootKey){
+                $DxEntityConfig.Add($RootKey,@{})
+            }
+            $DxEntityConfig.$RootKey.Add($_.BaseName,$ConfigObject)
         }
 
     Pop-Location
+
+$global:DxDefaults = (Get-Content ./ModuleConfig/SqlChecks.Config.json | ConvertFrom-Json).Defaults
+
 Pop-Location
