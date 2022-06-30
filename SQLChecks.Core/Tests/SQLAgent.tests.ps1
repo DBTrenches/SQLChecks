@@ -22,17 +22,22 @@ BeforeAll {
 Describe "SQL Agent" -Tag SqlAgent {
 
     BeforeAll {
-        $ServerEnabledAlerts = (Get-DxState -Tag SqlAgent.Alerts).AlertName
+        $ServerEnabledAlerts = Get-DxState -Tag SqlAgent.Alerts
         Write-Host "Examining Enabled Alerts on $SqlInstance"
         $ServerEnabledAlerts | Out-Null # quiesce false postive for linter PSScriptAnalyzer(PSUseDeclaredVarsMoreThanAssignments)
     }
 
     # uncomment for hunt-and-peck debugging. Variables defined in runtime not available to text titles assigned in discovery
     # It "Value of `$SqlInstance variable is 'data-1'." {$SqlInstance | Should -Be 'data-1'}
-
-    Context "SqlAgent.Alerts.EnabledAlerts" {
+    
+    Context "SqlAgent.Alerts.EnabledAlerts" -Tag SqlAgent.Alerts {
         It "'<_>'" -ForEach (Get-DxConfig SqlAgent.Alerts).EnabledAlerts {
-            $ServerEnabledAlerts | Should -Contain $_
+            $ServerEnabledAlerts  | Should -Contain $_
+        }
+        It "No unknown alerts" {
+            $ServerEnabledAlerts | Where-Object { 
+                $_ -NotIn (Get-DxConfig SqlAgent.Alerts).EnabledAlerts 
+            } | Should -BeNullOrEmpty
         }
     }
 }
