@@ -5,7 +5,7 @@ using namespace System.Management.Automation
 class ValidDxTagGenerator : IValidateSetValuesGenerator {
     [string[]] GetValidValues() {
         $Values = @(
-            'SqlAgent.IsRunning'                      # 'AgentIsRunning'
+            'SqlAgent.Status'                         # 'AgentIsRunning'
             'SqlAgent.Jobs.Schedules.NoneDisabled'    # 'AgentJobNoDisabledSchedules'
             'SqlAgent.Jobs.AllHaveOneActiveSchedule'  # 'AgentJobOneActiveSchedule'
             'AG.Connectivity'                         # 'AGInstanceConnectivity'
