@@ -70,6 +70,24 @@ Export-ModuleMember -Variable DxProfileConfig
 
 #endregion ProfileConfig
 ;;
+#region EntityConfig
+
+$DxEntityConfig = @{}
+
+Push-Location $ModuleConfig.EntityConfig.PathExpression
+
+    Get-ChildItem . -Recurse -Include *.json | ForEach-Object {
+        $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
+        
+        $DxEntityConfig.Add($_.BaseName,$ConfigObject)
+    }
+
+Pop-Location
+
+Export-ModuleMember -Variable DxEntityConfig
+
+#endregion EntityConfig
+;;
 #region SqlLibrary
 
 $SqlLibraryFileCollection = Get-ChildItem -Recurse -Filter *.sql -Path ./SQLChecks/SqlLibrary
