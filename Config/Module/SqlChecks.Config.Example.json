@@ -1,0 +1,14 @@
+{
+    "TemplateConfig": {
+        "PathExpression": "./Config/Template/"
+    },
+    "ProfileConfig": {
+        "PathExpression": "./Config/Profile"
+    },
+    "EntityConfig": {
+        "PathExpression": "./Config/Entity"
+    },
+    "Defaults": {
+        "ConnectionString": "localhost"
+    }
+}
