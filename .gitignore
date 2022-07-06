@@ -2,3 +2,4 @@
 /.vs/slnx.sqlite
 /.vs/SQLChecks/v15/.suo
 /.vs/VSWorkspaceState.json
+/EntityConfig/Private/*
