@@ -47,6 +47,29 @@ Export-ModuleMember -Variable DxTemplateConfig
 
 #endregion TemplateConfig
 ;;
+#region ProfileConfig
+
+$DxProfileConfig = @{}
+
+Push-Location $ModuleConfig.ProfileConfig.PathExpression
+
+    Get-ChildItem . -Recurse -Include *.json | ForEach-Object {
+        $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
+        
+        $RootKey = $_.Directory.Name
+        
+        if(-not $DxProfileConfig.$RootKey){
+            $DxProfileConfig.Add($RootKey,@{})
+        }
+        $DxProfileConfig.$RootKey.Add($_.BaseName,$ConfigObject)
+    }
+
+Pop-Location
+
+Export-ModuleMember -Variable DxProfileConfig
+
+#endregion ProfileConfig
+;;
 #region SqlLibrary
 
 $SqlLibraryFileCollection = Get-ChildItem -Recurse -Filter *.sql -Path ./SQLChecks/SqlLibrary
