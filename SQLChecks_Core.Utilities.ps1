@@ -1,11 +1,7 @@
 
 Push-Location $PSScriptRoot
 
-$ClassFileCollection = Get-ChildItem -Recurse -Filter *.ps1 -Path ./SQLChecks.Core/Classes
-
-foreach($ClassFile in $ClassFileCollection) {
-    . $ClassFile.FullName
-}
+. ./SqlChecks.Core/Classes/ValidDxTagGenerator.ps1
 
 $SqlLibraryFileCollection = Get-ChildItem -Recurse -Filter *.sql -Path ./SQLChecks.Core/SqlLibrary
 
