@@ -31,4 +31,16 @@ $Global:DxEntityConfig = @{}
 
 $global:DxDefaults = (Get-Content ./ModuleConfig/SqlChecks.Config.json | ConvertFrom-Json).Defaults
 
+. ./SqlChecks/Classes/ValidDxTagGenerator.ps1
+
+$SqlLibraryFileCollection = Get-ChildItem -Recurse -Filter *.sql -Path ./SQLChecks/SqlLibrary
+
+$global:DxQueryCollection = @{}
+
+foreach($SqlLibraryFile in $SqlLibraryFileCollection){
+    $TagName = $SqlLibraryFile.BaseName
+    $QueryText = Get-Content $SqlLibraryFile.FullName -Raw
+    $DxQueryCollection.Add($TagName,@{QueryText=$QueryText})
+}
+
 Pop-Location
