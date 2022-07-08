@@ -6,5 +6,5 @@ function Get-DxQuery {
         [string]$Tag
     )
 
-    $DxQueryCollection[$Tag].QueryText
+    $DxSqlLibrary[$Tag].QueryText
 }

@@ -15,7 +15,9 @@ if($null -eq $ConfigFile){
     $ModuleConfig = Get-Content $ConfigFile -Raw | ConvertFrom-Json
 }
 
-$global:DxDefaults = (Get-Content ./Config/Module/SqlChecks.Config.json | ConvertFrom-Json).Defaults
+$DxDefaults = (Get-Content ./Config/Module/SqlChecks.Config.json | ConvertFrom-Json).Defaults
+
+Export-ModuleMember -Variable DxDefaults
 
 #endregion ModuleConfig
 ;;
@@ -90,13 +92,15 @@ Export-ModuleMember -Variable DxEntityConfig
 
 $SqlLibraryFileCollection = Get-ChildItem -Recurse -Filter *.sql -Path ./SQLChecks/SqlLibrary
 
-$global:DxQueryCollection = @{}
+$DxSqlLibrary = @{}
 
 foreach($SqlLibraryFile in $SqlLibraryFileCollection){
     $TagName = $SqlLibraryFile.BaseName
     $QueryText = Get-Content $SqlLibraryFile.FullName -Raw
-    $DxQueryCollection.Add($TagName,@{QueryText=$QueryText})
+    $DxSqlLibrary.Add($TagName,@{QueryText=$QueryText})
 }
+
+Export-ModuleMember -Variable DxSqlLibrary
 
 #endregion SqlLibrary
 ;; 
