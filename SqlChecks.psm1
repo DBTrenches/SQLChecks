@@ -1,5 +1,7 @@
 Push-Location $PSScriptRoot
 
+Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) 
+;;
 #region ModuleConfig
 
 $ConfigFile = Get-Item ./Config/Module/SqlChecks.Config.json -ErrorAction SilentlyContinue
@@ -16,10 +18,6 @@ if($null -eq $ConfigFile){
 $global:DxDefaults = (Get-Content ./Config/Module/SqlChecks.Config.json | ConvertFrom-Json).Defaults
 
 #endregion ModuleConfig
-;;
-
-. ./SqlChecks/Classes/ValidDxTagGenerator.ps1
-
 ;;
 #region TemplateConfig
 

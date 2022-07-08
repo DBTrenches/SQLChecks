@@ -2,7 +2,7 @@ function Get-DxState {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory)]
-        [ValidateSet([ValidDxTagGenerator])]
+        [ValidateSet([DxTagGenerator])]
         [string]$Tag,
 
         [Parameter(Mandatory)]

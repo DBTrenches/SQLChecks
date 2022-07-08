@@ -3,7 +3,7 @@ function Get-DxConfig {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory)]
-        [ValidateSet([ValidDxTagGenerator])]
+        [ValidateSet([DxTagGenerator])]
         # [Alias('Tags')]
         # [string[]]$Tag, # TODO: string[]
         [string]$Tag

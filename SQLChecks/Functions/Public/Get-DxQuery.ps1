@@ -2,7 +2,7 @@ function Get-DxQuery {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory)]
-        [ValidateSet([ValidDxTagGenerator])]
+        [ValidateSet([DxTagGenerator])]
         [string]$Tag
     )
 
