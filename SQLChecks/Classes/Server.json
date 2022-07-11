@@ -1,0 +1,14 @@
+{
+    "Name": "",
+    "Databases": [],
+    "Security": {},
+    "ServerObjects": {},
+    "AvailabilityGroups": [],
+    "Management": {},
+    "SqlAgent": {
+        "Jobs": [],
+        "Alerts": [],
+        "Operators": [],
+        "ErrorLogs": []
+    }
+}

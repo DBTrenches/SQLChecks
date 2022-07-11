@@ -5,7 +5,7 @@ function Resolve-DxEntityConfig {
         [string]$EntityName
     )
 
-    $DxEntity = ($DxEntityConfig.$EntityName) | ConvertTo-Json | ConvertFrom-Json
+    $DxEntity = $DxEntityConfig.$EntityName
 
     if(-not $DxEntity){
         Write-Error (
@@ -16,10 +16,10 @@ function Resolve-DxEntityConfig {
         )
     }
 
-    $ProfileName = $Entity.ProfileName
-    $DxProfile = $DxProfileConfig.$ProfileName
+    $ProfileName = $DxEntity.ProfileName
+    $DxProfile = Resolve-DxProfile $ProfileName
 
-    if($Profile.Scope -ne $DxEntity.Scope){
+    if($DxProfile.Scope -ne $DxEntity.Scope){
         Write-Error (
             @(
                 "Configuration error: "
@@ -30,7 +30,7 @@ function Resolve-DxEntityConfig {
     }
 
     $ReturnObject = switch ($DxEntity.Scope) {
-        'Server' { Resolve-DxServerConfig $DxEntity }
+        'Server' { Resolve-DxServerConfig -Server $DxEntity -DxProfile $DxProfile }
         'AvailabilityGroup' { Resolve-DxAvailabilityGroupConfig $DxEntity }
         'Database' { Resolve-DxDatabaseConfig $DxEntity }
         Default { Write-Error "" }

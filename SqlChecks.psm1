@@ -30,21 +30,29 @@ $DxTemplateConfig = @{}
 
 Push-Location $ModuleConfig.TemplateConfig.PathExpression
 
-    Get-ChildItem . -Recurse -Include *.json,*.csv | ForEach-Object {
-        $ConfigObject = switch($_.Extension){
-            'json' {Get-Content $_ -Raw | ConvertFrom-Json}
-            'csv' {Get-Content $_ -Raw | ConvertFrom-Csv}
+    foreach($file in (Get-ChildItem . -Recurse -Include *.json,*.csv)) {
+        $ConfigObject = switch($file.Extension){
+            '.json' {Get-Content $file -Raw | ConvertFrom-Json}
+            '.csv' {Get-Content $file -Raw | ConvertFrom-Csv}
         }
         
-        $RootKey = $_.Directory.Name
+        $RootKey = $file.Directory.Name
         
         if(-not $DxTemplateConfig.$RootKey){
             $DxTemplateConfig.Add($RootKey,@{})
         }
-        $DxTemplateConfig.$RootKey.Add($_.BaseName,$ConfigObject)
+        $DxTemplateConfig.$RootKey.Add($file.BaseName,$ConfigObject)
     }
 
 Pop-Location
+
+$DxTemplateConfig.Add('Class',@{})
+
+Get-ChildItem ./SqlChecks/Classes -Filter *.json | ForEach-Object {
+    $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
+
+    $DxTemplateConfig.Class.Add($_.BaseName,$ConfigObject)
+}
 
 Export-ModuleMember -Variable DxTemplateConfig
 
@@ -102,12 +110,12 @@ Export-ModuleMember -Variable DxSqlLibrary
 
 #endregion SqlLibrary
 ;; 
-#region PublicFunctions
+#region Functions
 $functionFileCollection = Get-ChildItem -Recurse -Filter *.ps1 -Path ./SQLChecks/Functions
 
 foreach($functionFile in $functionFileCollection) {
     . $functionFile.FullName
 }
-#endregion PublicFunctions
+#endregion Functions
 ;;
 Pop-Location 
