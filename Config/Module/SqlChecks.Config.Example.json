@@ -9,6 +9,15 @@
         "PathExpression": "./Config/Entity"
     },
     "Defaults": {
-        "ConnectionString": "localhost"
+        "ConnectionString": "localhost",
+        "EntityConfig": {
+            "ResolvedFullPath": ""
+        },
+        "ProfileConfig": {
+            "ResolvedFullPath": ""
+        },
+        "TemplateConfig": {
+            "ResolvedFullPath": ""
+        }
     }
 }

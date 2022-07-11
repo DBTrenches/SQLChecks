@@ -15,7 +15,10 @@ if($null -eq $ConfigFile){
     $ModuleConfig = Get-Content $ConfigFile -Raw | ConvertFrom-Json
 }
 
-$DxDefaults = (Get-Content ./Config/Module/SqlChecks.Config.json | ConvertFrom-Json).Defaults
+$DxDefaults = $ModuleConfig.Defaults
+$DxDefaults.EntityConfig.ResolvedFullPath = Resolve-Path $ModuleConfig.EntityConfig.PathExpression
+$DxDefaults.ProfileConfig.ResolvedFullPath = Resolve-Path $ModuleConfig.ProfileConfig.PathExpression
+$DxDefaults.TemplateConfig.ResolvedFullPath = Resolve-Path $ModuleConfig.TemplateConfig.PathExpression
 
 Export-ModuleMember -Variable DxDefaults
 
@@ -56,12 +59,7 @@ Push-Location $ModuleConfig.ProfileConfig.PathExpression
     Get-ChildItem . -Recurse -Include *.json | ForEach-Object {
         $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
         
-        $RootKey = $_.Directory.Name
-        
-        if(-not $DxProfileConfig.$RootKey){
-            $DxProfileConfig.Add($RootKey,@{})
-        }
-        $DxProfileConfig.$RootKey.Add($_.BaseName,$ConfigObject)
+        $DxProfileConfig.Add($_.BaseName,$ConfigObject)
     }
 
 Pop-Location
