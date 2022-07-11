@@ -33,7 +33,7 @@ function Resolve-DxEntityConfig {
         'Server' { Resolve-DxServerConfig -Server $DxEntity -DxProfile $DxProfile }
         'AvailabilityGroup' { Resolve-DxAvailabilityGroupConfig $DxEntity }
         'Database' { Resolve-DxDatabaseConfig $DxEntity }
-        Default { Write-Error "" }
+        Default { Write-Error "yarglebargle" }
     }
 
     return $ReturnObject
