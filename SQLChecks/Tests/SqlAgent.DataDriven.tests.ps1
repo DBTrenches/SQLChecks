@@ -1,4 +1,5 @@
 #Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
+#Requires -Modules @{ModuleName = 'Pester';ModuleVersion = '5.0';Guid = 'a699dea5-2c73-4616-a270-1f7abb777e71'}
 
 [CmdletBinding()]
 Param(
