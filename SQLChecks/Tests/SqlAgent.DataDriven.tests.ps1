@@ -1,0 +1,42 @@
+#Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
+
+[CmdletBinding()]
+Param(
+    [string]$EntityName = $DxDefaults.EntityName
+)
+
+BeforeAll {
+    if($PSBoundParameters.Keys -contains 'EntityName'){
+        Write-Host "User-supplied config will be used. Selected Entity is '$EntityName'. "
+    }
+    else {
+        Write-Host "Default config will be used. Selected Entity is '$($DxDefaults.EntityName)'"
+    }
+    # $PSDefaultParameterValues.Add('*:EntityName',$EntityName) # doesn't apply at Discovery time when it's needed
+
+    $DxEntity = $DxEntityLibrary.$EntityName
+
+    Write-Host "The connection string to be used is '$($DxEntity.ConnectionString)'"
+    $PSDefaultParameterValues.Add('*:SqlInstance',$DxEntity.ConnectionString)
+}
+
+Describe "SqlAgent" -Tag SqlAgent {
+    BeforeAll {
+        $ServerEnabledAlerts = Get-DxState -Tag SqlAgent.Alerts 
+        $ServerEnabledAlerts | Out-Null
+    }
+
+    Context "SqlAgent.Alerts" {
+        It "<_>" -ForEach (
+            Get-DxConfig -Tag SqlAgent.Alerts -EntityName $EntityName | Where-Object Enabled
+            # $DxEntity.SqlAgent.Alerts | Where-Object Enabled # no tests detected
+        ).Name {
+            $ServerEnabledAlerts | Should -Contain $_
+        }
+    } 
+}
+
+AfterAll {
+    # $PSDefaultParameterValues.Remove('*:EntityName')
+    $PSDefaultParameterValues.Remove('*:SqlInstance')
+}

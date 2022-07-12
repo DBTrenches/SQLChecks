@@ -6,10 +6,13 @@ function Get-DxConfig {
         [ValidateSet([DxTagGenerator])]
         # [Alias('Tags')]
         # [string[]]$Tag, # TODO: string[]
-        [string]$Tag
+        [string]$Tag,
+
+        [Parameter(Mandatory)]
+        [string]$EntityName
 
         # $DxEntity
     )
 
-    Invoke-Expression "`$DxEntityConfig.$Tag"
+    Invoke-Expression "`$DxEntityLibrary.'$EntityName'.$Tag"
 }
