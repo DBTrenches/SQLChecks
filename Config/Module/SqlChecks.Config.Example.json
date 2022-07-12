@@ -8,8 +8,12 @@
     "EntityConfig": {
         "PathExpression": "./Config/Entity"
     },
+    "EntityLibrary": {
+        "PathExpression": "./Config/Resolved"
+    },
     "Defaults": {
         "ConnectionString": "localhost",
+        "EntityName": "localhost",
         "EntityConfig": {
             "ResolvedFullPath": ""
         },

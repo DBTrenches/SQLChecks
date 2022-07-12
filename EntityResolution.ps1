@@ -69,5 +69,34 @@ Pop-Location
 Export-ModuleMember -Variable DxEntityConfig
 
 #endregion EntityConfig
+;;
+#region EntityLibrary
+
+$DxEntityLibrary = @{}
+
+Push-Location $ModuleConfig.EntityLibrary.PathExpression
+
+    Get-ChildItem . -Recurse -Include *.json | ForEach-Object {
+        $ResolvedDateTimeUtc = @{
+            MemberType = 'NoteProperty'
+            Name = 'ResolvedDateTimeUtc' 
+            Value = [System.DateTime]::UtcNow
+        }
+
+        $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json 
+
+        $EntityName = $_.BaseName
+        
+        $DxEntityLibrary.Add($EntityName,$ConfigObject)
+
+        $DxEntityLibrary.$EntityName | Add-Member @ResolvedDateTimeUtc
+    }
+
+Pop-Location
+
+Export-ModuleMember -Variable DxEntityLibrary
+
+#endregion EntityLibrary
+;;
 
 Pop-Location
