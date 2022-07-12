@@ -20,18 +20,24 @@ BeforeDiscovery {
     $PSDefaultParameterValues.Add('*:SqlInstance',$DxEntity.ConnectionString)
 }
 
-Describe "SqlAgent" -Tag SqlAgent {
+Describe "SqlAgent on $($DxEntity.ConnectionString)" -Tag SqlAgent {
     BeforeAll {
         $ServerEnabledAlerts = Get-DxState -Tag SqlAgent.Alerts 
         $ServerEnabledAlerts | Out-Null
     }
 
-    Context "SqlAgent.Alerts" -Tag SqlAgent.Alerts {
-        It "<_>" -ForEach (
+    Context "SqlAgent.Alerts on $($DxEntity.ConnectionString)" -Tag SqlAgent.Alerts {
+        It "Enabled on server: <_>" -ForEach (
             # Get-DxConfig -Tag SqlAgent.Alerts -EntityName $EntityName | Where-Object Enabled
             $DxEntity.SqlAgent.Alerts | Where-Object Enabled # no tests detected
         ).Name {
             $ServerEnabledAlerts | Should -Contain $_
+        }
+
+        It "No unknown alerts on server. " -ForEach (
+            (($DxEntity.SqlAgent.Alerts | Where-Object Enabled).Name | Sort-Object) -join [System.Environment]::NewLine
+        ) {
+            ($ServerEnabledAlerts | Sort-Object) -join [System.Environment]::NewLine | Should -Be $_
         }
     } 
 }
