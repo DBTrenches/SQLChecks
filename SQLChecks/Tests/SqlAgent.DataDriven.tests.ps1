@@ -5,7 +5,7 @@ Param(
     [string]$EntityName = $DxDefaults.EntityName
 )
 
-BeforeAll {
+BeforeDiscovery {
     if($PSBoundParameters.Keys -contains 'EntityName'){
         Write-Host "User-supplied config will be used. Selected Entity is '$EntityName'. "
     }
@@ -26,10 +26,10 @@ Describe "SqlAgent" -Tag SqlAgent {
         $ServerEnabledAlerts | Out-Null
     }
 
-    Context "SqlAgent.Alerts" {
+    Context "SqlAgent.Alerts" -Tag SqlAgent.Alerts {
         It "<_>" -ForEach (
-            Get-DxConfig -Tag SqlAgent.Alerts -EntityName $EntityName | Where-Object Enabled
-            # $DxEntity.SqlAgent.Alerts | Where-Object Enabled # no tests detected
+            # Get-DxConfig -Tag SqlAgent.Alerts -EntityName $EntityName | Where-Object Enabled
+            $DxEntity.SqlAgent.Alerts | Where-Object Enabled # no tests detected
         ).Name {
             $ServerEnabledAlerts | Should -Contain $_
         }
