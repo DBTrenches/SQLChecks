@@ -5,68 +5,88 @@ Param(
     [string]$EntityName = $DxDefaults.EntityName
 )
 
-if ($PSBoundParameters.Keys -contains 'EntityName') {
-    Write-Verbose "User-selected entity will be used. "
+BeforeDiscovery {    
+    if ($PSBoundParameters.Keys -contains 'EntityName') {
+        Write-Verbose "User-selected entity will be used. "
+    }
+    else {
+        Write-Verbose "Default entity will be used. "
+    }
+
+    Write-Host "Selected entity is '$EntityName' "
+
+    $DxEntity = $DxEntityLibrary.$EntityName
+
+    $ConnectionString = $DxEntity.ConnectionString
+
+    Write-Host "The connection string to be used is '$ConnectionString'"
+    $Connect = @{SqlInstance = $ConnectionString}
 }
-else {
-    Write-Verbose "Default entity will be used. "
+
+Describe "SqlAgent.Alerts on '$ConnectionString" -Tag SqlAgent.Alerts {
+    BeforeDiscovery {
+        $ServerAlertCollection = Get-DxState -Tag SqlAgent.Alerts @Connect 
+        $ConfigAlertCollection = $DxEntity.SqlAgent.Alerts 
+        $AlertCollection = $ConfigAlertCollection | 
+            Where-Object Enabled | 
+            ForEach-Object {
+                $AlertName = $_.Name
+                $ServerAlert = $ServerAlertCollection | Where-Object {$_.Name -eq $AlertName}
+                $ExistsOnServer = [bool]$ServerAlert
+                @{
+                    AlertName = $AlertName
+                    ExistsInConfig = $true
+                    ExistsOnServer = $ExistsOnServer
+                }
+            }
+        
+        $ServerAlertCollection | Where-Object { $_.Name -NotIn $ConfigAlertCollection.Name } | ForEach-Object {
+            $AlertCollection += @{
+                AlertName = $_.Name
+                ExistsInConfig = $false
+                ExistsOnServer = $true
+            }
+        }
+    }
+    
+    It "Alert: '<_.AlertName>' " -ForEach $AlertCollection {
+        $_.ExistsOnServer | Should -BeTrue
+        $_.ExistsInConfig | Should -BeTrue
+    }
 }
 
-Write-Host "Selected entity is '$EntityName' "
-
-$DxEntity = $DxEntityLibrary.$EntityName
-
-$ConnectionString = $DxEntity.ConnectionString
-
-Write-Host "The connection string to be used is '$ConnectionString'"
-$Connect = @{SqlInstance = $ConnectionString}
-
-$ServerAlertCollection = Get-DxState -Tag SqlAgent.Alerts @Connect
-$ConfigAlertCollection = $DxEntity.SqlAgent.Alerts | Where-Object Enabled
-
-Describe "SqlAgent.Alerts on $ConnectionString" -Tag SqlAgent.Alerts {   
-    $ServerAlertCollection.Name | Where-Object { $_ -NotIn $ConfigAlertCollection.Name } | ForEach-Object { 
-        It "Alert on Server not in config: $_" {
-            $_ | Should -Be $null
+Describe "SqlAgent.Operators on '$ConnectionString" -Tag SqlAgent.Operators {
+    BeforeDiscovery {
+        $ServerOperatorCollection = Get-DxState -Tag SqlAgent.Operators @Connect 
+        $ConfigOperatorCollection = $DxEntity.SqlAgent.Operators 
+        $OperatorCollection = $ConfigOperatorCollection | 
+            ForEach-Object {
+                $OperatorName = $_.Name
+                $ServerOperator = $ServerOperatorCollection | Where-Object {$_.Name -eq $OperatorName}
+                $ExistsOnServer = [bool]$ServerOperator
+                @{
+                    OperatorName = $OperatorName
+                    ExistsInConfig = $true
+                    ExistsOnServer = $ExistsOnServer
+                    EmailInConfig = $_.Email
+                    EmailOnServer = $ServerOperator.Email
+                }
+            }
+        
+        $ServerOperatorCollection | Where-Object { $_.Name -NotIn $ConfigOperatorCollection.Name } | ForEach-Object {
+            $OperatorCollection += @{
+                OperatorName = $_.Name
+                ExistsInConfig = $false
+                ExistsOnServer = $true
+                EmailInConfig = $null
+                EmailOnServer = $_.Email
+            }
         }
     }
-
-    It "Alert counts should match from server to config" {
-        $ConfigAlertCollection.Count | Should -BeExactly $ServerAlertCollection.Count 
-    }
-
-    $ConfigAlertCollection | ForEach-Object {
-        $AlertName = $_.Name 
-
-        It "Alert exists on server: $AlertName" {
-            $AlertName | Should -BeIn $ServerAlertCollection.Name 
-        }
-    }
-} 
-
-$ServerOperatorCollection = Get-DxState -Tag SqlAgent.Operators @Connect
-$ConfigOperatorCollection = $DxEntity.SqlAgent.Operators 
-
-Describe "SqlAgent.Operators on $ConnectionString" -Tag SqlAgent.Operators {   
-    $ServerOperatorCollection.Name | Where-Object { $_ -NotIn $ConfigOperatorCollection.Name } | ForEach-Object { 
-        It "Operator on Server not in config: $_" {
-            $_ | Should -Be $null
-        }
-    }
-
-    It "Operator counts should match from server to config" {
-        $ConfigOperatorCollection.Count | Should -BeExactly $ServerOperatorCollection.Count 
-    }
-
-    $ConfigOperatorCollection | ForEach-Object {
-        $ConfigName = $_.Name
-        $ConfigEmail = $_.Email
-        $ServerOperator = $ServerOperatorCollection | Where-Object Name -Eq $ConfigName 
-
-        It "'$($ServerOperator.Email)' matches '$ConfigEmail'. " {
-            Write-Host "a $($ServerOperator.Email)"
-            Write-Host "b $ConfigEmail"
-            $ServerOperator.Email | Should Be $ConfigEmail
-        }
+    
+    It "Operator: '<_.OperatorName>' `n      Email:    '<_.EmailInConfig>'" -ForEach $OperatorCollection {
+        $_.ExistsOnServer | Should -BeTrue
+        $_.ExistsInConfig | Should -BeTrue
+        $_.EmailOnServer | Should -BeExactly $_.EmailInConfig
     }
 }
