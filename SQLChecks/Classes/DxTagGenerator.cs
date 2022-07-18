@@ -11,10 +11,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
                 "SqlAgent.Jobs.Schedules.Disabled",
                 "SqlAgent.Jobs.Schedules.NoneActive",
                 "SqlAgent.Operators",
-                "SqlAgent.Status",
-                "CheckDuplicateIndexes",
-                "CheckForIdentityColumnLimit",
-                "CheckUnconfiguredSQLAgentAlerts"
+                "SqlAgent.Status"
         };
 
         return Tags;
