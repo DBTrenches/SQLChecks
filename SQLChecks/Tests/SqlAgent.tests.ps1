@@ -5,7 +5,7 @@ Param(
     [string]$EntityName = $DxDefaults.EntityName
 )
 
-BeforeDiscovery {    
+BeforeAll {
     if ($PSBoundParameters.Keys -contains 'EntityName') {
         Write-Verbose "User-selected entity will be used. "
     }
@@ -14,12 +14,14 @@ BeforeDiscovery {
     }
 
     Write-Host "Selected entity is '$EntityName' "
+    Write-Host "The connection string to be used is '$($DxEntityLibrary.$EntityName.ConnectionString)' "
+}
 
+BeforeDiscovery {
     $DxEntity = $DxEntityLibrary.$EntityName
 
     $ConnectionString = $DxEntity.ConnectionString
 
-    Write-Host "The connection string to be used is '$ConnectionString' "
     New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
 }
 
