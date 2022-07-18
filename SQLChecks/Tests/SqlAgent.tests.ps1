@@ -101,18 +101,18 @@ Describe "SqlAgent.Status on '$ConnectionString' " -Tag SqlAgent.Status {
     }
 }
 
-Describe "SqlAgent.Jobs.Schedules on '$ConnectionString' " -Tag SqlAgent.Jobs.Schedules {
+Describe "SqlAgent.JobSchedules on '$ConnectionString' " -Tag SqlAgent.JobSchedules {
     BeforeDiscovery {
-        New-Variable -Name JobsWithDisabledSchedules -Value (Get-DxState SqlAgent.Jobs.Schedules.Disabled @Connect)
-        New-Variable -Name JobsWithNoActiveSchedules -Value (Get-DxState SqlAgent.Jobs.Schedules.NoneActive @Connect)
+        New-Variable -Name JobsWithDisabledSchedules -Value (Get-DxState SqlAgent.JobSchedules.Disabled @Connect)
+        New-Variable -Name JobsWithNoActiveSchedules -Value (Get-DxState SqlAgent.JobSchedules.NoneActive @Connect)
     }
     
-    It "Job: '<_.JobName>' . " -ForEach $JobsWithDisabledSchedules -Tag SqlAgent.Jobs.Schedules.Disabled {
+    It "Job: '<_.JobName>' . " -ForEach $JobsWithDisabledSchedules -Tag SqlAgent.JobSchedules.Disabled {
         # this should always fail. test will only execute if a job with a disabled
         # schedule is found during Discovery
         "Schedule: '$($_.DisabledScheduleName)' is disabled. " | Should -Be "All schedules are active. "
     }
-    It "Job: '<_.JobName>' . " -ForEach $JobsWithNoActiveSchedules -Tag SqlAgent.Jobs.Schedules.NoneActive {
+    It "Job: '<_.JobName>' . " -ForEach $JobsWithNoActiveSchedules -Tag SqlAgent.JobSchedules.NoneActive {
         # this should always fail. test will only execute if a job without an 
         # active schedule is found during Discovery
         "Has no active schedule. " | Should -Be "Has an active schedule. "

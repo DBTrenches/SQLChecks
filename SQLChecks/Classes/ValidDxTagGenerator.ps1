@@ -7,8 +7,8 @@ class ValidDxTagGenerator : IValidateSetValuesGenerator {
         $Values = @(
             'Service.TraceFlags'                        # 'TraceFlags' 
             'SqlAgent.Alerts'                           # 'SQLAgentAlerts'
-            'SqlAgent.Jobs.Schedules.NoneDisabled'      # 'AgentJobNoDisabledSchedules'
-            'SqlAgent.Jobs.AllHaveOneActiveSchedule'    # 'AgentJobOneActiveSchedule'
+            'SqlAgent.JobSchedules.Disabled'            # 'AgentJobNoDisabledSchedules'
+            'SqlAgent.JobSchedules.NoneActive'          # 'AgentJobOneActiveSchedule'
             'SqlAgent.Operators'                        # 'SQLAgentOperators'
             'SqlAgent.Status'                           # 'AgentIsRunning'
             # 'CheckDuplicateIndexes'

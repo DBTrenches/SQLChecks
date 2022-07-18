@@ -9,8 +9,8 @@ public class DxTagGenerator : IValidateSetValuesGenerator
         {
                 "Service.TraceFlags",
                 "SqlAgent.Alerts",
-                "SqlAgent.Jobs.Schedules.Disabled",
-                "SqlAgent.Jobs.Schedules.NoneActive",
+                "SqlAgent.JobSchedules.Disabled",
+                "SqlAgent.JobSchedules.NoneActive",
                 "SqlAgent.Operators",
                 "SqlAgent.Status"
         };
