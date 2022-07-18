@@ -20,7 +20,7 @@ BeforeDiscovery {
     $ConnectionString = $DxEntity.ConnectionString
 
     Write-Host "The connection string to be used is '$ConnectionString'"
-    $Connect = @{SqlInstance = $ConnectionString}
+    New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
 }
 
 Describe "SqlAgent.Alerts on '$ConnectionString" -Tag SqlAgent.Alerts {
