@@ -8,8 +8,8 @@ public class DxTagGenerator : IValidateSetValuesGenerator
         string[] Tags = new string[]
         {
                 "SqlAgent.Alerts",
-                "SqlAgent.Jobs.Schedules.NoneDisabled",
-                "SqlAgent.Jobs.AllHaveOneActiveSchedule",
+                "SqlAgent.Jobs.Schedules.Disabled",
+                "SqlAgent.Jobs.Schedules.NoneActive",
                 "SqlAgent.Operators",
                 "SqlAgent.Status",
                 "CheckDuplicateIndexes",
