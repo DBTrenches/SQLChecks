@@ -7,12 +7,13 @@
     "Security": {},
     "ServerObjects": {},
     "AvailabilityGroups": [],
-    "Management": {},
+    "Management": {
+        "NumErrorLogs": 6
+    },
     "SqlAgent": {
         "Jobs": [],
         "JobSchedules": [],
         "Alerts": [],
-        "Operators": [],
-        "ErrorLogs": []
+        "Operators": []
     }
 }
