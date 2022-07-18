@@ -1,5 +1,8 @@
 {
     "Name": "",
+    "Service": {
+        "TraceFlags": []
+    },
     "Databases": [],
     "Security": {},
     "ServerObjects": {},
