@@ -27,18 +27,16 @@ Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
     BeforeDiscovery {
         $ServerAlertCollection = Get-DxState -Tag SqlAgent.Alerts @Connect 
         $ConfigAlertCollection = $DxEntity.SqlAgent.Alerts 
-        $AlertCollection = $ConfigAlertCollection | 
-            Where-Object Enabled | 
-            ForEach-Object {
-                $AlertName = $_.Name
-                $ServerAlert = $ServerAlertCollection | Where-Object {$_.Name -eq $AlertName}
-                $ExistsOnServer = [bool]$ServerAlert
-                @{
-                    AlertName = $AlertName
-                    ExistsInConfig = $true
-                    ExistsOnServer = $ExistsOnServer
-                }
+        $AlertCollection = $ConfigAlertCollection | Where-Object Enabled | ForEach-Object {
+            $AlertName = $_.Name
+            $ServerAlert = $ServerAlertCollection | Where-Object {$_.Name -eq $AlertName}
+            $ExistsOnServer = [bool]$ServerAlert
+            @{
+                AlertName = $AlertName
+                ExistsInConfig = $true
+                ExistsOnServer = $ExistsOnServer
             }
+        }
         
         $ServerAlertCollection | Where-Object { $_.Name -NotIn $ConfigAlertCollection.Name } | ForEach-Object {
             $AlertCollection += @{
@@ -59,19 +57,18 @@ Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
     BeforeDiscovery {
         $ServerOperatorCollection = Get-DxState -Tag SqlAgent.Operators @Connect 
         $ConfigOperatorCollection = $DxEntity.SqlAgent.Operators 
-        $OperatorCollection = $ConfigOperatorCollection | 
-            ForEach-Object {
-                $OperatorName = $_.Name
-                $ServerOperator = $ServerOperatorCollection | Where-Object {$_.Name -eq $OperatorName}
-                $ExistsOnServer = [bool]$ServerOperator
-                @{
-                    OperatorName = $OperatorName
-                    ExistsInConfig = $true
-                    ExistsOnServer = $ExistsOnServer
-                    EmailInConfig = $_.Email
-                    EmailOnServer = $ServerOperator.Email
-                }
+        $OperatorCollection = $ConfigOperatorCollection | ForEach-Object {
+            $OperatorName = $_.Name
+            $ServerOperator = $ServerOperatorCollection | Where-Object {$_.Name -eq $OperatorName}
+            $ExistsOnServer = [bool]$ServerOperator
+            @{
+                OperatorName = $OperatorName
+                ExistsInConfig = $true
+                ExistsOnServer = $ExistsOnServer
+                EmailInConfig = $_.Email
+                EmailOnServer = $ServerOperator.Email
             }
+        }
         
         $ServerOperatorCollection | Where-Object { $_.Name -NotIn $ConfigOperatorCollection.Name } | ForEach-Object {
             $OperatorCollection += @{
