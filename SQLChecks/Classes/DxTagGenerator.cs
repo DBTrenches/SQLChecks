@@ -7,6 +7,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
     {
         string[] Tags = new string[]
         {
+                "Service.TraceFlags",
                 "SqlAgent.Alerts",
                 "SqlAgent.Jobs.Schedules.Disabled",
                 "SqlAgent.Jobs.Schedules.NoneActive",
