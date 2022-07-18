@@ -6,56 +6,67 @@ Param(
 )
 
 if ($PSBoundParameters.Keys -contains 'EntityName') {
-    Write-Host "User-supplied config will be used. Selected Entity is '$EntityName'. "
+    Write-Verbose "User-selected entity will be used. "
 }
 else {
-    Write-Host "Default config will be used. Selected Entity is '$($DxDefaults.EntityName)'"
+    Write-Verbose "Default entity will be used. "
 }
+
+Write-Host "Selected entity is '$EntityName' "
 
 $DxEntity = $DxEntityLibrary.$EntityName
 
 $ConnectionString = $DxEntity.ConnectionString
 
 Write-Host "The connection string to be used is '$ConnectionString'"
-$PSDefaultParameterValues.Add('*:SqlInstance', $ConnectionString)
+$Connect = @{SqlInstance = $ConnectionString}
 
-$ServerAlerts = Get-DxState -Tag SqlAgent.Alerts 
-$ConfigAlerts = $DxEntity.SqlAgent.Alerts | Where-Object Enabled
+$ServerAlertCollection = Get-DxState -Tag SqlAgent.Alerts @Connect
+$ConfigAlertCollection = $DxEntity.SqlAgent.Alerts | Where-Object Enabled
 
 Describe "SqlAgent.Alerts on $ConnectionString" -Tag SqlAgent.Alerts {   
-    $ServerAlerts | Where-Object { $_ -NotIn $ConfigAlerts.Name } | ForEach-Object { 
+    $ServerAlertCollection.Name | Where-Object { $_ -NotIn $ConfigAlertCollection.Name } | ForEach-Object { 
         It "Alert on Server not in config: $_" {
             $_ | Should -Be $null
         }
     }
-    $ConfigAlerts | ForEach-Object {
+
+    It "Alert counts should match from server to config" {
+        $ConfigAlertCollection.Count | Should -BeExactly $ServerAlertCollection.Count 
+    }
+
+    $ConfigAlertCollection | ForEach-Object {
         $AlertName = $_.Name 
 
         It "Alert exists on server: $AlertName" {
-            $AlertName | Should -BeIn $ServerAlerts
+            $AlertName | Should -BeIn $ServerAlertCollection.Name 
         }
     }
 } 
 
-$ServerOperators = Get-DxState -Tag SqlAgent.Operators 
-$ConfigOperators = $DxEntity.SqlAgent.Operators 
+$ServerOperatorCollection = Get-DxState -Tag SqlAgent.Operators @Connect
+$ConfigOperatorCollection = $DxEntity.SqlAgent.Operators 
 
 Describe "SqlAgent.Operators on $ConnectionString" -Tag SqlAgent.Operators {   
-    $ServerOperators.Name | Where-Object { $_ -NotIn $ConfigOperators.Name } | ForEach-Object { 
+    $ServerOperatorCollection.Name | Where-Object { $_ -NotIn $ConfigOperatorCollection.Name } | ForEach-Object { 
         It "Operator on Server not in config: $_" {
             $_ | Should -Be $null
         }
     }
 
-    $ConfigOperators | ForEach-Object {
+    It "Operator counts should match from server to config" {
+        $ConfigOperatorCollection.Count | Should -BeExactly $ServerOperatorCollection.Count 
+    }
+
+    $ConfigOperatorCollection | ForEach-Object {
         $ConfigName = $_.Name
         $ConfigEmail = $_.Email
-        $ServerOperator = $ServerOperators | Where-Object Name -Eq $ConfigName 
+        $ServerOperator = $ServerOperatorCollection | Where-Object Name -Eq $ConfigName 
 
-        It "Operator '$ConfigName' exists on server and has correct email: '$ConfigEmail'. " {
-            $ServerOperator.Email | Should -BeExactly $ConfigEmail
+        It "'$($ServerOperator.Email)' matches '$ConfigEmail'. " {
+            Write-Host "a $($ServerOperator.Email)"
+            Write-Host "b $ConfigEmail"
+            $ServerOperator.Email | Should Be $ConfigEmail
         }
     }
-} 
-
-$PSDefaultParameterValues.Remove('*:SqlInstance')
+}

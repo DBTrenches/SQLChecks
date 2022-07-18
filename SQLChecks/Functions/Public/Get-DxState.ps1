@@ -6,9 +6,7 @@ function Get-DxState {
         [string]$Tag,
 
         [Parameter(Mandatory)]
-        [DbaInstance]$SqlInstance,
-
-        [Switch]$NoExpand
+        [DbaInstance]$SqlInstance
     )
 
     $DxQuery = Get-DxQuery -Tag $Tag
@@ -20,17 +18,5 @@ function Get-DxState {
         Write-Verbose "Empty resultset for [$Tag] query against [$SqlInstance]"
     }
 
-    $ExpandProperty = ($DxState | Get-Member | Where-Object MemberType -EQ 'NoteProperty').Name
-    $PropCount = $ExpandProperty.Count
-
-    # If there's only one property in the resultset, expand it to an array
-    if($PropCount -gt 1){
-        $DxState
-    } elseif ($NoExpand) {
-        [PSCustomObject]@{
-            $ExpandProperty = $DxState.$ExpandProperty
-        }
-    } else {
-        $DxState | Select-Object -ExpandProperty $ExpandProperty
-    }
+    $DxState
 }
