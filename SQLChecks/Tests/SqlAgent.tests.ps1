@@ -92,3 +92,14 @@ Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
         $_.EmailOnServer | Should -BeExactly $_.EmailInConfig
     }
 }
+
+Describe "SqlAgent.Status on '$ConnectionString' " -Tag SqlAgent.Status {
+    BeforeDiscovery {
+        New-Variable -Name SqlAgentStatus -Value (Get-DxState SqlAgent.Status @Connect)
+    }
+    
+    It "Agent is running and auto-restart. " -ForEach $SqlAgentStatus {
+        $_.StatusDescription | Should -BeExactly "Running"
+        $_.StartupTypeDescription | Should -BeExactly "Automatic"
+    }
+}
