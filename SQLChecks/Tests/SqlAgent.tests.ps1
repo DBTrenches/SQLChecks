@@ -19,11 +19,11 @@ BeforeDiscovery {
 
     $ConnectionString = $DxEntity.ConnectionString
 
-    Write-Host "The connection string to be used is '$ConnectionString'"
+    Write-Host "The connection string to be used is '$ConnectionString' "
     New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
 }
 
-Describe "SqlAgent.Alerts on '$ConnectionString" -Tag SqlAgent.Alerts {
+Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
     BeforeDiscovery {
         $ServerAlertCollection = Get-DxState -Tag SqlAgent.Alerts @Connect 
         $ConfigAlertCollection = $DxEntity.SqlAgent.Alerts 
@@ -55,7 +55,7 @@ Describe "SqlAgent.Alerts on '$ConnectionString" -Tag SqlAgent.Alerts {
     }
 }
 
-Describe "SqlAgent.Operators on '$ConnectionString" -Tag SqlAgent.Operators {
+Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
     BeforeDiscovery {
         $ServerOperatorCollection = Get-DxState -Tag SqlAgent.Operators @Connect 
         $ConfigOperatorCollection = $DxEntity.SqlAgent.Operators 
@@ -84,7 +84,9 @@ Describe "SqlAgent.Operators on '$ConnectionString" -Tag SqlAgent.Operators {
         }
     }
     
-    It "Operator: '<_.OperatorName>' `n      Email:    '<_.EmailInConfig>'" -ForEach $OperatorCollection {
+    # below `It` title displays aligned email address on success
+    # "Operator: '<_.OperatorName>' `n      Email:    '<_.EmailInConfig>'"
+    It "Operator: '<_.OperatorName>' " -ForEach $OperatorCollection {
         $_.ExistsOnServer | Should -BeTrue
         $_.ExistsInConfig | Should -BeTrue
         $_.EmailOnServer | Should -BeExactly $_.EmailInConfig
