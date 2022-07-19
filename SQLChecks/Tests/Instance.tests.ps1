@@ -27,28 +27,15 @@ BeforeDiscovery {
 
 Describe "Service.TraceFlags" -Tag Service.TraceFlags {
     BeforeDiscovery {
-        $ServerTraceFlagCollection = Get-DxState Service.TraceFlags @Connect 
-        $ConfigTraceFlagCollection = $DxEntity.Service.TraceFlags 
-        $TraceFlagCollection = $ConfigTraceFlagCollection | ForEach-Object {
-            $TraceFlag = $_
-            $ServerTraceFlag = $ServerTraceFlagCollection | Where-Object { $_.TraceFlag -eq $TraceFlag }
-            @{
-                TraceFlag = [int]$TraceFlag
-                ExistsInConfig = $true
-                ExistsOnServer = [bool]$ServerTraceFlag
-            }
+        $TraceFlagData = @{
+            ServerData = Get-DxState Service.TraceFlags @Connect 
+            ConfigData = $DxEntity.Service.TraceFlags 
+            KeyName = 'TraceFlag'
         }
-
-        $ServerTraceFlagCollection | Where-Object { $_.TraceFlag -NotIn $ConfigTraceFlagCollection } | ForEach-Object {
-            $TraceFlagCollection += @{
-                TraceFlag = $_.TraceFlag
-                ExistsInConfig = $false
-                ExistsOnServer = $true
-            }
-        }
+        New-Variable -Name TraceFlagCollection -Value (Join-DxConfigAndState @TraceFlagData)
     }
 
-    It "TraceFlag: <_.TraceFlag> " -ForEach $TraceFlagCollection {
+    It "TraceFlag: <_.Name> " -ForEach $TraceFlagCollection {
         $_.ExistsInConfig | Should -BeTrue
         $_.ExistsOnServer | Should -BeTrue
     }

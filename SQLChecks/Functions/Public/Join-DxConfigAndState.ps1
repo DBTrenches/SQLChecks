@@ -18,12 +18,16 @@ function Join-DxConfigAndState {
         Write-Error "Specific Key '$KeyName' is not present in supplied `$ServerData attributes. "
     }
 
-    if($KeyName -NotIn ($ConfigData | Get-Member | Where-Object MemberType -eq 'NoteProperty').Name){
-        Write-Error "Specific Key '$KeyName' is not present in supplied `$ConfigData attributes. "
+    $ConfigHasProperties = [bool]($ConfigData | Get-Member | Where-Object MemberType -eq 'NoteProperty')
+    
+    if($ConfigHasProperties){
+        if($KeyName -NotIn ($ConfigData | Get-Member | Where-Object MemberType -eq 'NoteProperty').Name){
+            Write-Error "Specific Key '$KeyName' is not present in supplied `$ConfigData attributes. "
+        }
     }
 
     $ReturnCollection = $ConfigData | ForEach-Object {
-        $ObjectKey = $_.$KeyName
+        $ObjectKey = if($ConfigHasProperties){$_.$KeyName}else{$_}
         $ServerObject = $ServerData | Where-Object { $_.$KeyName -eq $ObjectKey }
         if($ServerObject){
             $ServerObject = $ServerObject | Select-Object -ExcludeProperty $KeyName
