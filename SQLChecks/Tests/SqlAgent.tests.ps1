@@ -109,6 +109,16 @@ Describe "SqlAgent.JobSchedules on '$ConnectionString' " -Tag SqlAgent.JobSchedu
         New-Variable -Name JobsWithNoActiveSchedules -Value (Get-DxState SqlAgent.JobSchedules.NoneActive @Connect)
     }
     
+    It "No jobs have a disabled schedule. " {
+        $JobsWithDisabledSchedules.Count | Should -Be 0
+        $JobsWithDisabledSchedules.Count | Should -Not -BeNullOrEmpty
+    }
+
+    It "All jobs have at least one active schedule. " {
+        $JobsWithNoActiveSchedules.Count | Should -Be 0
+        $JobsWithNoActiveSchedules.Count | Should -Not -BeNullOrEmpty
+    }
+
     It "Job: '<_.JobName>' . " -ForEach $JobsWithDisabledSchedules -Tag SqlAgent.JobSchedules.Disabled {
         # this should always fail. test will only execute if a job with a disabled
         # schedule is found during Discovery
