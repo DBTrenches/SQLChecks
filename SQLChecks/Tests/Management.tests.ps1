@@ -38,3 +38,32 @@ Describe "Management.NumErrorLogs" -Tag Management.NumErrorLogs {
         $_.ServerNumErrorLogs | Should -Not -BeNullOrEmpty
     }
 }
+
+Describe "Management.Xevents " -Tag Management.Xevents {
+    BeforeDiscovery {
+        $ServerStartupXeventCollection = Get-DxState Management.Xevents @Connect | Where-Object { $_.StartupState -eq $true } 
+        $ConfigStartupXeventCollection = $DxEntity.Management.Xevents | Where-Object { $_.StartupState -eq $true } 
+        $StartupXeventCollection = $ConfigStartupXeventCollection | ForEach-Object {
+            $StartupXevent = $_.Name
+            $ServerStartupXevent = $ServerStartupXeventCollection | Where-Object { $_.Name -eq $StartupXevent }
+            @{
+                StartupXevent = $StartupXevent
+                ExistsInConfig = $true
+                ExistsOnServer = [bool]$ServerStartupXevent
+            }
+        }
+
+        $ServerStartupXeventCollection | Where-Object { $_.Name -NotIn $ConfigStartupXeventCollection.Name } | ForEach-Object {
+            $StartupXeventCollection += @{
+                StartupXevent = $_.StartupXevent
+                ExistsInConfig = $false
+                ExistsOnServer = $true
+            }
+        }
+    }
+
+    It "StartupXevent: <_.StartupXevent> " -ForEach $StartupXeventCollection {
+        $_.ExistsInConfig | Should -BeTrue
+        $_.ExistsOnServer | Should -BeTrue
+    }
+}
