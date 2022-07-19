@@ -27,29 +27,14 @@ BeforeDiscovery {
 
 Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
     BeforeDiscovery {
-        $ServerAlertCollection = Get-DxState -Tag SqlAgent.Alerts @Connect 
-        $ConfigAlertCollection = $DxEntity.SqlAgent.Alerts 
-        $AlertCollection = $ConfigAlertCollection | Where-Object Enabled | ForEach-Object {
-            $AlertName = $_.Name
-            $ServerAlert = $ServerAlertCollection | Where-Object {$_.Name -eq $AlertName}
-            $ExistsOnServer = [bool]$ServerAlert
-            @{
-                AlertName = $AlertName
-                ExistsInConfig = $true
-                ExistsOnServer = $ExistsOnServer
-            }
+        $AlertData = @{
+            ServerData = Get-DxState -Tag SqlAgent.Alerts @Connect 
+            ConfigData = $DxEntity.SqlAgent.Alerts 
         }
-        
-        $ServerAlertCollection | Where-Object { $_.Name -NotIn $ConfigAlertCollection.Name } | ForEach-Object {
-            $AlertCollection += @{
-                AlertName = $_.Name
-                ExistsInConfig = $false
-                ExistsOnServer = $true
-            }
-        }
+        New-Variable -Name AlertCollection -Value (Join-DxConfigAndState @AlertData)
     }
     
-    It "Alert: '<_.AlertName>' " -ForEach $AlertCollection {
+    It "Alert: '<_.Name>' " -ForEach $AlertCollection {
         $_.ExistsOnServer | Should -BeTrue
         $_.ExistsInConfig | Should -BeTrue
     }
