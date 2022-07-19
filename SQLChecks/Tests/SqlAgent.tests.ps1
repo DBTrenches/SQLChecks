@@ -57,38 +57,19 @@ Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
 
 Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
     BeforeDiscovery {
-        $ServerOperatorCollection = Get-DxState -Tag SqlAgent.Operators @Connect 
-        $ConfigOperatorCollection = $DxEntity.SqlAgent.Operators 
-        $OperatorCollection = $ConfigOperatorCollection | ForEach-Object {
-            $OperatorName = $_.Name
-            $ServerOperator = $ServerOperatorCollection | Where-Object {$_.Name -eq $OperatorName}
-            $ExistsOnServer = [bool]$ServerOperator
-            @{
-                OperatorName = $OperatorName
-                ExistsInConfig = $true
-                ExistsOnServer = $ExistsOnServer
-                EmailInConfig = $_.Email
-                EmailOnServer = $ServerOperator.Email
-            }
+        $OperatorData = @{
+            ServerData = Get-DxState -Tag SqlAgent.Operators @Connect 
+            ConfigData = $DxEntity.SqlAgent.Operators 
         }
-        
-        $ServerOperatorCollection | Where-Object { $_.Name -NotIn $ConfigOperatorCollection.Name } | ForEach-Object {
-            $OperatorCollection += @{
-                OperatorName = $_.Name
-                ExistsInConfig = $false
-                ExistsOnServer = $true
-                EmailInConfig = $null
-                EmailOnServer = $_.Email
-            }
-        }
+        New-Variable -Name OperatorCollection -Value (Join-DxConfigAndState @OperatorData)
     }
     
     # below `It` title displays aligned email address on success
-    # "Operator: '<_.OperatorName>' `n      Email:    '<_.EmailInConfig>'"
-    It "Operator: '<_.OperatorName>' " -ForEach $OperatorCollection {
+    # "Operator: '<_.OperatorName>' `n      Email:    '<_.Config.Email>'"
+    It "Operator: '<_.Name>' " -ForEach $OperatorCollection {
         $_.ExistsOnServer | Should -BeTrue
         $_.ExistsInConfig | Should -BeTrue
-        $_.EmailOnServer | Should -BeExactly $_.EmailInConfig
+        $_.Server.Email | Should -BeExactly $_.Config.Email
     }
 }
 
