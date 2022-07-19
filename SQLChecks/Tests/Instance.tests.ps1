@@ -53,3 +53,42 @@ Describe "Service.TraceFlags" -Tag Service.TraceFlags {
         $_.ExistsOnServer | Should -BeTrue
     }
 }
+
+Describe "Service.SysConfigurations " -Tag Service.SysConfigurations, SpConfigure {
+    BeforeDiscovery {
+        $ServerSysConfigurationCollection = Get-DxState Service.SysConfigurations @Connect 
+        $ConfigSysConfigurationCollection = $DxEntity.Service.SysConfigurations 
+        $SysConfigurationCollection = $ConfigSysConfigurationCollection | ForEach-Object {
+            $SysConfiguration = $_.Name
+            $ServerSysConfiguration = $ServerSysConfigurationCollection | Where-Object { $_.Name -eq $SysConfiguration }
+            @{
+                SysConfiguration = $SysConfiguration
+                ExistsInConfig = $true
+                ExistsOnServer = [bool]$ServerSysConfiguration
+                ConfigSetting = $_.Value
+                ServerSetting = $ServerSysConfiguration.Value
+                ValueInUse = $ServerSysConfiguration.ValueInUse
+            }
+        }
+
+        # SysConfigurations are static, but we want to assert that the SqlLibrary query
+        # is 1:1 aligned with all config values. therefore keep the check for orphans
+        $ServerSysConfigurationCollection | Where-Object { $_.Name -NotIn $ConfigSysConfigurationCollection.Name } | ForEach-Object {
+            $SysConfigurationCollection += @{
+                SysConfiguration = $_.SysConfiguration
+                ExistsInConfig = $false
+                ExistsOnServer = $true
+                ConfigSetting = $null
+                ServerSetting = $_.Value
+                ValueInUse = $_.ValueInUse
+            }
+        }
+    }
+
+    It "SysConfiguration: '<_.SysConfiguration>' " -ForEach $SysConfigurationCollection {
+        $_.ExistsInConfig | Should -BeTrue
+        $_.ExistsOnServer | Should -BeTrue
+        $_.ServerSetting | Should -BeExactly $_.ConfigSetting
+        $_.ValueInUse | Should -BeExactly $_.ServerSetting
+    }
+}

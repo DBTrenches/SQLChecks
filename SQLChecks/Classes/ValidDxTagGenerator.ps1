@@ -5,6 +5,8 @@ using namespace System.Management.Automation
 class ValidDxTagGenerator : IValidateSetValuesGenerator {
     [string[]] GetValidValues() {
         $Values = @(
+            'Management.NumErrorLogs'                   # 'NumErrorLogs'
+            'Service.SysConfigurations'                 # 'SpConfig'
             'Service.TraceFlags'                        # 'TraceFlags' 
             'SqlAgent.Alerts'                           # 'SQLAgentAlerts'
             'SqlAgent.JobSchedules.Disabled'            # 'AgentJobNoDisabledSchedules'
@@ -37,12 +39,10 @@ class ValidDxTagGenerator : IValidateSetValuesGenerator {
             # 'MaxDataFileSize'
             # 'MaxTLogAutoGrowthInKB'
             # 'MustHaveDDLTrigger'
-            # 'NumErrorLogs'
             # 'ResourceGovernorPools'
             # 'ResourceGovernorSetting'
             # 'ServiceBrokerShouldBeEnabled'
             # 'ShouldCheckForAutoGrowthRisks'
-            # 'SpConfig'
             # 'SQLEndpoints'
             # 'SQLServicesStartup'
             # 'StartupXEvents'

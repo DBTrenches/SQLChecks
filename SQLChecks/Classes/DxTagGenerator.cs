@@ -9,6 +9,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
         {
                 "Management.NumErrorLogs",
                 "Service.TraceFlags",
+                "Service.SysConfigurations",
                 "SqlAgent.Alerts",
                 "SqlAgent.JobSchedules.Disabled",
                 "SqlAgent.JobSchedules.NoneActive",
