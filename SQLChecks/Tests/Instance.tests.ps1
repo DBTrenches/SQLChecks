@@ -43,39 +43,18 @@ Describe "Service.TraceFlags" -Tag Service.TraceFlags {
 
 Describe "Service.SysConfigurations " -Tag Service.SysConfigurations, SpConfigure {
     BeforeDiscovery {
-        $ServerSysConfigurationCollection = Get-DxState Service.SysConfigurations @Connect 
-        $ConfigSysConfigurationCollection = $DxEntity.Service.SysConfigurations 
-        $SysConfigurationCollection = $ConfigSysConfigurationCollection | ForEach-Object {
-            $SysConfiguration = $_.Name
-            $ServerSysConfiguration = $ServerSysConfigurationCollection | Where-Object { $_.Name -eq $SysConfiguration }
-            @{
-                SysConfiguration = $SysConfiguration
-                ExistsInConfig = $true
-                ExistsOnServer = [bool]$ServerSysConfiguration
-                ConfigSetting = $_.Value
-                ServerSetting = $ServerSysConfiguration.Value
-                ValueInUse = $ServerSysConfiguration.ValueInUse
-            }
+        $SpConfigData = @{
+            ConfigData = $DxEntity.Service.SysConfigurations 
+            ServerData = Get-DxState Service.SysConfigurations @Connect 
         }
 
-        # SysConfigurations are static, but we want to assert that the SqlLibrary query
-        # is 1:1 aligned with all config values. therefore keep the check for orphans
-        $ServerSysConfigurationCollection | Where-Object { $_.Name -NotIn $ConfigSysConfigurationCollection.Name } | ForEach-Object {
-            $SysConfigurationCollection += @{
-                SysConfiguration = $_.SysConfiguration
-                ExistsInConfig = $false
-                ExistsOnServer = $true
-                ConfigSetting = $null
-                ServerSetting = $_.Value
-                ValueInUse = $_.ValueInUse
-            }
-        }
+        New-Variable -Name SpConfigCollection -Value (Join-DxConfigAndState @SpConfigData)
     }
 
-    It "SysConfiguration: '<_.SysConfiguration>' " -ForEach $SysConfigurationCollection {
+    It "SysConfiguration: '<_.Name>' " -ForEach $SpConfigCollection {
         $_.ExistsInConfig | Should -BeTrue
         $_.ExistsOnServer | Should -BeTrue
-        $_.ServerSetting | Should -BeExactly $_.ConfigSetting
-        $_.ValueInUse | Should -BeExactly $_.ServerSetting
+        $_.Server.Value | Should -BeExactly $_.Config.Value
+        $_.Server.ValueInUse | Should -BeExactly $_.Server.Value
     }
 }
