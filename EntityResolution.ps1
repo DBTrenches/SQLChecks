@@ -12,12 +12,16 @@ Push-Location $ModuleConfig.TemplateConfig.PathExpression
             '.csv' {Get-Content $file -Raw | ConvertFrom-Csv}
         }
         
-        $RootKey = $file.Directory.Name
+        $GrandParent = $file.Directory.Parent.Name
+        $Parent = $file.Directory.Name
         
-        if(-not $DxTemplateConfig.$RootKey){
-            $DxTemplateConfig.Add($RootKey,@{})
+        if(-not $DxTemplateConfig.$GrandParent){
+            $DxTemplateConfig.Add($GrandParent,@{})
         }
-        $DxTemplateConfig.$RootKey.Add($file.BaseName,$ConfigObject)
+        if(-not $DxTemplateConfig.$GrandParent.$Parent){
+            $DxTemplateConfig.$GrandParent.Add($Parent,@{})
+        }
+        $DxTemplateConfig.$GrandParent.$Parent.Add($file.BaseName,$ConfigObject)
     }
 
 Pop-Location
