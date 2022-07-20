@@ -58,3 +58,37 @@ Describe "Service.SysConfigurations " -Tag Service.SysConfigurations, SpConfigur
         $_.Server.ValueInUse | Should -BeExactly $_.Server.Value
     }
 }
+
+Describe "Security.SysAdmins " -Tag Security.SysAdmins {
+    BeforeDiscovery {
+        $SysAdminData = @{
+            ConfigData = $DxEntity.Security.SysAdmins 
+            ServerData = Get-DxState Security.SysAdmins @Connect 
+        }
+
+        New-Variable -Name SysAdminCollection -Value (Join-DxConfigAndState @SysAdminData)
+    }
+
+    It "SysAdmin: '<_.Name>' " -ForEach $SysAdminCollection {
+        $_.ExistsInConfig | Should -BeTrue
+        $_.ExistsOnServer | Should -BeTrue
+    }
+}
+
+Describe "Service.TempDbConfiguration " -Tag Service.TempDbConfiguration {
+    BeforeDiscovery {
+        $TempDbConfigurationData = @{
+            ConfigData = $DxEntity.Service.TempDbConfiguration 
+            ServerData = Get-DxState Service.TempDbConfiguration @Connect 
+            KeyName = 'DbName'
+        }
+
+        New-Variable -Name TempDbConfigurationCollection -Value (Join-DxConfigAndState @TempDbConfigurationData)
+    }
+
+    It "NumberOfFiles: '<_.Config.NumberOfFiles>', TotalSizeMb: '<_.Config.TotalSizeMB>' " -ForEach $TempDbConfigurationCollection {
+        $_.ExistsInConfig | Should -BeTrue
+        $_.Server.NumberOfFiles | Should -BeExactly $_.Server.NumberOfFiles
+        $_.Server.TotalSizeMB | Should -BeExactly $_.Server.TotalSizeMB
+    }
+}
