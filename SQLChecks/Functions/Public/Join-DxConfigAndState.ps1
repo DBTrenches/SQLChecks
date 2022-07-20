@@ -1,4 +1,28 @@
 function Join-DxConfigAndState {
+<#
+.SYNOPSIS
+    SQL `OUTER JOIN` data from $DxEntityLibrary and Get-DxState for use in a Pester v5 data-driven test
+
+.DESCRIPTION
+    Pester v5 needs the data object for a data-driven test to be completely resolved in the `BeforeDiscovery` phase. 
+    This means (I think...) that both Config and Server data need to be sensibly merged into a single [PsObject[]]
+    in order to pass it downstream out of the `BeforeDiscover` block to an actually test. This logic is reasonably 
+    verbose and arcane, but consistent enough that it can be packaged into this function. Using this function rather 
+    than in-line scripting saves about 25 lines per test. 
+
+.PARAMETER KeyName
+    Both Config data (from $DxEntityLibrary) and Server data (from Get-DxState) need to have a common attribute to JOIN on 
+    even if there is a one-row or zero-row set returned. By default this will be `Name` but can be manually set. Keys that
+    are present in Config only will have a $false value for the .ExistsOnServer attribute. Likewise keys that are found in
+    Server data but are not in Config will have a $false value for the .ExistsInConfig attribute. Typically a $false value
+    for either of these attributes will trigger a failed test.
+
+.PARAMETER ServerData
+    This Data should be retrieved by the Get-DxState function from a Server target. 
+
+.PARAMETER ConfigData
+    This data should already exist in memory in the $DxEntityLibrary module variable.
+#>
     [CmdletBinding()]
     param (
         [Parameter()]
