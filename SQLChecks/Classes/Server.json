@@ -2,14 +2,20 @@
     "Name": "",
     "ConnectionString": "",
     "Service": {
+        "SysConfigurations": [],
+        "TempDBConfiguration": [],
         "TraceFlags": []
     },
     "Databases": [],
-    "Security": {},
+    "Security": {
+        "Logins": [],
+        "SysAdmins": []
+    },
     "ServerObjects": {},
     "AvailabilityGroups": [],
     "Management": {
-        "NumErrorLogs": 6
+        "NumErrorLogs": 6,
+        "Xevents": []
     },
     "SqlAgent": {
         "Jobs": [],
