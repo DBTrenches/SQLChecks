@@ -29,8 +29,17 @@ function Resolve-DxEntityConfig {
         )
     }
 
+    switch ($DxEntity.Scope) {
+        'Server' {
+            $DxProfile.ConnectionString = $DxEntity.ConnectionString
+        }
+        'AvailabilityGroup' { }
+        'Database' { }
+        Default { Write-Error "Yooohnoooooh" }
+    }
+
     $ReturnObject = switch ($DxEntity.Scope) {
-        'Server' { Resolve-DxServerConfig -Server $DxEntity -DxProfile $DxProfile }
+        'Server' { Resolve-DxServerConfig -DxEntity $DxEntity -DxProfile $DxProfile }
         'AvailabilityGroup' { Resolve-DxAvailabilityGroupConfig $DxEntity }
         'Database' { Resolve-DxDatabaseConfig $DxEntity }
         Default { Write-Error "yarglebargle" }

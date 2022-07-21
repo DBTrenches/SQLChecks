@@ -2,14 +2,14 @@ function Resolve-DxServerConfig {
     [CmdletBinding()]
     Param(
         [Parameter()]
-        [object]$Server,
+        [object]$DxEntity,
 
         [Parameter()]
         [object]$DxProfile
     )
 
+
     $ReturnObject = $DxTemplateConfig.Class.Server
-    
 
     foreach(
         $node in @(
@@ -24,19 +24,30 @@ function Resolve-DxServerConfig {
         $ReturnObject.$node = $DxProfile.$node
     }
     
-    # foreach($override in $Server.Override.GetEnumerator().Name){
-    #     $Server.$override
-    # }
-    
+    $EntityName = $DxEntity.Name
 
-    # foreach($alert in $Server.Override.SqlAgent.Alerts.EnabledAlerts){
-    #     switch($alert.'@Action'){
-    #         "Add" {$ReturnObject.SqlAgent.EnabledAlerts += $alert.Name}
-    #         "Remove" {$ReturnObject.SqlAgent.EnabledAlerts = $Server.SqlAgent.EnabledAlerts | Where-Object { $_ -ne $alert.Name}}
-    #     }
-    # }
+    $ReturnObject.Name = $EntityName
+    $ReturnObject.ConnectionString = $DxEntity.ConnectionString
 
+    $OverrideObject = $DxEntityConfig.$EntityName.Override
 
+    foreach($alert in $OverrideObject.SqlAgent.Alerts){
+        $Action = $alert.'@Action'
+        $alert = $alert | Select-Object * -ExcludeProperty '@Action'
+        switch($Action){
+            "Add" {$ReturnObject.SqlAgent.Alerts += $alert}
+            "Remove" {$ReturnObject.SqlAgent.Alerts = $Server.SqlAgent.Alerts | Where-Object { $_.Name -ne $alert.Name}}
+        }
+    }
+
+    foreach($operator in $OverrideObject.SqlAgent.Operators){
+        $Action = $operator.'@Action'
+        $operator = $operator | Select-Object * -ExcludeProperty '@Action'
+        switch($Action){
+            "Add" {$ReturnObject.SqlAgent.Operators += $operator}
+            "Remove" {$ReturnObject.SqlAgent.Operators = $Server.SqlAgent.Operators | Where-Object { $_.Name -ne $operator.Name}}
+        }
+    }
 
     return $ReturnObject
 }

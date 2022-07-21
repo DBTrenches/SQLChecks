@@ -1,6 +1,7 @@
 {
     "Name": "",
     "ConnectionString": "",
+    "Scope": "Server",
     "Service": {
         "SysConfigurations": [],
         "TempDBConfiguration": [],
