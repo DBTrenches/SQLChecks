@@ -83,12 +83,12 @@ Describe "Service.TempDbConfiguration " -Tag Service.TempDbConfiguration {
             KeyName = 'DbName'
         }
 
-        New-Variable -Name TempDbConfigurationCollection -Value (Join-DxConfigAndState @TempDbConfigurationData)
+        New-Variable -Name TempDbConfiguration -Value (Join-DxConfigAndState @TempDbConfigurationData)
     }
 
-    It "NumberOfFiles: '<_.Config.NumberOfFiles>', TotalSizeMb: '<_.Config.TotalSizeMB>' " -ForEach $TempDbConfigurationCollection {
+    It "NumberOfFiles: '<_.Config.NumberOfFiles>', TotalSizeMb: '<_.Config.TotalSizeMB>' " -ForEach $TempDbConfiguration {
         $_.ExistsInConfig | Should -BeTrue
-        $_.Server.NumberOfFiles | Should -BeExactly $_.Server.NumberOfFiles
-        $_.Server.TotalSizeMB | Should -BeExactly $_.Server.TotalSizeMB
+        $_.Server.NumberOfFiles | Should -BeExactly $_.Config.NumberOfFiles
+        $_.Server.TotalSizeMB | Should -BeExactly $_.Config.TotalSizeMB
     }
 }
