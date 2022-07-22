@@ -25,7 +25,7 @@ BeforeDiscovery {
     New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
 }
 
-Describe "Service.TraceFlags" -Tag Service.TraceFlags {
+Describe "Service.TraceFlags " -Tag Service.TraceFlags {
     BeforeDiscovery {
         $TraceFlagData = @{
             ServerData = Get-DxState Service.TraceFlags @Connect 
