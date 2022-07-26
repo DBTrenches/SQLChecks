@@ -59,22 +59,6 @@ Describe "Service.SysConfigurations " -Tag Service.SysConfigurations, SpConfigur
     }
 }
 
-Describe "Security.SysAdmins " -Tag Security.SysAdmins {
-    BeforeDiscovery {
-        $SysAdminData = @{
-            ConfigData = $DxEntity.Security.SysAdmins 
-            ServerData = Get-DxState Security.SysAdmins @Connect 
-        }
-
-        New-Variable -Name SysAdminCollection -Value (Join-DxConfigAndState @SysAdminData)
-    }
-
-    It "SysAdmin: '<_.Name>' " -ForEach $SysAdminCollection {
-        $_.ExistsInConfig | Should -BeTrue
-        $_.ExistsOnServer | Should -BeTrue
-    }
-}
-
 Describe "Service.TempDbConfiguration " -Tag Service.TempDbConfiguration {
     BeforeDiscovery {
         $TempDbConfigurationData = @{
