@@ -70,9 +70,13 @@ Describe "Service.TempDbConfiguration " -Tag Service.TempDbConfiguration {
         New-Variable -Name TempDbConfiguration -Value (Join-DxConfigAndState @TempDbConfigurationData)
     }
 
-    It "NumberOfFiles: '<_.Config.NumberOfFiles>', TotalSizeMb: '<_.Config.TotalSizeMB>' " -ForEach $TempDbConfiguration {
+    It "NumberOfFiles: '<_.Config.NumberOfFiles>' " -ForEach $TempDbConfiguration {
         $_.ExistsInConfig | Should -BeTrue
         $_.Server.NumberOfFiles | Should -BeExactly $_.Config.NumberOfFiles
+    }
+    
+    It "TotalSizeMb: '<_.Config.TotalSizeMB>' " -ForEach $TempDbConfiguration {
+        $_.ExistsInConfig | Should -BeTrue
         $_.Server.TotalSizeMB | Should -BeExactly $_.Config.TotalSizeMB
     }
 }
