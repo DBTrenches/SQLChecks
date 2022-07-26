@@ -21,11 +21,7 @@ class DxLogin {
 class DxLoginCollection {
     [DxLogin[]]$Logins
 
-    DxLoginCollection() {
-        $this.Logins | ForEach-Object {
-            $_.SetServerRolesFromJson()
-        }
-    }
+    DxLoginCollection() {}
 
     DxLoginCollection([object[]]$Logins){
         $this.Logins = $Logins
@@ -36,7 +32,12 @@ class DxLoginCollection {
     }
 
     [DxLogin[]]GetSysAdmins(){
-        $SysAdminCollection = ($this.Logins | Where-Object { $_.ServerRoles -contains 'SysAdmin' })
+        $SysAdminCollection = (
+            $this.Logins | Where-Object { 
+                ($_.ServerRoles -contains 'SysAdmin') -or 
+                ($_.ServerRolesFromJson -like '*SysAdmin*') 
+            }
+        )
 
         return $SysAdminCollection
     }
