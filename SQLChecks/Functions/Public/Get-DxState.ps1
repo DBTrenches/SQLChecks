@@ -15,7 +15,7 @@ function Get-DxState {
     $DxQuery = Get-DxQuery -Tag $Tag
 
     if($PSBoundParameters.Keys -contains 'Database'){
-        $AllDatabases = (Invoke-DbaQuery -SqlInstance $SqlInstance -Query "select [name] as [Name] from sys.databases").Name
+        $AllDatabases = (Invoke-SqlCmd2 -ServerInstance $SqlInstance -Query "select [name] as [Name] from sys.databases").Name
 
         $NonExistentDatabases = $Database | Where-Object {
             ($_ -NotIn $AllDatabases) -and
@@ -35,11 +35,11 @@ function Get-DxState {
 
     $DxState = if($PSBoundParameters.Keys -contains 'Database'){
         foreach($db in $Database) {
-            Invoke-DbaQuery -Query $DxQuery -SqlInstance $SqlInstance -Database $db | 
+            Invoke-SqlCmd2 -Query $DxQuery -ServerInstance $SqlInstance -Database $db | 
                 Select-Object *, @{Name="_Database";Expression={$db}}
         }
     } else {
-        Invoke-DbaQuery -Query $DxQuery -SqlInstance $SqlInstance
+        Invoke-SqlCmd2 -Query $DxQuery -ServerInstance $SqlInstance
     }
 
     $DxState = $DxState | Select-Object * -ExcludeProperty RowError,RowState,Table,ItemArray,HasErrors
