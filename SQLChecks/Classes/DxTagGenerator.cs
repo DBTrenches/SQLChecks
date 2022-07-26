@@ -7,6 +7,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
     {
         string[] Tags = new string[]
         {
+                "Database.OversizedIndexes",
                 "Management.NumErrorLogs",
                 "Management.Xevents",
                 "Security.SysAdmins",
