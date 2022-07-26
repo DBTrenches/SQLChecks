@@ -40,21 +40,3 @@ Describe "Security.SysAdmins " -Tag Security.SysAdmins {
         $_.ExistsOnServer | Should -BeTrue
     }
 }
-
-Describe "Service.TempDbConfiguration " -Tag Service.TempDbConfiguration {
-    BeforeDiscovery {
-        $TempDbConfigurationData = @{
-            ConfigData = $DxEntity.Service.TempDbConfiguration 
-            ServerData = Get-DxState Service.TempDbConfiguration @Connect 
-            KeyName = 'DbName'
-        }
-
-        New-Variable -Name TempDbConfiguration -Value (Join-DxConfigAndState @TempDbConfigurationData)
-    }
-
-    It "NumberOfFiles: '<_.Config.NumberOfFiles>', TotalSizeMb: '<_.Config.TotalSizeMB>' " -ForEach $TempDbConfiguration {
-        $_.ExistsInConfig | Should -BeTrue
-        $_.Server.NumberOfFiles | Should -BeExactly $_.Config.NumberOfFiles
-        $_.Server.TotalSizeMB | Should -BeExactly $_.Config.TotalSizeMB
-    }
-}
