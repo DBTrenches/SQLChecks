@@ -36,7 +36,7 @@ function Resolve-DxServerConfig {
         $alert = $alert | Select-Object * -ExcludeProperty '@Action'
         switch($Action){
             "Add" {$ReturnObject.SqlAgent.Alerts += $alert}
-            "Remove" {$ReturnObject.SqlAgent.Alerts = $Server.SqlAgent.Alerts | Where-Object { $_.Name -ne $alert.Name}}
+            "Remove" {$ReturnObject.SqlAgent.Alerts = $ReturnObject.SqlAgent.Alerts | Where-Object { $_.Name -ne $alert.Name}}
         }
     }
 
@@ -45,7 +45,7 @@ function Resolve-DxServerConfig {
         $operator = $operator | Select-Object * -ExcludeProperty '@Action'
         switch($Action){
             "Add" {$ReturnObject.SqlAgent.Operators += $operator}
-            "Remove" {$ReturnObject.SqlAgent.Operators = $Server.SqlAgent.Operators | Where-Object { $_.Name -ne $operator.Name}}
+            "Remove" {$ReturnObject.SqlAgent.Operators = $ReturnObject.SqlAgent.Operators | Where-Object { $_.Name -ne $operator.Name}}
         }
     }
 
