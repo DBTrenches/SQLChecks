@@ -1,4 +1,14 @@
+
+-- don't run this in tempdb w/o uncommitted
+set transaction isolation level read uncommitted;
+
 select
+    FourPartName = concat(
+        db_name(),N'.',
+        schema_name(o.[schema_id]),N'.',
+        o.[name],N'.',
+        i.[name]
+    ),
     db_name() as DatabaseName,
     schema_name(o.[schema_id]) as [SchemaName],
     o.[name] as TableName,
