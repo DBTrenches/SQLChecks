@@ -30,19 +30,27 @@ function Join-DxConfigAndState {
         $KeyName = 'Name',
 
         [Parameter(Mandatory)]
+        [AllowNull()]
         [object]
         $ServerData,
 
         [Parameter(Mandatory)]
+        [AllowNull()]
         [object]
         $ConfigData
     )
 
-    if($KeyName -NotIn ($ServerData | Get-Member | Where-Object MemberType -eq 'NoteProperty').Name){
-        Write-Error "Specific Key '$KeyName' is not present in supplied `$ServerData attributes. "
+    if($ServerData){
+        if($KeyName -NotIn ($ServerData | Get-Member | Where-Object MemberType -eq 'NoteProperty').Name){
+            Write-Error "Specific Key '$KeyName' is not present in supplied `$ServerData attributes. "
+        }
     }
 
-    $ConfigHasProperties = [bool]($ConfigData | Get-Member | Where-Object MemberType -eq 'NoteProperty')
+    $ConfigHasProperties = if($ConfigData){
+        [bool]($ConfigData | Get-Member | Where-Object MemberType -eq 'NoteProperty')
+    } else {
+        $false
+    }
     
     if($ConfigHasProperties){
         if($KeyName -NotIn ($ConfigData | Get-Member | Where-Object MemberType -eq 'NoteProperty').Name){
@@ -50,9 +58,12 @@ function Join-DxConfigAndState {
         }
     }
 
-    $ReturnCollection = $ConfigData | ForEach-Object {
+    $ReturnCollection = @()
+    
+    $ConfigData | ForEach-Object {
         $ObjectKey = if($ConfigHasProperties){$_.$KeyName}else{$_}
         $ServerObject = $ServerData | Where-Object { $_.$KeyName -eq $ObjectKey }
+
         if($ServerObject){
             $ServerObject = $ServerObject | Select-Object -ExcludeProperty $KeyName
             $ServerObjectExists = $true
@@ -60,7 +71,8 @@ function Join-DxConfigAndState {
             $ServerObject = @{}
             $ServerObjectExists = $false
         }
-        @{
+
+        $ReturnCollection += @{
             Name = $ObjectKey
             ExistsInConfig = $true
             ExistsOnServer = $ServerObjectExists 
