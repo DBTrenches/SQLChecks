@@ -27,21 +27,7 @@ BeforeDiscovery {
 
 Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
     BeforeDiscovery {
-        [string[]]$Database = $DxEntity.DatabasesToCheck
-
-        if(($Database.Count -eq 1) -and ($Database[0].Substring(0,1) -eq '@')){
-            $Label = $Database
-            $Database = switch ($Label) {
-                "@LocalOnly" { (Invoke-SqlCmd2 -ServerInstance $ConnectionString -Query "select d.[name] from sys.databases as d where not exists (select database_name from sys.availability_databases_cluster as adc where adc.[database_name] = d.[name]);").name }
-                "@AgOnly" { (Invoke-SqlCmd2 -ServerInstance $ConnectionString -Query "select distinct database_name from sys.availability_databases_cluster;").database_name }
-                "@All" { @("*") }
-                Default {}
-            }
-        }
-
-        $DxEntity.Databases.OversizedIndexes.ExcludedDatabases | ForEach-Object {
-            $Database += "-$_"
-        } 
+        [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.OversizedIndexes
         
         $ConfigData = $DxEntity.Databases.OversizedIndexes.AllowList | Select-Object *, @{
             Name = 'FourPartName' 
