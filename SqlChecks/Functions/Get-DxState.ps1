@@ -26,8 +26,8 @@ function Get-DxState {
         [ValidateSet([DxTagGenerator])]
         [string]$Tag,
 
-        [Parameter(Mandatory)]
-        [DbaInstance]$SqlInstance,
+        [Parameter()]
+        [DbaInstance]$SqlInstance = $DxEntityLibrary[$DxDefaults.EntityName].ConnectionString,
 
         [Parameter()]
         [string[]]$Database
