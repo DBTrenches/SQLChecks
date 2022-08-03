@@ -50,7 +50,6 @@ Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
     }
 
     It "OversizedIndex: <_.Name> " -ForEach $OversizedIndexCollection {
-        $_.ExistsInConfig | Should -BeTrue 
-        $_.ExistsOnServer | Should -BeTrue -Because "Oversized indexes that are dropped from the server should be removed from the allowlist. "
-    }    
+        $_.ExistsInConfig | Should -BeExactly $_.ExistsOnServer -Because "Oversized indexes that are dropped from the server should be removed from the allowlist. "
+    }
 }
