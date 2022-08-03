@@ -28,7 +28,7 @@ BeforeDiscovery {
 Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
     BeforeDiscovery {
         [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.OversizedIndexes
-        
+
         $ConfigData = $DxEntity.Databases.OversizedIndexes.AllowList | Select-Object *, @{
             Name = 'FourPartName' 
             Expression = {
@@ -51,5 +51,34 @@ Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
 
     It "OversizedIndex: <_.Name> " -ForEach $OversizedIndexCollection {
         $_.ExistsInConfig | Should -BeExactly $_.ExistsOnServer -Because "Oversized indexes that are dropped from the server should be removed from the allowlist. "
+    }
+}
+
+Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
+    BeforeDiscovery {
+        [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.DuplicateIndexes
+
+        $ConfigData = $DxEntity.Databases.DuplicateIndexes.AllowList | Select-Object *, @{
+            Name = 'FourPartName' 
+            Expression = {
+                @(
+                    $_.Database
+                    $_.Schema
+                    $_.Table
+                    $_.Index
+                ) -join '.'
+            }
+        }
+
+        $DuplicateIndexesData = @{
+            ServerData = Get-DxState Databases.DuplicateIndexes @Connect -Database $Database
+            ConfigData = $ConfigData 
+            KeyName = 'FourPartName'
+        }
+        New-Variable -Name DuplicateIndexesCollection -Value (Join-DxConfigAndState @DuplicateIndexesData)
+    }
+
+    It "DuplicateIndex: <_.Name> " -ForEach $DuplicateIndexesCollection {
+        $_.ExistsInConfig | Should -BeExactly $_.ExistsOnServer -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
     }
 }
