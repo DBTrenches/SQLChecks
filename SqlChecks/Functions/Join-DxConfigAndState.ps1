@@ -74,7 +74,7 @@ function Join-DxConfigAndState {
 
         $ReturnCollection += @{
             Name = $ObjectKey
-            ExistsInConfig = $true
+            ExistsInConfig = [bool]$_
             ExistsOnServer = $ServerObjectExists 
             Config = $_ | Select-Object -ExcludeProperty $KeyName
             Server = $ServerObject
@@ -91,5 +91,5 @@ function Join-DxConfigAndState {
         }
     }
 
-    $ReturnCollection
+    $ReturnCollection 
 }
