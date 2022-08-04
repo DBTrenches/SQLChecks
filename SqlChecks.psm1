@@ -48,6 +48,8 @@ $functionFileCollection = Get-ChildItem -Recurse -Filter *.ps1 -Path ./SQLChecks
 foreach($functionFile in $functionFileCollection) {
     . $functionFile.FullName
 }
+
+Export-ModuleMember -Alias gxdb 
 #endregion Functions
 ;;
 Pop-Location 
