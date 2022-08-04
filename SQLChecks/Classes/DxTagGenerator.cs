@@ -7,19 +7,19 @@ public class DxTagGenerator : IValidateSetValuesGenerator
     {
         string[] Tags = new string[]
         {
-                "Databases.DuplicateIndexes",
-                "Databases.OversizedIndexes",
-                "Management.NumErrorLogs",
-                "Management.Xevents",
-                "Security.SysAdmins",
-                "Service.TempDbConfiguration",
-                "Service.TraceFlags",
-                "Service.SysConfigurations",
-                "SqlAgent.Alerts",
-                "SqlAgent.JobSchedules.Disabled",
-                "SqlAgent.JobSchedules.NoneActive",
-                "SqlAgent.Operators",
-                "SqlAgent.Status"
+            "Databases.DuplicateIndexes",
+            "Databases.OversizedIndexes",
+            "Management.NumErrorLogs",
+            "Management.Xevents",
+            "Security.SysAdmins",
+            "Service.TempDbConfiguration",
+            "Service.TraceFlags",
+            "Service.SysConfigurations",
+            "SqlAgent.Alerts",
+            "SqlAgent.JobSchedules.Disabled",
+            "SqlAgent.JobSchedules.NoneActive",
+            "SqlAgent.Operators",
+            "SqlAgent.Status"
         };
 
         return Tags;
