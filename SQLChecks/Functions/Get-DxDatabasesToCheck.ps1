@@ -26,7 +26,8 @@ Function Get-DxDatabasesToCheck {
     includes a database that does not exist on the server, a warning will be raised.
     If this param is not used, `master` db will be used. @-Labels are also supported.
 #>
-    [CmdletBinding(DefaultParameterSetName = 'Entity')]
+    [CmdletBinding(DefaultParameterSetName = 'Database')]
+    [Alias('gxdb')]
     Param(
 
         [Parameter(Mandatory, ParameterSetName = 'Entity')]
@@ -41,7 +42,7 @@ Function Get-DxDatabasesToCheck {
         [DbaInstance]
         $SqlInstance = $DxEntityLibrary[$DxDefaults.EntityName].ConnectionString,
 
-        [Parameter(ParameterSetName = 'Database')]
+        [Parameter(ParameterSetName = 'Database', Position = 0)]
         [string[]]
         $Database = @('*')
     )
