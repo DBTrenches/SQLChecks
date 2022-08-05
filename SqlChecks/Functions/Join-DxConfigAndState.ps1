@@ -1,7 +1,7 @@
 function Join-DxConfigAndState {
 <#
 .SYNOPSIS
-    SQL `OUTER JOIN` data from $DxEntityLibrary and Get-DxState for use in a Pester v5 data-driven test
+    SQL `OUTER JOIN` data from `$DxEntityLibrary` and `Get-DxState` for use in a Pester v5 data-driven test
 
 .DESCRIPTION
     Pester v5 needs the data object for a data-driven test to be completely resolved in the `BeforeDiscovery` phase. 
