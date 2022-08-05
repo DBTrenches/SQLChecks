@@ -22,7 +22,7 @@ BeforeDiscovery {
 
     $ConnectionString = $DxEntity.ConnectionString
 
-    New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
+    $Connect = @{SqlInstance = $ConnectionString}
 }
 
 Describe "Security.SysAdmins " -Tag Security.SysAdmins {
@@ -32,7 +32,7 @@ Describe "Security.SysAdmins " -Tag Security.SysAdmins {
             ServerData = Get-DxState Security.SysAdmins @Connect 
         }
 
-        New-Variable -Name SysAdminCollection -Value (Join-DxConfigAndState @SysAdminData)
+        $SysAdminCollection = Join-DxConfigAndState @SysAdminData
     }
 
     It "SysAdmin: '<_.Name>' " -ForEach $SysAdminCollection {

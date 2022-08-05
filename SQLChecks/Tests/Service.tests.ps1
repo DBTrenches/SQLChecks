@@ -22,7 +22,7 @@ BeforeDiscovery {
 
     $ConnectionString = $DxEntity.ConnectionString
 
-    New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
+    $Connect = @{SqlInstance = $ConnectionString}
 }
 
 Describe "Service.TraceFlags " -Tag Service.TraceFlags {
@@ -32,7 +32,7 @@ Describe "Service.TraceFlags " -Tag Service.TraceFlags {
             ConfigData = $DxEntity.Service.TraceFlags 
             KeyName = 'TraceFlag'
         }
-        New-Variable -Name TraceFlagCollection -Value (Join-DxConfigAndState @TraceFlagData)
+        $TraceFlagCollection = Join-DxConfigAndState @TraceFlagData
     }
 
     It "TraceFlag: <_.Name> " -ForEach $TraceFlagCollection {
@@ -48,7 +48,7 @@ Describe "Service.SysConfigurations " -Tag Service.SysConfigurations, SpConfigur
             ServerData = Get-DxState Service.SysConfigurations @Connect 
         }
 
-        New-Variable -Name SpConfigCollection -Value (Join-DxConfigAndState @SpConfigData)
+        $SpConfigCollection = Join-DxConfigAndState @SpConfigData
     }
 
     It "SysConfiguration: '<_.Name>' " -ForEach $SpConfigCollection {
@@ -67,7 +67,7 @@ Describe "Service.TempDbConfiguration " -Tag Service.TempDbConfiguration {
             KeyName = 'DbName'
         }
 
-        New-Variable -Name TempDbConfiguration -Value (Join-DxConfigAndState @TempDbConfigurationData)
+        $TempDbConfiguration = Join-DxConfigAndState @TempDbConfigurationData
     }
 
     It "NumberOfFiles: '<_.Config.NumberOfFiles>' " -ForEach $TempDbConfiguration {

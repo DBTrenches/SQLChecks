@@ -22,7 +22,7 @@ BeforeDiscovery {
 
     $ConnectionString = $DxEntity.ConnectionString
 
-    New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
+    $Connect = @{SqlInstance = $ConnectionString}
 }
 
 Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
@@ -31,7 +31,7 @@ Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
             ServerData = Get-DxState -Tag SqlAgent.Alerts @Connect 
             ConfigData = $DxEntity.SqlAgent.Alerts 
         }
-        New-Variable -Name AlertCollection -Value (Join-DxConfigAndState @AlertData)
+        $AlertCollection = Join-DxConfigAndState @AlertData
     }
     
     It "Alert: '<_.Name>' " -ForEach $AlertCollection {
@@ -46,7 +46,7 @@ Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
             ServerData = Get-DxState -Tag SqlAgent.Operators @Connect 
             ConfigData = $DxEntity.SqlAgent.Operators 
         }
-        New-Variable -Name OperatorCollection -Value (Join-DxConfigAndState @OperatorData)
+        $OperatorCollection = Join-DxConfigAndState @OperatorData
     }
     
     # below `It` title displays aligned email address on success
@@ -60,7 +60,7 @@ Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
 
 Describe "SqlAgent.Status on '$ConnectionString' " -Tag SqlAgent.Status {
     BeforeDiscovery {
-        New-Variable -Name SqlAgentStatus -Value (Get-DxState SqlAgent.Status @Connect)
+        $SqlAgentStatus = Get-DxState SqlAgent.Status @Connect
     }
     
     It "Agent is running and auto-restart. " -ForEach $SqlAgentStatus {
@@ -71,8 +71,8 @@ Describe "SqlAgent.Status on '$ConnectionString' " -Tag SqlAgent.Status {
 
 Describe "SqlAgent.JobSchedules on '$ConnectionString' " -Tag SqlAgent.JobSchedules {
     BeforeDiscovery {
-        New-Variable -Name JobsWithDisabledSchedules -Value (Get-DxState SqlAgent.JobSchedules.Disabled @Connect)
-        New-Variable -Name JobsWithNoActiveSchedules -Value (Get-DxState SqlAgent.JobSchedules.NoneActive @Connect)
+        $JobsWithDisabledSchedules = Get-DxState SqlAgent.JobSchedules.Disabled @Connect
+        $JobsWithNoActiveSchedules = Get-DxState SqlAgent.JobSchedules.NoneActive @Connect
     }
     
     It "No jobs have a disabled schedule. " {

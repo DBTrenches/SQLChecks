@@ -22,12 +22,12 @@ BeforeDiscovery {
 
     $ConnectionString = $DxEntity.ConnectionString
 
-    New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
+    $Connect = @{SqlInstance = $ConnectionString}
 }
 
 Describe "Management.NumErrorLogs" -Tag Management.NumErrorLogs {
     BeforeDiscovery { 
-        New-Variable -Name NumErrorLogsCollection -Value @{
+        $NumErrorLogsCollection = @{
             ServerNumErrorLogs = (Get-DxState Management.NumErrorLogs @Connect).NumErrorLogs
             ConfigNumErrorLogs = $DxEntity.Management.NumErrorLogs
         }
@@ -45,7 +45,7 @@ Describe "Management.Xevents " -Tag Management.Xevents {
             ServerData = Get-DxState Management.Xevents @Connect | Where-Object { $_.StartupState -eq $true } 
             ConfigData = $DxEntity.Management.Xevents | Where-Object { $_.StartupState -eq $true } 
         }
-        New-Variable -Name StartupXeventCollection -Value (Join-DxConfigAndState @StartupXeventData)
+        $StartupXeventCollection = Join-DxConfigAndState @StartupXeventData
     }
 
     It "StartupXevent: <_.Name> " -ForEach $StartupXeventCollection {

@@ -22,7 +22,7 @@ BeforeDiscovery {
 
     $ConnectionString = $DxEntity.ConnectionString
 
-    New-Variable -Name Connect -Value @{SqlInstance = $ConnectionString}
+    $Connect = @{SqlInstance = $ConnectionString}
 }
 
 Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
@@ -46,7 +46,7 @@ Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
             ConfigData = $ConfigData 
             KeyName = 'FourPartName'
         }
-        New-Variable -Name OversizedIndexCollection -Value (Join-DxConfigAndState @OversizedIndexData)
+        $OversizedIndexCollection = Join-DxConfigAndState @OversizedIndexData
     }
 
     It "OversizedIndex: <_.Name> " -ForEach $OversizedIndexCollection {
@@ -75,7 +75,7 @@ Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
             ConfigData = $ConfigData 
             KeyName = 'FourPartName'
         }
-        New-Variable -Name DuplicateIndexesCollection -Value (Join-DxConfigAndState @DuplicateIndexesData)
+        $DuplicateIndexesCollection = Join-DxConfigAndState @DuplicateIndexesData
     }
 
     It "DuplicateIndex: <_.Name> " -ForEach $DuplicateIndexesCollection {
