@@ -52,8 +52,19 @@ Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
         $OversizedIndexCollection = Join-DxConfigAndState @OversizedIndexData
     }
 
-    It "OversizedIndex: <_.Name> " -ForEach $OversizedIndexCollection {
-        $_.ExistsInConfig | Should -BeExactly $_.ExistsOnServer -Because "Oversized indexes that are dropped from the server should be removed from the allowlist. "
+    It "OversizedIndex test is running " -ForEach $OversizedIndexCollection[0] {
+        ($_.ExistsInConfig).Count | Should -BeExactly 1 -Because "In order to confirm the test ran, an empty object is returned from `Join-DxConfigAndState` when there is a null set on both server and config "
+    }
+
+    Context "OversizedIndex: <_.Name> " -ForEach $OversizedIndexCollection {
+        It "Is properly allowlisted " {
+            $_.ExistsInConfig | Should -BeExactly $true -Because "Oversized indexes may not exist unless they are allowlisted. "
+        }
+        It "Exists when it is allowlisted " {
+            $Database = (Get-DxDatabasesToCheck -Tag Databases.OversizedIndexes -EntityName $EntityName)
+            $_.Config.Database | Should -BeIn $Database -Because "You have allowlisted an index in a database that is not checked by config rules.  "
+            $_.ExistsOnServer | Should -BeExactly $true -Because "Oversized indexes that are dropped from the server should be removed from the allowlist. "
+        }
     }
 }
 
@@ -82,6 +93,6 @@ Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
     }
 
     It "DuplicateIndex: <_.Name> " -ForEach $DuplicateIndexesCollection {
-        $_.ExistsInConfig | Should -BeExactly $_.ExistsOnServer -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+        $_.ExistsInConfig | Should -BeExactly $true -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
     }
 }

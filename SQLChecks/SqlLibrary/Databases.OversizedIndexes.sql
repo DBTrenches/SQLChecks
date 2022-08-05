@@ -9,10 +9,10 @@ select
         o.[name],N'.',
         i.[name]
     ),
-    db_name() as DatabaseName,
-    schema_name(o.[schema_id]) as [SchemaName],
-    o.[name] as TableName,
-    i.[name] as IndexName,
+    db_name() as [Database],
+    schema_name(o.[schema_id]) as [Schema],
+    o.[name] as [Table],
+    i.[name] as [Index],
     i.[type_desc] as IndexType,
     sum(c.max_length) as RowLength,
     count(ic.index_id) as [ColumnCount]
