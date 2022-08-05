@@ -5,16 +5,22 @@ using namespace System.Management.Automation
 class ValidDxTagGenerator : IValidateSetValuesGenerator {
     [string[]] GetValidValues() {
         $Values = @(
+            '_Utility.select1'
+            'Databases.DuplicateIndexes'                # 'CheckDuplicateIndexes'
+            'Databases.IdentityColumnLimit'             # 'CheckForIdentityColumnLimit'
+            'Databases.Files.SpaceUsed'
+            'Databases.OversizedIndexes'
             'Management.NumErrorLogs'                   # 'NumErrorLogs'
+            'Management.Xevents'
+            'Security.SysAdmins'
             'Service.SysConfigurations'                 # 'SpConfig'
+            'Service.TempDbConfiguration'               # 'TempDBConfiguration'
             'Service.TraceFlags'                        # 'TraceFlags' 
             'SqlAgent.Alerts'                           # 'SQLAgentAlerts'
             'SqlAgent.JobSchedules.Disabled'            # 'AgentJobNoDisabledSchedules'
             'SqlAgent.JobSchedules.NoneActive'          # 'AgentJobOneActiveSchedule'
             'SqlAgent.Operators'                        # 'SQLAgentOperators'
             'SqlAgent.Status'                           # 'AgentIsRunning'
-            # 'CheckDuplicateIndexes'
-            # 'CheckForIdentityColumnLimit'
             # 'CheckUnconfiguredSQLAgentAlerts'
             # 'AG.Connectivity'                         # 'AGInstanceConnectivity'
             # 'AG.PrimaryHealthStatus'                  # 'AGPrimaryHealthStatus'
@@ -46,7 +52,6 @@ class ValidDxTagGenerator : IValidateSetValuesGenerator {
             # 'SQLEndpoints'
             # 'SQLServicesStartup'
             # 'StartupXEvents'
-            # 'TempDBConfiguration'
             # 'ZeroAutoGrowthFiles'
         )
         return $Values
