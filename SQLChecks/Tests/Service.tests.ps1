@@ -1,5 +1,8 @@
 #Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
 
+# PsScriptAnalyzer reports false positive for $vars defined in `Discovery` not used until `It`
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
+
 [CmdletBinding()]
 Param(
     [string]$EntityName = $DxDefaults.EntityName
