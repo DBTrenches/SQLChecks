@@ -92,7 +92,17 @@ Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
         $DuplicateIndexesCollection = Join-DxConfigAndState @DuplicateIndexesData
     }
 
-    It "DuplicateIndex: <_.Name> " -ForEach $DuplicateIndexesCollection {
-        $_.ExistsInConfig | Should -BeExactly $true -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+    It "DuplicateIndex test is running " -ForEach $DuplicateIndexesCollection[0] {
+        ($_.ExistsInConfig).Count | Should -BeExactly 1 -Because "In order to confirm the test ran, an empty object is returned from `Join-DxConfigAndState` when there is a null set on both server and config "
+    }
+    Context "DuplicateIndex: <_.Name> " -ForEach $DuplicateIndexesCollection {
+        It "Is properly allowlisted " {
+            $_.ExistsInConfig | Should -BeExactly $true -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+        }
+        It "Exists when it is allowlisted " {
+            $Database = (Get-DxDatabasesToCheck -Tag Databases.DuplicateIndexes -EntityName $EntityName)
+            $_.Config.Database | Should -BeIn $Database -Because "You have allowlisted an index in a database that is not checked by config rules.  "
+            $_.ExistsOnServer | Should -BeExactly $true -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+        }
     }
 }
