@@ -178,7 +178,7 @@ select
     TableName,
     IndexName,
     DuplicateIndexName,
-    FourPartName = concat(SchemaName,N'.',TableName,N'.',IndexName,N'.',DuplicateIndexName)
+    FourPartName = concat(db_name(),N'.',SchemaName,N'.',TableName,N'.',IndexName)
 from DuplicatesTable as dt
 union all
 select
@@ -188,5 +188,5 @@ select
     TableName,
     IndexName,
     DuplicateIndexName,
-    FourPartName = concat(SchemaName,N'.',TableName,N'.',IndexName,N'.',DuplicateIndexName)
+    FourPartName = concat(db_name(),N'.',SchemaName,N'.',TableName,N'.',IndexName)
 from DuplicatesXMLTable as dtxml;
