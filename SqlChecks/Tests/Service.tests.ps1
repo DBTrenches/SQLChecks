@@ -38,9 +38,16 @@ Describe "Service.TraceFlags " -Tag Service.TraceFlags {
         $TraceFlagCollection = Join-DxConfigAndState @TraceFlagData
     }
 
-    It "TraceFlag: <_.Name> " -ForEach $TraceFlagCollection {
-        $_.ExistsInConfig | Should -BeTrue
-        $_.ExistsOnServer | Should -BeTrue
+    It "TraceFlag test is running" -ForEach $TraceFlagCollection[0] {
+        ($_.ExistsInConfig).Count | Should -BeExactly 1 -Because "In order to confirm the test ran, an empty object is returned from `Join-DxConfigAndState` when there is a null set on both server and config "
+    }
+    Context "TraceFlag: <_.Name> " -ForEach $TraceFlagCollection {
+        It "Is in config " {
+            $_.ExistsInConfig | Should -BeTrue -Because "We should have all TFs documented in Config. "
+        }
+        It "Is deployed " {
+            $_.ExistsOnServer | Should -BeTrue -Because "All config TFs should be applied "
+        }
     }
 }
 
