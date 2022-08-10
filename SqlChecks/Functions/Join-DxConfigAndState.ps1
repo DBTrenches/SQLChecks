@@ -91,5 +91,11 @@ function Join-DxConfigAndState {
         }
     }
 
+    # Null object (false/false) returned when no value present in config
+    # Discard in presence of valid server state
+    if($ReturnCollection.Count -gt 1){
+        $ReturnCollection = $ReturnCollection | Where-Object {$true -in ($_.ExistsOnServer,$_.ExistsInConfig)}
+    } 
+
     $ReturnCollection 
 }

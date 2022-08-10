@@ -67,7 +67,6 @@ Describe "Management.DbMail.DefaultProfile on '$ConnectionString' " -Tag Managem
         $Collection = Join-DxConfigAndState @Splat
     }
     It "DbMail.DefaultProfile: '<_.Name>' " -ForEach $Collection {
-        $_.ExistsOnServer | Should -BeTrue
-        $_.ExistsInConfig | Should -BeTrue
+        $_.Server.IsDefault | Should -BeTrue
     }
 }
