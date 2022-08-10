@@ -8,21 +8,25 @@ Requires [`dbatools`](https://dbatools.io/) and [`Pester` v5](https://pester.dev
 
 <!-- For more information refer to [the documentation](./docs/Readme.md). -->
 
+## Setup
+
+TODO: Explain setup
+
 ## Example Usage
-First of all import the module.
+
+Import the module and run tests without arguments to test the default entity. 
 
 ```powershell
 Import-Module .\SqlChecks.psd1 -Force
-```
-
-```powershell
 Invoke-Pester .\SqlChecks\Tests -Output Detailed
 ```
 
 You can also test a single item based on its tag.
 
 ```powershell
-Invoke-Pester .\SqlChecks\Tests -Output Detailed -Tag SqlAgent.Alerts
+Invoke-Pester .\SqlChecks\Tests\SqlAgent* -Tag SqlAgent.Alerts -Output Detailed
 ```
+
+> Tip: if you add the command `$PSDefaultParameterValues.'Invoke-Pester:Output' = 'Detailed'` to your `$PROFILE`, you will get `-Output Detailed` every time without having to type it. 
 
 <!-- You can find some example configuration files in the `examples` folder. -->
