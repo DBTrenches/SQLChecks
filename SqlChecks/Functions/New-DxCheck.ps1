@@ -21,7 +21,7 @@ function New-DxCheck {
     # 1. Is the tag unique and new?
     if($Tag -In [DxTagGenerator]::New().GetValidValues()){
         Write-Error "Chosen tag '$Tag' is already configured. Choose a different name. "
-        return -1
+        return
     }
 
     Push-Location $PSScriptRoot/..
