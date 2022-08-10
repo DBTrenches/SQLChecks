@@ -29,7 +29,7 @@ function New-DxCheck {
     # 2. add the tag to the collection
     [Collections.ArrayList]$ClassFile = Get-Content Classes/DxTagGenerator.cs
     $InsertStart = $ClassFile.IndexOf("        {")
-    $ClassFile.Insert(1 + $InsertStart,"`"$TagName`",")
+    $ClassFile.Insert(1 + $InsertStart,"            `"$Tag`",")
     $ClassFile | Set-Content Classes/DxTagGenerator.cs
 
     # 3. add a (blank) SqlLibrary file and open for editing
@@ -37,22 +37,23 @@ function New-DxCheck {
     Invoke-Item "SqlLibrary/$($Tag).sql" 
 
     # 4. add a stub test and open for editting
-    $QueryDomain = ($Tag -split '.')[0]
+    $QueryDomain = ($Tag -split '\.')[0]
+    $EndOfTag = $Tag -replace "$QueryDomain."
     $TestFile = Get-ChildItem "Tests/${QueryDomain}.tests.ps1"
     if(-not $TestFile){
         $header = (Get-Content Tests/SqlAgent.tests.ps1)[0..29]
-        New-Item -ItemType File -Name "Tests/${QueryDomain}.tests.ps1" -Value $header
+        $TestFile = New-Item -ItemType File -Name "Tests/${QueryDomain}.tests.ps1" -Value $header
     }
     $footer = @"
     Describe "${Tag} on '`$ConnectionString' " -Tag ${Tag} {
         BeforeDiscovery {
             `$Splat = @{
                 ServerData = Get-DxState -Tag ${Tag} @Connect 
-                ConfigData = $DxEntity.${Tag} 
+                ConfigData = `$DxEntity.${Tag} 
             }
             `$Collection = Join-DxConfigAndState @Splat
         }
-        It "Alert: '<_.Name>' " -ForEach `$Collection {
+        It "${EndOfTag}: '<_.Name>' " -ForEach `$Collection {
             `$_.ExistsOnServer | Should -BeTrue
             `$_.ExistsInConfig | Should -BeTrue
         }
