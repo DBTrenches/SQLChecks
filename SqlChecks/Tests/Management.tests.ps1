@@ -56,3 +56,18 @@ Describe "Management.Xevents " -Tag Management.Xevents {
         $_.ExistsOnServer | Should -BeTrue
     }
 }
+
+Describe "Management.DbMail.DefaultProfile on '$ConnectionString' " -Tag Management.DbMail.DefaultProfile {
+    BeforeDiscovery {
+        $Splat = @{
+            ServerData = Get-DxState -Tag Management.DbMail.DefaultProfile @Connect 
+            ConfigData = $DxEntity.Management.DbMail.DefaultProfile 
+            KeyName = 'ProfileId'
+        }
+        $Collection = Join-DxConfigAndState @Splat
+    }
+    It "DbMail.DefaultProfile: '<_.Name>' " -ForEach $Collection {
+        $_.ExistsOnServer | Should -BeTrue
+        $_.ExistsInConfig | Should -BeTrue
+    }
+}
