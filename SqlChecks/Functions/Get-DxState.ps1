@@ -1,7 +1,7 @@
 function Get-DxState {
 <#
 .SYNOPSIS
-    Runs the SqlLibrary query for $Tag against a server and return the current state. 
+    Runs the SqlLibrary query for `$Tag` against a server and return the current state. 
 
 .DESCRIPTION
     Every valid $Tag has a corresponding entry at $DxSqlLibrary.$Tag.QueryText. 
