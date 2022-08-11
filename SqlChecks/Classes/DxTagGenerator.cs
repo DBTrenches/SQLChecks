@@ -9,8 +9,8 @@ public class DxTagGenerator : IValidateSetValuesGenerator
         {
             "_Utility.select1",
             "Databases.DuplicateIndexes",
-            "Databases.IdentityColumnLimit",
             "Databases.Files.SpaceUsed",
+            "Databases.IdentityColumnLimit",
             "Databases.OversizedIndexes",
             "Management.DbMail.DefaultProfile",
             "Management.NumErrorLogs",

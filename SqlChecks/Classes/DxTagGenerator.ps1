@@ -7,8 +7,8 @@ class DxTagGenerator : IValidateSetValuesGenerator {
         $Values = @(
             '_Utility.select1'
             'Databases.DuplicateIndexes'                # 'CheckDuplicateIndexes'
-            'Databases.IdentityColumnLimit'             # 'CheckForIdentityColumnLimit'
             'Databases.Files.SpaceUsed'
+            'Databases.IdentityColumnLimit'             # 'CheckForIdentityColumnLimit'
             'Databases.OversizedIndexes'
             'Management.DbMail.DefaultProfile'
             'Management.NumErrorLogs'                   # 'NumErrorLogs'
