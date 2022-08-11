@@ -1,7 +1,6 @@
 Push-Location $PSScriptRoot
 
-#Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) 
-. SqlChecks\Classes\DxTagGenerator.ps1
+Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) 
 ;;
 #region ModuleConfig
 
