@@ -2,7 +2,7 @@
 
 using namespace System.Management.Automation
 
-class ValidDxTagGenerator : IValidateSetValuesGenerator {
+class DxTagGenerator : IValidateSetValuesGenerator {
     [string[]] GetValidValues() {
         $Values = @(
             '_Utility.select1'
@@ -10,6 +10,7 @@ class ValidDxTagGenerator : IValidateSetValuesGenerator {
             'Databases.IdentityColumnLimit'             # 'CheckForIdentityColumnLimit'
             'Databases.Files.SpaceUsed'
             'Databases.OversizedIndexes'
+            'Management.DbMail.DefaultProfile'
             'Management.NumErrorLogs'                   # 'NumErrorLogs'
             'Management.Xevents'
             'Security.SysAdmins'
