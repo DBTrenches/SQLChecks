@@ -52,4 +52,4 @@ foreach($functionFile in $functionFileCollection) {
 Export-ModuleMember -Alias gxdb 
 #endregion Functions
 ;;
-Pop-Location 
+Pop-Location

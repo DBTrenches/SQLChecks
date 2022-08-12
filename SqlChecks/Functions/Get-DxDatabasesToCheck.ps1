@@ -110,4 +110,3 @@ Function Get-DxDatabasesToCheck {
 
     $DatabaseCollection
 }
-
