@@ -7,6 +7,22 @@ param (
     [string]
     $Edition
 )
+<#
+.SYNOPSIS
+    Make the module PS Version 5 (Desktop) or enforce 6/7 (Core) compat requirements
+
+.DESCRIPTION
+    The class [DxTagGenerator] derives IValidateSetValuesGenerator which is only available
+    in PS Core. A workaround for this exists and is trivial to implement but which is bad
+    Because Of Reasons. If you _really_ want to run the module in v5, execute this script.
+    Execute it with `-Edition Core` to toggle back.
+
+.LINK
+    https://vexx32.github.io/2018/11/29/Dynamic-ValidateSet/
+
+.LINK
+    https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.ivalidatesetvaluesgenerator
+#>
 
 Push-Location $PSScriptRoot
 
