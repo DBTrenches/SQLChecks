@@ -4,13 +4,13 @@ Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw)
 ;;
 #region ModuleConfig
 
-$ConfigFile = Get-Item ./Config/Module/SqlChecks.Config.json -ErrorAction SilentlyContinue
+$ConfigFile = Get-Item ./Config/SqlChecks.Config.json -ErrorAction SilentlyContinue
 
 if($null -eq $ConfigFile){
-    $ModuleConfig = Get-Content ./Config/Module/SqlChecks.Config.Example.json | ConvertFrom-Json
-    $ModuleConfig.TemplateConfig.PathExpression = './Config/Module/SqlChecks.Config.json'
-    $ModuleConfig | ConvertTo-Json | Set-Content ./Config/Module/SqlChecks.Config.json
-    $ConfigFile = Get-Item ./Config/Module/SqlChecks.Config.json 
+    $ModuleConfig = Get-Content ./Config/SqlChecks.Config.Example.json | ConvertFrom-Json
+    $ModuleConfig.TemplateConfig.PathExpression = './Config/SqlChecks.Config.json'
+    $ModuleConfig | ConvertTo-Json | Set-Content ./Config/SqlChecks.Config.json
+    $ConfigFile = Get-Item ./Config/SqlChecks.Config.json 
 } else {
     $ModuleConfig = Get-Content $ConfigFile -Raw | ConvertFrom-Json
 }
