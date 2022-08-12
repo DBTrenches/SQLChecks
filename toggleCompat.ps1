@@ -12,14 +12,14 @@ Push-Location $PSScriptRoot
 
 Remove-Module SqlChecks -Force -ErrorAction SilentlyContinue
 
-$ParamModifier_V5 = '        [ValidateSet([DxTagGenerator])]'
-$ParamModifier_V7 = @'
+$ParamModifier_V5 = @'
         [ArgumentCompleter({
             param($Command, $Parameter, $WordToComplete, $CommandAst, $FakeBoundParams)
             Get-DxTags
         })]
         [ValidateScript({ $_ -in (Get-DxTags) })]
 '@
+$ParamModifier_V7 = '        [ValidateSet([DxTagGenerator])]'
 
 $Psm1_V5 = '# Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) '
 $Psm1_V7 = 'Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) '
