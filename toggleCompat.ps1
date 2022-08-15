@@ -59,7 +59,7 @@ if('Core' -eq $Edition){
     }
 
     (Get-Content SqlChecks.psm1 -Raw).Replace( $Psm1_V5, $Psm1_V7).TrimEnd() | Set-Content SqlChecks.psm1 
-    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V5, $Psd1_V7).TrimEnd() | Set-Content SqlChecks.psd1 -Encoding unicode
+    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V5, $Psd1_V7).TrimEnd() | Set-Content SqlChecks.psd1 
 }
 
 if('Desktop' -eq $Edition){
@@ -69,7 +69,7 @@ if('Desktop' -eq $Edition){
     }
 
     (Get-Content SqlChecks.psm1 -Raw).Replace( $Psm1_V7, $Psm1_V5).TrimEnd() | Set-Content SqlChecks.psm1
-    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V7, $Psd1_V5).TrimEnd() | Set-Content SqlChecks.psd1 -Encoding unicode
+    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V7, $Psd1_V5).TrimEnd() | Set-Content SqlChecks.psd1 
 }
 
 Pop-Location
