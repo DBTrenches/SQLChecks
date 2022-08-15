@@ -90,3 +90,19 @@ Describe "Service.TempDbConfiguration " -Tag Service.TempDbConfiguration {
         $_.Server.TotalSizeMB | Should -BeExactly $_.Config.TotalSizeMB
     }
 }
+
+Describe "Service.InstantFileInitializationSetting on '$ConnectionString' " -Tag Service.InstantFileInitializationSetting {
+    BeforeDiscovery {
+        $Splat = @{
+            ServerData = Get-DxState -Tag Service.InstantFileInitializationSetting @Connect 
+            ConfigData = $DxEntity.Service.InstantFileInitializationSetting 
+            KeyName = "Name"
+        }
+        $Collection = Join-DxConfigAndState @Splat
+    }
+    It "InstantFileInitializationSetting: '<_.Name>' " -ForEach $Collection {
+        $_.ExistsOnServer | Should -BeTrue
+        $_.ExistsInConfig | Should -BeTrue
+        $_.Server.IFIEnabled | Should -Be $_.Config.IFIEnabled
+    }
+}

@@ -16,6 +16,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
             "Management.NumErrorLogs",
             "Management.Xevents",
             "Security.SysAdmins",
+            "Service.InstantFileInitializationSetting",
             "Service.SysConfigurations",
             "Service.TempDbConfiguration",
             "Service.TraceFlags",
