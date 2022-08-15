@@ -1,5 +1,4 @@
-
-function Resolve-DxProfile {
+Function Resolve-DxProfile {
     [CmdletBinding()]
     param (
         [Parameter()]
