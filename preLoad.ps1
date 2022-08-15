@@ -1,4 +1,16 @@
 
+<#
+.DESCRIPTION
+    This script checks RequiredModules, PSVersion, and for the existence
+    of `code` on the commandline (for the New-DxCheck fuinction).
+    This script **LIKELY DOES NOT WORK** to pre-install modules without a 2nd
+    wrapper manifest. See the blog post for a full explanation. No 2nd manifest 
+    exists at this time because I'm lazy. 
+
+.LINK
+    https://tommymaynard.com/the-scriptstoprocess-and-requiredmodules-order-2018/
+#>
+
 $RequiredModules = @(
     @{
         ModuleName = 'dbatools'

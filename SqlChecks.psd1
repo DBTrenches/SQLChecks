@@ -6,6 +6,7 @@
     Copyright         = '(c) 2017-2022 Timothy Addison & DBTrenches. All rights reserved.'
     # Required for IValidateSetValuesGenerator
     PowerShellVersion = '6.0'
+    ScriptsToProcess  = 'preLoad.ps1'
     RequiredModules   = @(
         @{
             ModuleName = 'dbatools'
