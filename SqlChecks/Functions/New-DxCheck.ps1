@@ -13,7 +13,8 @@ function New-DxCheck {
 #>
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [string]
         $Tag
     )
