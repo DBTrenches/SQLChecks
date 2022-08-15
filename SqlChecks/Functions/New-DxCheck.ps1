@@ -6,7 +6,7 @@ function New-DxCheck {
 .DESCRIPTION
     1. Given an input $Tag that does not already exist in the Tag Collection
     2. Add that Tag to the Collection (defined in the DxTagGenerator class file)
-    3. Add a (blank) SqlLibrary file for the Tag and open it for editting
+    3. Add a (blank) SqlLibrary file for the Tag and open it for editting in VSCode
     4. Add a stub test snippet to the appropriate .tests.ps1 file
     5. TODO: handle for adding config
 
@@ -35,7 +35,7 @@ function New-DxCheck {
 
     # 3. add a (blank) SqlLibrary file and open for editing
     New-Item -ItemType File -Path "SqlLibrary/$($Tag).sql" -Value "/* SQL Query for $Tag */"
-    Invoke-Item "SqlLibrary/$($Tag).sql" 
+    code --add "SqlLibrary/$($Tag).sql" 
 
     # 4. add a stub test and open for editting
     $QueryDomain = ($Tag -split '\.')[0]
@@ -62,7 +62,7 @@ Describe "${Tag} on '`$ConnectionString' " -Tag ${Tag} {
 }
 "@
     Add-Content -Path $TestFile -Value $footer
-    Invoke-Item $TestFile
+    code --add $TestFile
 
     # 5. TODO: handle for adding config
 
