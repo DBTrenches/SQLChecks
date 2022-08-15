@@ -40,6 +40,15 @@ $ParamModifier_V7 = '        [ValidateSet([DxTagGenerator])]'
 $Psm1_V5 = '# Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) '
 $Psm1_V7 = 'Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) '
 
+$Psd1_V5 = @"
+    # toggle compat mode by running toggleCompat.ps1 from the repo root
+    # PowerShellVersion = '6.0'
+"@
+$Psd1_V7 = @"
+    # Required for IValidateSetValuesGenerator
+    PowerShellVersion = '6.0'
+"@
+
 if('Core' -eq $Edition){
     if('Core' -ne $PSEdition){
         Write-Warning "You are setting the module compat level to PSCore in a PSDesktop session. "
@@ -50,6 +59,7 @@ if('Core' -eq $Edition){
     }
 
     (Get-Content SqlChecks.psm1 -Raw).Replace( $Psm1_V5, $Psm1_V7).TrimEnd() | Set-Content SqlChecks.psm1 
+    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V5, $Psd1_V7).TrimEnd() | Set-Content SqlChecks.psd1 -Encoding unicode
 }
 
 if('Desktop' -eq $Edition){
@@ -59,6 +69,7 @@ if('Desktop' -eq $Edition){
     }
 
     (Get-Content SqlChecks.psm1 -Raw).Replace( $Psm1_V7, $Psm1_V5).TrimEnd() | Set-Content SqlChecks.psm1
+    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V7, $Psd1_V5).TrimEnd() | Set-Content SqlChecks.psd1 -Encoding unicode
 }
 
 Pop-Location
