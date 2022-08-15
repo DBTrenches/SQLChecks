@@ -46,19 +46,20 @@ function New-DxCheck {
         $TestFile = New-Item -ItemType File -Name "Tests/${QueryDomain}.tests.ps1" -Value $header
     }
     $footer = @"
-    Describe "${Tag} on '`$ConnectionString' " -Tag ${Tag} {
-        BeforeDiscovery {
-            `$Splat = @{
-                ServerData = Get-DxState -Tag ${Tag} @Connect 
-                ConfigData = `$DxEntity.${Tag} 
-            }
-            `$Collection = Join-DxConfigAndState @Splat
+
+Describe "${Tag} on '`$ConnectionString' " -Tag ${Tag} {
+    BeforeDiscovery {
+        `$Splat = @{
+            ServerData = Get-DxState -Tag ${Tag} @Connect 
+            ConfigData = `$DxEntity.${Tag} 
         }
-        It "${EndOfTag}: '<_.Name>' " -ForEach `$Collection {
-            `$_.ExistsOnServer | Should -BeTrue
-            `$_.ExistsInConfig | Should -BeTrue
-        }
+        `$Collection = Join-DxConfigAndState @Splat
     }
+    It "${EndOfTag}: '<_.Name>' " -ForEach `$Collection {
+        `$_.ExistsOnServer | Should -BeTrue
+        `$_.ExistsInConfig | Should -BeTrue
+    }
+}
 "@
     Add-Content -Path $TestFile -Value $footer
     Invoke-Item $TestFile
