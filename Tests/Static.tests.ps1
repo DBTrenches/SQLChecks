@@ -1,3 +1,4 @@
+#Requires -Modules @{ModuleName = 'Pester';ModuleVersion = '5.0';Guid = 'a699dea5-2c73-4616-a270-1f7abb777e71';}
 
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 Param()
@@ -37,5 +38,26 @@ Describe "DxTag PS class file should be sorted " -Tag Sorted {
     }
     It "Tag names in the CS class file should be in alphbetical order. " {
         Compare-Object $Array $SortedArray -SyncWindow 0 | Should -BeNullOrEmpty
+    }
+}
+
+Describe "All files should have consistent start and end whitespace. " -Tag WhiteSpace {
+    BeforeDiscovery {
+        $FileCollection = Get-ChildItem -Recurse -File | ForEach-Object {
+            # skip empty files
+            if(Get-Content $_ -Raw){
+                [PSCustomObject]@{
+                    Path = Resolve-Path $_ -Relative
+                    Raw = Get-Content $_ -Raw
+                    Trim = (Get-Content $_ -Raw).Trim()
+                }
+            }
+        }
+    }
+
+    Context "<_.Path>" -ForEach $FileCollection {
+        It "Has consistent line endings" {
+            $_.Raw | Should -Be ($_.Trim + [Environment]::NewLine)
+        }
     }
 }
