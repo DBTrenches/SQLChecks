@@ -56,6 +56,7 @@ Describe "All files should have consistent start and end whitespace. " -Tag Whit
     }
 
     Context "<_.Path>" -ForEach $FileCollection {
+        # Fix with: $FileCollection | % { Set-Content -Path $_.Path -Value $_.Trim }
         It "Has consistent line endings" {
             $_.Raw | Should -Be ($_.Trim + [Environment]::NewLine)
         }
