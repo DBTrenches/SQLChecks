@@ -1,4 +1,3 @@
-
 using System.Management.Automation;
 
 public class DxTagGenerator : IValidateSetValuesGenerator

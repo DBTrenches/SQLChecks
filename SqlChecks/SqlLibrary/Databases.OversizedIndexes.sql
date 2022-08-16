@@ -1,4 +1,3 @@
-
 -- don't run this in tempdb w/o uncommitted
 set transaction isolation level read uncommitted;
 

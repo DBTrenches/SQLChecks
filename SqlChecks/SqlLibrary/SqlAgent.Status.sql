@@ -1,4 +1,3 @@
-
 select  
     dss.status_desc as StatusDescription, 
     dss.startup_type_desc as StartupTypeDescription

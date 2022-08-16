@@ -1,4 +1,3 @@
-
 select 
     pp.profile_id as ProfileId,
     pp.principal_sid as PrincipleSid,

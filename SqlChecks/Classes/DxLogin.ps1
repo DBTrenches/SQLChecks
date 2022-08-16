@@ -1,4 +1,3 @@
-
 class DxLogin {
     [string]$Name
     [byte[]]$SecurityId
