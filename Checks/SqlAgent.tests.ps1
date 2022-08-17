@@ -30,14 +30,10 @@ BeforeDiscovery {
 
 Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
     BeforeDiscovery {
-        $AlertData = @{
-            ServerData = Get-DxState -Tag SqlAgent.Alerts @Connect 
-            ConfigData = $DxEntity.SqlAgent.Alerts 
-        }
-        $AlertCollection = Join-DxConfigAndState @AlertData
+        Initialize-DxCheck SqlAgent.Alerts -EntityName $EntityName
     }
     
-    It "Alert: '<_.Name>' " -ForEach $AlertCollection {
+    It "Alert: '<_.Name>' " -ForEach $Collection {
         $_.ExistsOnServer | Should -BeTrue
         $_.ExistsInConfig | Should -BeTrue
     }
