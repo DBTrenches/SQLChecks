@@ -40,7 +40,7 @@ Function Initialize-DxCheck {
 
     $Join = @{
         ServerData = Get-DxState -Tag $Tag -SqlInstance $ConnectionString -Database $Database
-        ConfigData = $DxEntity.SqlAgent.Alerts
+        ConfigData = Invoke-Expression "`$DxEntity.$Tag"
         KeyName    = $KeyName
     }
 
