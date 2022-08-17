@@ -19,16 +19,18 @@ BeforeAll {
     Write-Host "The connection string to be used is '$($DxEntityLibrary.$EntityName.ConnectionString)' "
 }
 
-BeforeDiscovery {    
-    $DxEntity = $DxEntityLibrary.$EntityName
-    $ConnectionString = $DxEntity.ConnectionString
-    $Connect = @{SqlInstance = $ConnectionString}
+BeforeDiscovery {
+    . $PSScriptRoot/Set-DxPesterVariables.ps1
+}
+
+BeforeAll {
+    . $PSScriptRoot/Set-DxPesterVariables.ps1
 }
 
 Describe "Management.NumErrorLogs" -Tag Management.NumErrorLogs { 
     BeforeAll {
         # @Connect splat is not available to this scope
-        $ServerValue = (Get-DxState Management.NumErrorLogs -SqlInstance $DxEntityLibrary.$EntityName.ConnectionString).NumErrorLogs
+        $ServerValue = (Get-DxState Management.NumErrorLogs @Connect).NumErrorLogs
         $ConfigValue = $DxEntityLibrary.$EntityName.Management.NumErrorLogs
     }
 
@@ -54,10 +56,10 @@ Describe "Management.Xevents " -Tag Management.Xevents {
 }
 
 Describe "Management.DbMail.DefaultProfile " -Tag Management.DbMail.DefaultProfile {
-    BeforeDiscovery {
-        Initialize-DxCheck Management.DbMail.DefaultProfile -EntityName $EntityName -KeyName ProfileId
+    BeforeAll {
+        $ServerState = Get-DxState Management.DbMail.DefaultProfile @Connect
     }
-    It "DbMail.DefaultProfile: '<_.Name>' " -ForEach $Collection {
-        $_.Server.IsDefault | Should -BeTrue
+    It "DbMail.DefaultProfile " {
+        $ServerState.IsDefault | Should -BeTrue
     }
 }
