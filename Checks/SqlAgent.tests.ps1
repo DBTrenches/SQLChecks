@@ -28,6 +28,10 @@ BeforeDiscovery {
     $Connect = @{SqlInstance = $ConnectionString}
 }
 
+AfterAll {
+    Remove-Variable Collection -Force -Scope Global
+}
+
 Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
     BeforeDiscovery {
         Initialize-DxCheck SqlAgent.Alerts -EntityName $EntityName
@@ -41,16 +45,12 @@ Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
 
 Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
     BeforeDiscovery {
-        $OperatorData = @{
-            ServerData = Get-DxState -Tag SqlAgent.Operators @Connect 
-            ConfigData = $DxEntity.SqlAgent.Operators 
-        }
-        $OperatorCollection = Join-DxConfigAndState @OperatorData
+        Initialize-DxCheck SqlAgent.Operators -EntityName $EntityName
     }
     
     # below `It` title displays aligned email address on success
     # "Operator: '<_.OperatorName>' `n      Email:    '<_.Config.Email>'"
-    It "Operator: '<_.Name>' " -ForEach $OperatorCollection {
+    It "Operator: '<_.Name>' " -ForEach $Collection {
         $_.ExistsOnServer | Should -BeTrue
         $_.ExistsInConfig | Should -BeTrue
         $_.Server.Email | Should -BeExactly $_.Config.Email
