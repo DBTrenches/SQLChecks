@@ -15,7 +15,6 @@ BeforeAll {
     else {
         Write-Verbose "Default entity will be used. "
     }
-
     Write-Host "Selected entity is '$EntityName' "
     Write-Host "The connection string to be used is '$($DxEntityLibrary.$EntityName.ConnectionString)' "
 }
@@ -26,17 +25,16 @@ BeforeDiscovery {
     $Connect = @{SqlInstance = $ConnectionString}
 }
 
-Describe "Management.NumErrorLogs" -Tag Management.NumErrorLogs {
-    BeforeDiscovery { 
-        $NumErrorLogsCollection = @{
-            ServerNumErrorLogs = (Get-DxState Management.NumErrorLogs @Connect).NumErrorLogs
-            ConfigNumErrorLogs = $DxEntity.Management.NumErrorLogs
-        }
+Describe "Management.NumErrorLogs" -Tag Management.NumErrorLogs { 
+    BeforeAll {
+        # @Connect splat is not available to this scope
+        $ServerValue = (Get-DxState Management.NumErrorLogs -SqlInstance $DxEntityLibrary.$EntityName.ConnectionString).NumErrorLogs
+        $ConfigValue = $DxEntityLibrary.$EntityName.Management.NumErrorLogs
     }
 
-    It "NumErrorLogs: <_.ConfigNumErrorLogs> " -ForEach $NumErrorLogsCollection {
-        $_.ServerNumErrorLogs | Should -BeExactly $_.ConfigNumErrorLogs
-        $_.ServerNumErrorLogs | Should -Not -BeNullOrEmpty
+    It "NumErrorLogs: $($DxEntityLibrary.$EntityName.Management.NumErrorLogs) " {
+        $ServerValue | Should -BeExactly $ConfigValue
+        $ConfigValue | Should -Not -BeNullOrEmpty
     }
 }
 
