@@ -27,6 +27,7 @@ function Get-DxState {
         [string]$Tag,
 
         [Parameter()]
+        [ValidateNotNullOrEmpty()]
         [DbaInstance]$SqlInstance = $DxEntityLibrary[$DxDefaults.EntityName].ConnectionString,
 
         [Parameter()]
