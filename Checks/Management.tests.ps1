@@ -22,9 +22,7 @@ BeforeAll {
 
 BeforeDiscovery {    
     $DxEntity = $DxEntityLibrary.$EntityName
-
     $ConnectionString = $DxEntity.ConnectionString
-
     $Connect = @{SqlInstance = $ConnectionString}
 }
 
@@ -57,14 +55,9 @@ Describe "Management.Xevents " -Tag Management.Xevents {
     }
 }
 
-Describe "Management.DbMail.DefaultProfile on '$ConnectionString' " -Tag Management.DbMail.DefaultProfile {
+Describe "Management.DbMail.DefaultProfile " -Tag Management.DbMail.DefaultProfile {
     BeforeDiscovery {
-        $Splat = @{
-            ServerData = Get-DxState -Tag Management.DbMail.DefaultProfile @Connect 
-            ConfigData = $DxEntity.Management.DbMail.DefaultProfile 
-            KeyName = 'ProfileId'
-        }
-        $Collection = Join-DxConfigAndState @Splat
+        Initialize-DxCheck Management.DbMail.DefaultProfile -EntityName $EntityName -KeyName ProfileId
     }
     It "DbMail.DefaultProfile: '<_.Name>' " -ForEach $Collection {
         $_.Server.IsDefault | Should -BeTrue
