@@ -1,6 +1,6 @@
 #Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
 
-# PsScriptAnalyzer reports false positive for $vars defined in `Discovery` not used until `It`
+# PsScriptAnalyzer reports false positive for $vars defined in `BeforeDiscovery` not used until `It`
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 
 [CmdletBinding()]
@@ -15,16 +15,13 @@ BeforeAll {
     else {
         Write-Verbose "Default entity will be used. "
     }
-
     Write-Host "Selected entity is '$EntityName' "
     Write-Host "The connection string to be used is '$($DxEntityLibrary.$EntityName.ConnectionString)' "
 }
 
 BeforeDiscovery {
     $DxEntity = $DxEntityLibrary.$EntityName
-
     $ConnectionString = $DxEntity.ConnectionString
-
     $Connect = @{SqlInstance = $ConnectionString}
 }
 
@@ -32,7 +29,7 @@ AfterAll {
     Remove-Variable Collection -Force -Scope Global
 }
 
-Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
+Describe "SqlAgent.Alerts " -Tag SqlAgent.Alerts {
     BeforeDiscovery {
         Initialize-DxCheck SqlAgent.Alerts -EntityName $EntityName
     }
@@ -43,7 +40,7 @@ Describe "SqlAgent.Alerts on '$ConnectionString' " -Tag SqlAgent.Alerts {
     }
 }
 
-Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
+Describe "SqlAgent.Operators " -Tag SqlAgent.Operators {
     BeforeDiscovery {
         Initialize-DxCheck SqlAgent.Operators -EntityName $EntityName
     }
@@ -57,7 +54,7 @@ Describe "SqlAgent.Operators on '$ConnectionString' " -Tag SqlAgent.Operators {
     }
 }
 
-Describe "SqlAgent.Status on '$ConnectionString' " -Tag SqlAgent.Status {
+Describe "SqlAgent.Status " -Tag SqlAgent.Status {
     BeforeDiscovery {
         $SqlAgentStatus = Get-DxState SqlAgent.Status @Connect
     }
@@ -68,7 +65,7 @@ Describe "SqlAgent.Status on '$ConnectionString' " -Tag SqlAgent.Status {
     }
 }
 
-Describe "SqlAgent.JobSchedules on '$ConnectionString' " -Tag SqlAgent.JobSchedules {
+Describe "SqlAgent.JobSchedules " -Tag SqlAgent.JobSchedules {
     BeforeDiscovery {
         $JobsWithDisabledSchedules = Get-DxState SqlAgent.JobSchedules.Disabled @Connect
         $JobsWithNoActiveSchedules = Get-DxState SqlAgent.JobSchedules.NoneActive @Connect
