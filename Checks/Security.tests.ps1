@@ -1,8 +1,5 @@
 #Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
 
-# PsScriptAnalyzer reports false positive for $vars defined in `Discovery` not used until `It`
-[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
-
 [CmdletBinding()]
 Param(
     [string]$EntityName = $DxDefaults.EntityName
@@ -15,30 +12,20 @@ BeforeAll {
     else {
         Write-Verbose "Default entity will be used. "
     }
-
     Write-Host "Selected entity is '$EntityName' "
     Write-Host "The connection string to be used is '$($DxEntityLibrary.$EntityName.ConnectionString)' "
 }
 
-BeforeDiscovery {    
-    $DxEntity = $DxEntityLibrary.$EntityName
-
-    $ConnectionString = $DxEntity.ConnectionString
-
-    $Connect = @{SqlInstance = $ConnectionString}
+AfterAll {
+    Remove-Variable Collection -Force -Scope Global
 }
 
 Describe "Security.SysAdmins " -Tag Security.SysAdmins {
     BeforeDiscovery {
-        $SysAdminData = @{
-            ConfigData = $DxEntity.Security.SysAdmins 
-            ServerData = Get-DxState Security.SysAdmins @Connect 
-        }
-
-        $SysAdminCollection = Join-DxConfigAndState @SysAdminData
+        Initialize-DxCheck Security.SysAdmins -EntityName $EntityName
     }
 
-    It "SysAdmin: '<_.Name>' " -ForEach $SysAdminCollection {
+    It "SysAdmin: '<_.Name>' " -ForEach $Collection {
         $_.ExistsInConfig | Should -BeTrue
         $_.ExistsOnServer | Should -BeTrue
     }
