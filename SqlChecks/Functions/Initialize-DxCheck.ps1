@@ -8,6 +8,7 @@ Function Initialize-DxCheck {
     variable to the global: scope. Ostensibly should be ablt to export to the parent (1) scope per
     the docs but was not able to achieve this on cursory testing. Still needs the Database[] array
     pre-populated for multi-DB queries at this time.
+    Use of this function saves 2-5 lines per Check typically.
 
 .LINK
     https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_scopes#managing-scope
