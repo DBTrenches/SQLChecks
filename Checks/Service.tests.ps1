@@ -16,10 +16,6 @@ BeforeAll {
     Write-Host "The connection string to be used is '$($DxEntityLibrary.$EntityName.ConnectionString)' "
 }
 
-AfterAll {
-    Remove-Variable Collection -Force -Scope Global
-}
-
 Describe "Service.TraceFlags " -Tag Service.TraceFlags {
     BeforeDiscovery {
         Initialize-DxCheck Service.TraceFlags -KeyName TraceFlag -EntityName $EntityName

@@ -23,10 +23,6 @@ BeforeDiscovery {
     . $PSScriptRoot/Set-DxPesterVariables.ps1
 }
 
-AfterAll {
-    Remove-Variable Collection -Force -Scope Global
-}
-
 Describe "SqlAgent.Alerts " -Tag SqlAgent.Alerts {
     BeforeDiscovery {
         Initialize-DxCheck SqlAgent.Alerts -EntityName $EntityName
