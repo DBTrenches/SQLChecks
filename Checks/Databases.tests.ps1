@@ -54,12 +54,12 @@ Describe "Databases.OversizedIndexes " -Tag Databases.OversizedIndexes {
 
     Context "OversizedIndex: <_.Name> " -ForEach $OversizedIndexCollection {
         It "Is properly allowlisted " {
-            $_.ExistsInConfig | Should -BeExactly $true -Because "Oversized indexes may not exist unless they are allowlisted. "
+            $_.ExistsInConfig | Should -BeTrue -Because "Oversized indexes may not exist unless they are allowlisted. "
         }
         It "Exists when it is allowlisted " {
             $Database = (Get-DxDatabasesToCheck -Tag Databases.OversizedIndexes -EntityName $EntityName)
             $_.Config.Database | Should -BeIn $Database -Because "You have allowlisted an index in a database that is not checked by config rules.  "
-            $_.ExistsOnServer | Should -BeExactly $true -Because "Oversized indexes that are dropped from the server should be removed from the allowlist. "
+            $_.ExistsOnServer | Should -BeTrue -Because "Oversized indexes that are dropped from the server should be removed from the allowlist. "
         }
     }
 }
@@ -93,12 +93,12 @@ Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
     }
     Context "DuplicateIndex: <_.Name> " -ForEach $DuplicateIndexesCollection {
         It "Is properly allowlisted " {
-            $_.ExistsInConfig | Should -BeExactly $true -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+            $_.ExistsInConfig | Should -BeTrue -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
         }
         It "Exists when it is allowlisted " {
             $Database = (Get-DxDatabasesToCheck -Tag Databases.DuplicateIndexes -EntityName $EntityName)
             $_.Config.Database | Should -BeIn $Database -Because "You have allowlisted an index in a database that is not checked by config rules.  "
-            $_.ExistsOnServer | Should -BeExactly $true -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+            $_.ExistsOnServer | Should -BeTrue -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
         }
     }
 }
