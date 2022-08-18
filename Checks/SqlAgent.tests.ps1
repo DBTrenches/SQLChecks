@@ -20,9 +20,7 @@ BeforeAll {
 }
 
 BeforeDiscovery {
-    $DxEntity = $DxEntityLibrary.$EntityName
-    $ConnectionString = $DxEntity.ConnectionString
-    $Connect = @{SqlInstance = $ConnectionString}
+    . $PSScriptRoot/Set-DxPesterVariables.ps1
 }
 
 AfterAll {
