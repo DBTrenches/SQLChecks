@@ -22,6 +22,9 @@
         },
         "TemplateConfig": {
             "ResolvedFullPath": ""
+        },
+        "EntityLibrary": {
+            "ResolvedFullPath": ""
         }
     }
 }

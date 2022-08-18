@@ -19,6 +19,7 @@ $DxDefaults = $ModuleConfig.Defaults
 $DxDefaults.EntityConfig.ResolvedFullPath = Resolve-Path $ModuleConfig.EntityConfig.PathExpression
 $DxDefaults.ProfileConfig.ResolvedFullPath = Resolve-Path $ModuleConfig.ProfileConfig.PathExpression
 $DxDefaults.TemplateConfig.ResolvedFullPath = Resolve-Path $ModuleConfig.TemplateConfig.PathExpression
+$DxDefaults.EntityLibrary.ResolvedFullPath = Resolve-Path $ModuleConfig.EntityLibrary.PathExpression
 
 Export-ModuleMember -Variable DxDefaults
 
