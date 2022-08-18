@@ -58,6 +58,20 @@ if('Core' -ne $PSEdition){
     $reponse = $null
 }
 
+#Region UserMode
+
 if($null -eq (Get-Command code)){
     Write-Error "`code` utility not found on `$PATH. Function `New-DxCheck` invokes VSCode via the command line. "
 }
+
+# Adding new tags requires loading a fresh session. 
+# Default code terminal handling preserves the environment on reload.
+# Reloading integrated terminal (from the extension) does this better.
+# Extension also supports [run|debug]-test-from-GUI
+if('ms-vscode.powershell' -NotIn (code --list-extensions)){
+    choco install vscode-powershell --yes
+}
+
+# ¿TODO: assert git config?
+
+#EndRegion UserMode
