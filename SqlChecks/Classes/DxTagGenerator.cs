@@ -15,6 +15,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
             "Management.NumErrorLogs",
             "Management.Xevents",
             "Security.SysAdmins",
+            "Service.CommittedMemory",
             "Service.InstantFileInitializationSetting",
             "Service.SysConfigurations",
             "Service.TempDbConfiguration",
@@ -23,8 +24,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
             "SqlAgent.JobSchedules.Disabled",
             "SqlAgent.JobSchedules.NoneActive",
             "SqlAgent.Operators",
-            "SqlAgent.Status",
-            "Service.CommittedMemory"
+            "SqlAgent.Status"
         };
 
         return Tags;

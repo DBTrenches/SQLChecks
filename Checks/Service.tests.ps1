@@ -75,23 +75,12 @@ Describe "Service.InstantFileInitializationSetting on '$ConnectionString' " -Tag
 }
 
 Describe "Service.CommittedMemory " -Tag Service.CommittedMemory {
-
     BeforeAll {
-
         # this dot-source can be removed if there is a script-level `BeforeAll{}` copy
-
         . $PSScriptRoot/Set-DxPesterVariables.ps1
-
         $ServerValue = (Get-DxState Service.CommittedMemory @Connect).NumErrorLogs
-
     }
-
     It "CommittedMemory: $($DxEntityLibrary.$EntityName.Service.CommittedMemory) " {
-
         $ServerValue.committed_kb | Should -Belessorequal $ServerValue.committed_target_kb -1000
-
-
-
     }
-
 }
