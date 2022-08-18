@@ -10,13 +10,23 @@ function New-DxCheck {
     4. Add a stub test snippet to the appropriate .tests.ps1 file
     5. TODO: handle for adding config
 
+.PARAMETER Scalar
+    By default, this will create a stub for a complex data-driven test. If you want 
+    a simple (one-row, single-attribute) test, you can specify `-Scalar` to get the 
+    alternate test stub syntax. BEWARE - scalar tests require data to be retrieved
+    in the `Run` phase and may require a `BeforeAll{}` block add to the top of the 
+    tests.ps1 file
 #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $Tag
+        $Tag,
+
+        [Parameter()]
+        [switch]
+        $Scalar
     )
 
     # 1. Is the tag unique and new?
@@ -45,22 +55,46 @@ function New-DxCheck {
         $header = (Get-Content Tests/SqlAgent.tests.ps1)[0..29]
         $TestFile = New-Item -ItemType File -Name "Tests/${QueryDomain}.tests.ps1" -Value $header
     }
-    $footer = @"
+    $footer_DataDriven = @"
 
-Describe "${Tag} on '`$ConnectionString' " -Tag ${Tag} {
+Describe "${Tag} " -Tag ${Tag} {
     BeforeDiscovery {
-        `$Splat = @{
-            ServerData = Get-DxState -Tag ${Tag} @Connect 
-            ConfigData = `$DxEntity.${Tag} 
-        }
-        `$Collection = Join-DxConfigAndState @Splat
+        Initialize-DxCheck ${Tag}
     }
-    It "${EndOfTag}: '<_.Name>' " -ForEach `$Collection {
-        `$_.ExistsOnServer | Should -BeTrue
-        `$_.ExistsInConfig | Should -BeTrue
+    Context "${EndOfTag}: '<_.Name>' " -ForEach `$Collection {
+        It "Exists on the server " {
+            `$_.ExistsOnServer | Should -BeTrue -Because "${EndOfTag} values should be remove from config when obsolete. "
+        }
+        It "Exists in config " {
+            `$_.ExistsInConfig | Should -BeTrue -Because "${EndOfTag} entries that exist on the server should be registered in config. " 
+        }
+<# #ADD Other logical tests here!
+        It "Has the correct value for 'ColumnName' (<_.Config.ColumnName>) " {
+            `$_.Server.ColumnName | Should -BeExactly `$_.Config.ColumnName
+        }
+#>
     }
 }
 "@
+    $footer_Scalar = @"
+
+Describe "${Tag} " -Tag ${Tag} {
+    BeforeAll {
+        # this dot-source can be removed if there is a script-level `BeforeAll{}` copy
+        . `$PSScriptRoot/Set-DxPesterVariables.ps1
+        `$ServerValue = (Get-DxState ${Tag} @Connect).NumErrorLogs
+        `$ConfigValue = `$DxEntityLibrary.`$EntityName.${Tag}
+    }
+    It "${EndOfTag}: `$(`$DxEntityLibrary.`$EntityName.${Tag}) " {
+        `$ServerValue | Should -BeExactly `$ConfigValue
+        `$ConfigValue | Should -Not -BeNullOrEmpty
+    }
+}
+"@
+    $footer = switch ($Scalar) {
+        $true { $footer_Scalar }
+        $false { $footer_DataDriven }
+    }
     Add-Content -Path $TestFile -Value $footer
     code --add $TestFile
 
