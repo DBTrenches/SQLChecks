@@ -23,7 +23,8 @@ public class DxTagGenerator : IValidateSetValuesGenerator
             "SqlAgent.JobSchedules.Disabled",
             "SqlAgent.JobSchedules.NoneActive",
             "SqlAgent.Operators",
-            "SqlAgent.Status"
+            "SqlAgent.Status",
+            "Service.CommittedMemory"
         };
 
         return Tags;
