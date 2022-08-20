@@ -50,10 +50,37 @@ function New-DxCheck {
     # 4. add a stub test and open for editting
     $QueryDomain = ($Tag -split '\.')[0]
     $EndOfTag = $Tag -replace "$QueryDomain."
-    $TestFile = Get-ChildItem "Tests/${QueryDomain}.tests.ps1"
+    $TestFile = Get-ChildItem "../Checks/${QueryDomain}.tests.ps1"
     if(-not $TestFile){
-        $header = (Get-Content Tests/SqlAgent.tests.ps1)[0..29]
-        $TestFile = New-Item -ItemType File -Name "Tests/${QueryDomain}.tests.ps1" -Value $header
+        $header = @"
+#Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
+
+# PsScriptAnalyzer reports false positive for `$vars defined in `BeforeDiscovery` not used until `It`
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
+
+[CmdletBinding()]
+Param(
+    [string]`$EntityName = `$DxDefaults.EntityName
+)
+
+BeforeAll {
+    . `$PSScriptRoot/Set-DxPesterVariables.ps1
+    if (`$PSBoundParameters.Keys -contains 'EntityName') {
+        Write-Verbose "User-selected entity will be used. "
+    }
+    else {
+        Write-Verbose "Default entity will be used. "
+    }
+    Write-Host "Selected entity is '`$EntityName' "
+    Write-Host "The connection string to be used is '`$(`$DxEntityLibrary.`$EntityName.ConnectionString)' "
+}
+
+BeforeDiscovery {
+    . `$PSScriptRoot/Set-DxPesterVariables.ps1
+}
+        
+"@
+        $TestFile = New-Item -ItemType File -Name "../Checks/${QueryDomain}.tests.ps1" -Value $header
     }
     $footer_DataDriven = @"
 
