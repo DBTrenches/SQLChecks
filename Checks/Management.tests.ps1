@@ -63,3 +63,24 @@ Describe "Management.DbMail.DefaultProfile " -Tag Management.DbMail.DefaultProfi
         $ServerState.IsDefault | Should -BeTrue
     }
 }
+
+Describe "Management.ResourceGovernor.ResourceGovernorState " -Tag Management.ResourceGovernor.ResourceGovernorState {
+    BeforeDiscovery {
+        Initialize-DxCheck Management.ResourceGovernor.ResourceGovernorState -KeyName ClassifierFunction
+    }
+    Context "ResourceGovernor.ResourceGovernorState " -ForEach $Collection {
+        It "'<_.Name>' classifier exists on the server " {
+            $_.ExistsOnServer | Should -BeTrue
+        }
+        It "'<_.Name>' classifier exists in config " {
+            $_.ExistsInConfig | Should -BeTrue
+        }
+        It "Resource governor has the correct server value for 'IsEnabled' (<_.Config.IsEnabled>) " {
+            $_.Server.IsEnabled | Should -BeExactly $_.Config.IsEnabled
+        }
+        It "Resource governor has the correct server value for 'IsReconfigurationPending' (<_.Config.IsReconfigurationPending>) " {
+            $_.Server.IsReconfigurationPending | Should -BeExactly $_.Config.IsReconfigurationPending
+        }
+
+    }
+}
