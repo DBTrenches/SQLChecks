@@ -6,6 +6,8 @@ public class DxTagGenerator : IValidateSetValuesGenerator
     {
         string[] Tags = new string[]
         {
+            "Databases.DDLTrigger",
+            "Databases.DDLTrigger",
             "_Utility.select1",
             "Databases.DuplicateIndexes",
             "Databases.Files.SpaceUsed",

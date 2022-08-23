@@ -6,6 +6,7 @@ class DxTagGenerator : IValidateSetValuesGenerator {
     [string[]] GetValidValues() {
         $Values = @(
             '_Utility.select1'
+            'Databases.DDLTrigger'                      # 'CheckForDDLTRIGGER'
             'Databases.DuplicateIndexes'                # 'CheckDuplicateIndexes'
             'Databases.Files.SpaceUsed'
             'Databases.IdentityColumnLimit'             # 'CheckForIdentityColumnLimit'

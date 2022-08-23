@@ -102,3 +102,26 @@ Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
         }
     }
 }
+
+
+Describe "Databases.DDLTrigger" -Tag Databases.DDLTrigger {
+    BeforeDiscovery {
+        [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.DDLTrigger
+
+        initialize-DxCheck "Databases.DDLTrigger" -Database $Database -keyname TriggerName
+    }
+
+    It "DDLTrigger test is running " -ForEach $Collection[0] {
+        ($_.ExistsInConfig).Count | Should -BeExactly 1 -Because "In order to confirm the test ran, an empty object is returned from `Join-DxConfigAndState` when there is a null set on both server and config "
+    }
+    Context "DDLTrigger: <_._Database> " -ForEach $Collection {
+        It "Is properly allowlisted " {
+            $_.ExistsInConfig | Should -BeTrue -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+        }
+        It "Exists when it is allowlisted " {
+           # $Database = (Get-DxDatabasesToCheck -Tag Databases.DDLTrigger -EntityName $EntityName)
+            #$_.Config.Database | Should -BeIn $Database -Because "You have allowlisted an index in a database that is not checked by config rules. "
+            $_.ExistsOnServer | Should -BeTrue -Because "DDL Triggers that are dropped from the server should be removed from the allowlist. "
+        }
+    }
+}
