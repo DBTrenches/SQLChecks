@@ -1,15 +1,15 @@
 {
     "TemplateConfig": {
-        "PathExpression": "./Config/Template/"
+        "PathExpression": "$DXCHECKS_CONFIG_DIR/Config/Template/"
     },
     "ProfileConfig": {
-        "PathExpression": "./Config/Profile"
+        "PathExpression": "$DXCHECKS_CONFIG_DIR/Config/Profile"
     },
     "EntityConfig": {
-        "PathExpression": "./Config/Entity"
+        "PathExpression": "$DXCHECKS_CONFIG_DIR/Config/Entity"
     },
     "EntityLibrary": {
-        "PathExpression": "./Config/Resolved"
+        "PathExpression": "$DXCHECKS_CONFIG_DIR/Config/Resolved"
     },
     "Defaults": {
         "ConnectionString": "localhost",
