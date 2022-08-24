@@ -51,10 +51,10 @@ Function Get-DxDatabasesToCheck {
 
     [string[]]$ExcludeDatabases = @()
 
-    $AllDatabases = (Invoke-SqlCmd2 -ServerInstance $SqlInstance -Query "select [name] as [Name] from sys.databases").Name
-
     switch ($PSCmdlet.ParameterSetName) { 
         'Entity' {
+            $AllDatabases = (Invoke-SqlCmd2 -ServerInstance $DxEntity.ConnectionString -Query "select [name] as [Name] from sys.databases").Name
+
             $Database = $DxEntity.DatabasesToCheck
         
             if($null -eq $Database){
@@ -68,6 +68,8 @@ Function Get-DxDatabasesToCheck {
             $Connect = @{ ServerInstance = $DxEntity.ConnectionString }
         } 
         'Database' {
+            $AllDatabases = (Invoke-SqlCmd2 -ServerInstance $SqlInstance -Query "select [name] as [Name] from sys.databases").Name
+
             $Connect = @{ ServerInstance = $SqlInstance }
         }
         Default { Write-Error 'Get-DxDatabasesToCheck: Unhandled exception.' }
