@@ -11,7 +11,7 @@ AfterAll {
     Pop-Location
 }
 
-Describe "DxTag CS class file should be sorted " -Tag Sorted {
+Describe "DxTag CS class file " -Tag ClassFile, CS {
     BeforeAll {
         [Collections.ArrayList]$ClassFile = Get-Content SqlChecks/Classes/DxTagGenerator.cs
         $Start = $ClassFile.IndexOf("        {") + 1
@@ -19,12 +19,15 @@ Describe "DxTag CS class file should be sorted " -Tag Sorted {
         $Array = $ClassFile[$Start .. $End] | ForEach-Object {$_ -replace '"' -replace ',' -replace ' '}
         $SortedArray = $Array | Sort-Object
     }
-    It "Tag names in the CS class file should be in alphbetical order. " {
+    It "Tag names should be in alphbetical order. " -Tag Sorted {
         Compare-Object $Array $SortedArray -SyncWindow 0 | Should -BeNullOrEmpty
+    }
+    It "There are no duplicate tags" -Tag Dupe, Duplicate {
+        ($Array | Group-Object | Where-Object Count -gt 1).Name | Should -BeNullOrEmpty
     }
 }
 
-Describe "DxTag PS class file should be sorted " -Tag Sorted {
+Describe "DxTag PS class file " -Tag ClassFile, PS {
     BeforeAll {
         [Collections.ArrayList]$ClassFile = Get-Content SqlChecks/Classes/DxTagGenerator.ps1
         $Start = $ClassFile.IndexOf('        $Values = @(') + 1
@@ -36,12 +39,16 @@ Describe "DxTag PS class file should be sorted " -Tag Sorted {
         }
         $SortedArray = $Array | Sort-Object
     }
-    It "Tag names in the CS class file should be in alphbetical order. " {
+    It "Tag names in should be in alphbetical order. " -Tag Sorted {
         Compare-Object $Array $SortedArray -SyncWindow 0 | Should -BeNullOrEmpty
+    }
+    It "There are no duplicate tags" -Tag Dupe, Duplicate {
+        ($Array | Group-Object | Where-Object Count -gt 1).Name | Should -BeNullOrEmpty
     }
 }
 
 Describe "All files should have consistent start and end whitespace. " -Tag WhiteSpace {
+    # TODO: exclude lots, like .gitignored local config
     BeforeDiscovery {
         $FileCollection = Get-ChildItem -Recurse -File | ForEach-Object {
             # skip empty files
