@@ -96,17 +96,17 @@ Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
     }
 }
 
-Describe "Databases.DDLTrigger" -Tag Databases.DDLTrigger {
+Describe "Databases.DdlTrigger" -Tag Databases.DdlTrigger {
     BeforeDiscovery {
-        [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.DDLTrigger
-        $ServerData = Get-DxState Databases.DDLTrigger @Connect -Database $Database | Sort-Object _Database
+        [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.DdlTrigger
+        $ServerData = Get-DxState Databases.DdlTrigger @Connect -Database $Database | Sort-Object _Database
     }
     BeforeAll{
-        $TriggerName = $DxEntity.Databases.DDLTrigger.TriggerName
-        $Database = Get-DxDatabasesToCheck -Tag Databases.DDLTrigger -EntityName $EntityName
+        $TriggerName = $DxEntity.Databases.DdlTrigger.TriggerName
+        $Database = Get-DxDatabasesToCheck -Tag Databases.DdlTrigger -EntityName $EntityName
     }
 
-    Context "DDLTrigger: <_._Database> " -ForEach $ServerData  {
+    Context "DdlTrigger: <_._Database> " -ForEach $ServerData  {
         It "Exists " {
             $_._Database | Should -BeIn $Database -Because "You are checking a database that is excluded by config rules. "
             $_.Count | Should -Be 1 

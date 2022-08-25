@@ -6,7 +6,7 @@ class DxTagGenerator : IValidateSetValuesGenerator {
     [string[]] GetValidValues() {
         $Values = @(
             '_Utility.select1'
-            'Databases.DDLTrigger'                      # 'CheckForDDLTRIGGER'
+            'Databases.DdlTrigger'                      # 'CheckForDdlTrigger'
             'Databases.DuplicateIndexes'                # 'CheckDuplicateIndexes'
             'Databases.Files.SpaceUsed'
             'Databases.IdentityColumnLimit'             # 'CheckForIdentityColumnLimit'
@@ -46,7 +46,7 @@ class DxTagGenerator : IValidateSetValuesGenerator {
             # 'LockPagesInMemoryEnabled'
             # 'MaxDataFileSize'
             # 'MaxTLogAutoGrowthInKB'
-            # 'MustHaveDDLTrigger'
+            # 'MustHaveDdlTrigger'
             # 'ResourceGovernorPools'
             # 'ResourceGovernorSetting'
             # 'ServiceBrokerShouldBeEnabled'
