@@ -1,4 +1,4 @@
-/* SQL Query for Databases.DDLTrigger */
+/* SQL Query for Databases.DdlTrigger */
 SELECT 
     t.name TriggerName,
     COUNT(*) AS TriggerCount
