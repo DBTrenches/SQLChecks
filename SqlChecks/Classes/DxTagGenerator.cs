@@ -7,6 +7,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
         string[] Tags = new string[]
         {
             "_Utility.select1",
+            "Databases.DdlTrigger",
             "Databases.DuplicateIndexes",
             "Databases.Files.SpaceUsed",
             "Databases.IdentityColumnLimit",
