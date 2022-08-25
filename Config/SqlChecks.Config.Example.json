@@ -1,5 +1,6 @@
 {
     "TemplateConfig": {
+        "//": "TODO: support `$DXCHECKS_CONFIG_DIR`",
         "PathExpression": "$DXCHECKS_CONFIG_DIR/Config/Template/"
     },
     "ProfileConfig": {
