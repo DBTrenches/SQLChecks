@@ -103,13 +103,13 @@ Describe "Databases.DDLTrigger" -Tag Databases.DDLTrigger {
     }
     BeforeAll{
         $TriggerName = $DxEntity.Databases.DDLTrigger.TriggerName
-        $Database = (Get-DxDatabasesToCheck -Tag Databases.DDLTrigger -EntityName $EntityName)
+        $Database = Get-DxDatabasesToCheck -Tag Databases.DDLTrigger -EntityName $EntityName
     }
 
     Context "DDLTrigger: <_._Database> " -ForEach $ServerData  {
         It "Exists " {
             $_._Database | Should -BeIn $Database -Because "You are checking a database that is excluded by config rules. "
-            $_.Count | Should -Be 1 "DDL Triggers that are dropped from the server should be removed from the allowlist. "
+            $_.Count | Should -Be 1 
             $_.TriggerName | Should -Be $TriggerName
         }
     }
