@@ -72,6 +72,11 @@ if('ms-vscode.powershell' -NotIn (code --list-extensions)){
     choco install vscode-powershell --yes
 }
 
+# https://www.itechtics.com/windows-10-clipboard-history/#3-enable-or-disable-clipboard-history-using-windows-registry
+if(1 -ne (Get-ItemPropertyValue HKCU:\Software\Microsoft\Clipboard -Name EnableClipboardHistory)){
+    Write-Warning "It is highly recommended you enabled clipboard history. Press `⊞ Win`+`V` to configure clipboard history. "
+}
+
 # ¿TODO: assert git config?
 
 #EndRegion UserMode

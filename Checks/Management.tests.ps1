@@ -81,6 +81,41 @@ Describe "Management.ResourceGovernor.ResourceGovernorState " -Tag Management.Re
         It "Resource governor has the correct server value for 'IsReconfigurationPending' (<_.Config.IsReconfigurationPending>) " {
             $_.Server.IsReconfigurationPending | Should -BeExactly $_.Config.IsReconfigurationPending
         }
+    }
+}
 
+Describe "Management.ResourceGovernor.Pools " -Tag Management.ResourceGovernor.Pools {
+    BeforeDiscovery {
+        Initialize-DxCheck Management.ResourceGovernor.Pools -KeyName resourcepoolname
+    }
+    Context "ResourceGovernor.Pools: '<_.Name>' " -ForEach $Collection {
+        It "Exists on the server " {
+            $_.ExistsOnServer | Should -BeTrue -Because "ResourceGovernor.Pools values should be remove from config when obsolete. "
+        }
+        It "Exists in config " {
+            $_.ExistsInConfig | Should -BeTrue -Because "ResourceGovernor.Pools entries that exist on the server should be registered in config. " 
+        }
+
+        It "Has the correct value for 'PoolCapCpuPercent' (<_.Config.PoolCapCpuPercent>) " {
+            $_.Server.PoolCapCpuPercent | Should -BeExactly $_.Config.PoolCapCpuPercent
+        }
+        It "Has the correct value for 'PoolMinCpuPercent' (<_.Config.PoolMinCpuPercent>) " {
+            $_.Server.PoolMinCpuPercent | Should -BeExactly $_.Config.PoolMinCpuPercent
+        }
+        It "Has the correct value for 'PoolMaxCpuPercent' (<_.Config.PoolMaxCpuPercent>) " {
+            $_.Server.PoolMaxCpuPercent | Should -BeExactly $_.Config.PoolMaxCpuPercent
+        }
+        It "Has the correct value for 'PoolMinMemoryPercent' (<_.Config.PoolMinMemoryPercent>) " {
+            $_.Server.PoolMinMemoryPercent | Should -BeExactly $_.Config.PoolMinMemoryPercent
+        }
+        It "Has the correct value for 'PoolMaxMemoryPercent' (<_.Config.PoolMaxMemoryPercent>) " {
+            $_.Server.PoolMaxMemoryPercent | Should -BeExactly $_.Config.PoolMaxMemoryPercent
+        }
+        It "Has the correct value for 'GroupRequestMaxMemoryGrantPercent' (<_.Config.GroupRequestMaxMemoryGrantPercent>) " {
+            $_.Server.GroupRequestMaxMemoryGrantPercent | Should -BeExactly $_.Config.GroupRequestMaxMemoryGrantPercent
+        }
+        It "Has the correct value for 'GroupMaxDop' (<_.Config.GroupMaxDop>) " {
+            $_.Server.GroupMaxDop | Should -BeExactly $_.Config.GroupMaxDop
+        }
     }
 }

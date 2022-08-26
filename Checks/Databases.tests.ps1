@@ -9,15 +9,8 @@ Param(
 )
 
 BeforeAll {
-    if ($PSBoundParameters.Keys -contains 'EntityName') {
-        Write-Verbose "User-selected entity will be used. "
-    }
-    else {
-        Write-Verbose "Default entity will be used. "
-    }
-
-    Write-Host "Selected entity is '$EntityName' "
-    Write-Host "The connection string to be used is '$($DxEntityLibrary.$EntityName.ConnectionString)' "
+    . $PSScriptRoot/Write-DxTestFileHeader.ps1
+    . $PSScriptRoot/Set-DxPesterVariables.ps1
 }
 
 BeforeDiscovery {    
@@ -99,6 +92,25 @@ Describe "Databases.DuplicateIndexes " -Tag Databases.DuplicateIndexes {
             $Database = (Get-DxDatabasesToCheck -Tag Databases.DuplicateIndexes -EntityName $EntityName)
             $_.Config.Database | Should -BeIn $Database -Because "You have allowlisted an index in a database that is not checked by config rules.  "
             $_.ExistsOnServer | Should -BeTrue -Because "Duplicate indexes that are dropped from the server should be removed from the allowlist. "
+        }
+    }
+}
+
+Describe "Databases.DdlTrigger" -Tag Databases.DdlTrigger {
+    BeforeDiscovery {
+        [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.DdlTrigger
+        $ServerData = Get-DxState Databases.DdlTrigger @Connect -Database $Database | Sort-Object _Database
+    }
+    BeforeAll{
+        $TriggerName = $DxEntity.Databases.DdlTrigger.TriggerName
+        $Database = Get-DxDatabasesToCheck -Tag Databases.DdlTrigger -EntityName $EntityName
+    }
+
+    Context "DdlTrigger: <_._Database> " -ForEach $ServerData  {
+        It "Exists " {
+            $_._Database | Should -BeIn $Database -Because "You are checking a database that is excluded by config rules. "
+            $_.Count | Should -Be 1 
+            $_.TriggerName | Should -Be $TriggerName
         }
     }
 }
