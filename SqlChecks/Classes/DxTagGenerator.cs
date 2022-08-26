@@ -6,6 +6,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
     {
         string[] Tags = new string[]
         {
+            "Databases.Indexes.ResumableRebuild.Orphans",
             "Management.ResourceGovernor.Pools",
             "_Utility.select1",
             "Databases.DdlTrigger",

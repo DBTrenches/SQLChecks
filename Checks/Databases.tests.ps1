@@ -114,3 +114,14 @@ Describe "Databases.DdlTrigger" -Tag Databases.DdlTrigger {
         }
     }
 }
+
+Describe "Databases.Indexes.ResumableRebuild.Orphans " -Tag Databases.Indexes.ResumableRebuild.Orphans {
+    BeforeAll {
+        [string[]]$Database = Get-DxDatabasesToCheck -EntityName $EntityName -Tag Databases.Indexes.ResumableRebuild.Orphans
+        $ServerData = Get-DxState Databases.Indexes.ResumableRebuild.Orphans @Connect -Database $Database | Sort-Object _Database
+        
+    }
+    It "Jose is awesome" {
+        $ServerData | should -BeNullOrEmpty
+    }
+}
