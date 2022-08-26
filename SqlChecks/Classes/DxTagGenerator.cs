@@ -15,6 +15,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
             "Databases.OversizedIndexes",
             "Management.DbMail.DefaultProfile",
             "Management.NumErrorLogs",
+            "Management.ResourceGovernor.ResourceGovernorState",
             "Management.Xevents",
             "Security.SysAdmins",
             "Service.InstantFileInitializationSetting",
