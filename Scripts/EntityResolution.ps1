@@ -1,4 +1,4 @@
-Push-Location $PSScriptRoot
+Push-Location $PSScriptRoot/..
 
 #region TemplateConfig
 

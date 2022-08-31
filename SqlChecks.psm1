@@ -25,7 +25,7 @@ Export-ModuleMember -Variable DxDefaults
 
 #endregion ModuleConfig
 ;;
-. ./EntityResolution.ps1
+. ./Scripts/EntityResolution.ps1
 ;;
 #region SqlLibrary
 
