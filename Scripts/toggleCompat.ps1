@@ -25,7 +25,7 @@ param (
     https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.ivalidatesetvaluesgenerator
 #>
 
-Push-Location $PSScriptRoot
+Push-Location $PSScriptRoot/..
 
 Remove-Module SqlChecks -Force -ErrorAction SilentlyContinue
 
