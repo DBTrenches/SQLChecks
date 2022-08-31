@@ -6,7 +6,6 @@ public class DxTagGenerator : IValidateSetValuesGenerator
     {
         string[] Tags = new string[]
         {
-            "Management.ResourceGovernor.Pools",
             "_Utility.select1",
             "Databases.DdlTrigger",
             "Databases.DuplicateIndexes",
@@ -15,6 +14,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
             "Databases.OversizedIndexes",
             "Management.DbMail.DefaultProfile",
             "Management.NumErrorLogs",
+            "Management.ResourceGovernor.Pools",
             "Management.ResourceGovernor.ResourceGovernorState",
             "Management.Xevents",
             "Security.SysAdmins",
