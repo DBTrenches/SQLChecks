@@ -25,7 +25,7 @@ param (
     https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.ivalidatesetvaluesgenerator
 #>
 
-Push-Location $PSScriptRoot
+Push-Location $PSScriptRoot/..
 
 Remove-Module SqlChecks -Force -ErrorAction SilentlyContinue
 
@@ -55,22 +55,22 @@ if('Core' -eq $Edition){
         Write-Warning "You are setting the module compat level to PSCore in a PSDesktop session. "
     }
     Get-ChildItem SqlChecks/Functions -Recurse -File | ForEach-Object {
-        $FileContent = (Get-Content $_ -Raw).Replace($ParamModifier_V5, $ParamModifier_V7)
-        $FileContent.TrimEnd() | Set-Content $_
+        $FileContent = (Get-Content $_.FullName -Raw).Replace($ParamModifier_V5, $ParamModifier_V7)
+        $FileContent.TrimEnd() | Set-Content $_.FullName
     }
 
-    (Get-Content SqlChecks.psm1 -Raw).Replace( $Psm1_V5, $Psm1_V7).TrimEnd() | Set-Content SqlChecks.psm1 
-    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V5, $Psd1_V7).TrimEnd() | Set-Content SqlChecks.psd1 
+    (Get-Content SqlChecks.psm1 -Raw).Replace($Psm1_V5, $Psm1_V7).TrimEnd() | Set-Content SqlChecks.psm1 
+    (Get-Content SqlChecks.psd1 -Raw).Replace($Psd1_V5, $Psd1_V7).TrimEnd() | Set-Content SqlChecks.psd1 
 }
 
 if('Desktop' -eq $Edition){
     Get-ChildItem SqlChecks/Functions -Recurse -File | ForEach-Object {
-        $FileContent = (Get-Content $_ -Raw).Replace( $ParamModifier_V7, $ParamModifier_V5)
-        $FileContent.TrimEnd() | Set-Content $_
+        $FileContent = (Get-Content $_.FullName -Raw).Replace($ParamModifier_V7, $ParamModifier_V5)
+        $FileContent.TrimEnd() | Set-Content $_.FullName
     }
 
-    (Get-Content SqlChecks.psm1 -Raw).Replace( $Psm1_V7, $Psm1_V5).TrimEnd() | Set-Content SqlChecks.psm1
-    (Get-Content SqlChecks.psd1 -Raw).Replace( $Psd1_V7, $Psd1_V5).TrimEnd() | Set-Content SqlChecks.psd1 
+    (Get-Content SqlChecks.psm1 -Raw).Replace($Psm1_V7, $Psm1_V5).TrimEnd() | Set-Content SqlChecks.psm1
+    (Get-Content SqlChecks.psd1 -Raw).Replace($Psd1_V7, $Psd1_V5).TrimEnd() | Set-Content SqlChecks.psd1 
 }
 
 Pop-Location

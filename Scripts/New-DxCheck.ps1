@@ -1,4 +1,4 @@
-function New-DxCheck {
+
 <#
 .SYNOPSIS
     Creates placeholder components needed to initialise a new SqlCheck
@@ -9,6 +9,11 @@ function New-DxCheck {
     3. Add a (blank) SqlLibrary file for the Tag and open it for editting in VSCode
     4. Add a stub test snippet to the appropriate .tests.ps1 file
     5. TODO: handle for adding config
+    Run as a script rather than as a function in the scope of the module because
+    you cannot unload a C# class and re-import it in the same pwsh session. The
+    Class is C# *bEcAuSe ReAsOnS* (see file for more), but changing the class itself 
+    is a part of adding a new check so running this outside the scope of the module
+    is preferred.
 
 .PARAMETER Scalar
     By default, this will create a stub for a complex data-driven test. If you want 
@@ -17,42 +22,45 @@ function New-DxCheck {
     in the `Run` phase and may require a `BeforeAll{}` block add to the top of the 
     tests.ps1 file
 #>
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory)]
-        [ValidateNotNullOrEmpty()]
-        [string]
-        $Tag,
+[CmdletBinding()]
+param (
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $Tag,
 
-        [Parameter()]
-        [switch]
-        $Scalar
-    )
+    [Parameter()]
+    [switch]
+    $Scalar
+)
 
-    # 1. Is the tag unique and new?
-    if($Tag -In [DxTagGenerator]::New().GetValidValues()){
-        Write-Error "Chosen tag '$Tag' is already configured. Choose a different name. "
-        return
-    }
+Push-Location $PSScriptRoot/..
 
-    Push-Location $PSScriptRoot/..
+# 1. Is the tag unique and new?
+# TODO: reassert this check. 
+#       removed to allow this to run as a script without the module imported. 
+if($false) {
+#if ($Tag -In [DxTagGenerator]::New().GetValidValues()) {
+    Write-Error "Chosen tag '$Tag' is already configured. Choose a different name. "
+    return
+}
 
-    # 2. add the tag to the collection
-    [Collections.ArrayList]$ClassFile = Get-Content Classes/DxTagGenerator.cs
-    $InsertStart = $ClassFile.IndexOf("        {")
-    $ClassFile.Insert(1 + $InsertStart,"            `"$Tag`",")
-    $ClassFile | Set-Content Classes/DxTagGenerator.cs
+# 2. add the tag to the collection
+[Collections.ArrayList]$ClassFile = Get-Content Classes/DxTagGenerator.cs
+$InsertStart = $ClassFile.IndexOf("        {")
+$ClassFile.Insert(1 + $InsertStart, "            `"$Tag`",")
+$ClassFile | Set-Content Classes/DxTagGenerator.cs
 
-    # 3. add a (blank) SqlLibrary file and open for editing
-    New-Item -ItemType File -Path "SqlLibrary/$($Tag).sql" -Value "/* SQL Query for $Tag */"
-    code --add "SqlLibrary/$($Tag).sql" 
+# 3. add a (blank) SqlLibrary file and open for editing
+New-Item -ItemType File -Path "SqlLibrary/$($Tag).sql" -Value "/* SQL Query for $Tag */"
+code --add "SqlLibrary/$($Tag).sql" 
 
-    # 4. add a stub test and open for editting
-    $QueryDomain = ($Tag -split '\.')[0]
-    $EndOfTag = $Tag -replace "$QueryDomain."
-    $TestFile = Get-ChildItem "../Checks/${QueryDomain}.tests.ps1"
-    if(-not $TestFile){
-        $header = @"
+# 4. add a stub test and open for editting
+$QueryDomain = ($Tag -split '\.')[0]
+$EndOfTag = $Tag -replace "${QueryDomain}."
+$TestFile = Get-ChildItem "../Checks/${QueryDomain}.tests.ps1"
+if (-not $TestFile) {
+    $header = @"
 #Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
 
 # PsScriptAnalyzer reports false positive for `$vars defined in `BeforeDiscovery` not used until `It`
@@ -80,9 +88,9 @@ BeforeDiscovery {
 }
         
 "@
-        $TestFile = New-Item -ItemType File -Name "../Checks/${QueryDomain}.tests.ps1" -Value $header
-    }
-    $footer_DataDriven = @"
+    $TestFile = New-Item -ItemType File -Name "../Checks/${QueryDomain}.tests.ps1" -Value $header
+}
+$footer_DataDriven = @"
 
 Describe "${Tag} " -Tag ${Tag} {
     BeforeDiscovery {
@@ -103,7 +111,7 @@ Describe "${Tag} " -Tag ${Tag} {
     }
 }
 "@
-    $footer_Scalar = @"
+$footer_Scalar = @"
 
 Describe "${Tag} " -Tag ${Tag} {
     BeforeAll {
@@ -118,14 +126,13 @@ Describe "${Tag} " -Tag ${Tag} {
     }
 }
 "@
-    $footer = switch ($Scalar) {
-        $true { $footer_Scalar }
-        $false { $footer_DataDriven }
-    }
-    Add-Content -Path $TestFile -Value $footer
-    code --add $TestFile
-
-    # 5. TODO: handle for adding config
-
-    Pop-Location
+$footer = switch ($Scalar) {
+    $true { $footer_Scalar }
+    $false { $footer_DataDriven }
 }
+Add-Content -Path $TestFile -Value $footer
+code --add $TestFile
+
+# 5. TODO: handle for adding config
+
+Pop-Location
