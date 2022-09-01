@@ -1,0 +1,17 @@
+
+.create table PesterResultV2 (
+    TimeGenerated: datetime, 
+    Target: string, 
+    Identifier: string, 
+    BatchId: string, 
+    InvocationId: string, 
+    InvocationEndTime: datetime, 
+    HostComputer: string, 
+    TimeTaken: real, 
+    Passed: bool, 
+    Describe: string, 
+    Name: string, 
+    FailureMessage: string, 
+    Result: string, 
+    Context: string
+)
