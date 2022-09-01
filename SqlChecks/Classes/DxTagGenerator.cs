@@ -11,6 +11,7 @@ public class DxTagGenerator : IValidateSetValuesGenerator
             "Databases.DuplicateIndexes",
             "Databases.Files.SpaceUsed",
             "Databases.IdentityColumnLimit",
+            "Databases.Indexes.ResumableRebuild.Orphans",
             "Databases.OversizedIndexes",
             "Management.DbMail.DefaultProfile",
             "Management.NumErrorLogs",
