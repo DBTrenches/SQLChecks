@@ -1,4 +1,6 @@
 /* SQL Query for Databases.Indexes.ResumableRebuild.Orphans */
+set transaction isolation level read uncommitted;
+
 select
     db_name() as DatabaseName,
     s.[name] as SchemaName,
