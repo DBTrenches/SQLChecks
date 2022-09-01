@@ -20,11 +20,11 @@ BeforeAll {
 }
 
 BeforeDiscovery {
-    . $PSScriptRoot/Set-DxPesterVariables.ps1
+    . $PSScriptRoot/../Scripts/Set-DxPesterVariables.ps1
 }
 
 BeforeAll {
-    . $PSScriptRoot/Set-DxPesterVariables.ps1
+    . $PSScriptRoot/../Scripts/Set-DxPesterVariables.ps1
 }
 
 Describe "Management.NumErrorLogs" -Tag Management.NumErrorLogs { 

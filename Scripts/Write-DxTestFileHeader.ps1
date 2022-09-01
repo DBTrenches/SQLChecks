@@ -2,7 +2,8 @@
 
 <#
 .EXAMPLE
-    . $PSScriptRoot/Write-DxTestFileHeader.ps1
+    # from a file in the Checks directory. e.g. Checks/SqlAgent.Tests.ps1
+    . $PSScriptRoot/../Scripts/Write-DxTestFileHeader.ps1
 #>
 
 if ($PSBoundParameters.Keys -contains 'EntityName') {

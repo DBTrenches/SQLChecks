@@ -20,7 +20,7 @@ BeforeAll {
 }
 
 BeforeDiscovery {
-    . $PSScriptRoot/Set-DxPesterVariables.ps1
+    . $PSScriptRoot/../Scripts/Set-DxPesterVariables.ps1
 }
 
 Describe "SqlAgent.Alerts " -Tag SqlAgent.Alerts {
