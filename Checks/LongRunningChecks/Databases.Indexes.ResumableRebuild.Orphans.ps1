@@ -9,12 +9,12 @@ Param(
 )
 
 BeforeAll {
-    . $PSScriptRoot/../Write-DxTestFileHeader.ps1
-    . $PSScriptRoot/../Set-DxPesterVariables.ps1
+    . $PSScriptRoot/../../Scripts/Write-DxTestFileHeader.ps1
+    . $PSScriptRoot/../../Scripts/Set-DxPesterVariables.ps1
 }
 
 BeforeDiscovery {    
-    . $PSScriptRoot/../Set-DxPesterVariables.ps1
+    . $PSScriptRoot/../../Scripts/Set-DxPesterVariables.ps1
 }
 
 Describe "Databases.Indexes.ResumableRebuild.Orphans " -Tag Databases.Indexes.ResumableRebuild.Orphans {

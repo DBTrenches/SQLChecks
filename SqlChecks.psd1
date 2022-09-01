@@ -31,6 +31,7 @@
         'Get-DxState'
         'Join-DxConfigAndState'
         'Initialize-DxCheck'
+        'Invoke-DxChecks'
         'Resolve-DxEntityConfig'
         'Resolve-DxProfile'
         'Resolve-DxServerConfig'
