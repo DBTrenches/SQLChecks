@@ -7,7 +7,7 @@ function Resolve-DxEntityConfig {
 
     $DxEntity = $DxEntityConfig.$EntityName
 
-    if(-not $DxEntity){
+    if($null -eq $DxEntity){
         Write-Error (
             @(
                 "Entity name $EntityName not found in `$DxEntityConfig dictionary. "

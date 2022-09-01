@@ -15,10 +15,10 @@ Push-Location $ModuleConfig.TemplateConfig.PathExpression
         $GrandParent = $file.Directory.Parent.Name
         $Parent = $file.Directory.Name
         
-        if(-not $DxTemplateConfig.$GrandParent){
+        if($null -eq $DxTemplateConfig.$GrandParent){
             $DxTemplateConfig.Add($GrandParent,@{})
         }
-        if(-not $DxTemplateConfig.$GrandParent.$Parent){
+        if($null -eq $DxTemplateConfig.$GrandParent.$Parent){
             $DxTemplateConfig.$GrandParent.Add($Parent,@{})
         }
         $DxTemplateConfig.$GrandParent.$Parent.Add($file.BaseName,$ConfigObject)

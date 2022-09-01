@@ -58,8 +58,8 @@ code --add "SqlLibrary/$($Tag).sql"
 # 4. add a stub test and open for editting
 $QueryDomain = ($Tag -split '\.')[0]
 $EndOfTag = $Tag -replace "${QueryDomain}."
-$TestFile = Get-ChildItem "../Checks/${QueryDomain}.tests.ps1"
-if (-not $TestFile) {
+$TestFile = Get-ChildItem "../Checks/${QueryDomain}.tests.ps1" -ErrorAction SilentlyContinue
+if ($null -eq $TestFile) {
     $header = @"
 #Requires -Modules @{ModuleName='SqlChecks';ModuleVersion='2.0';Guid='998f41a0-c4b4-4ec5-9e11-cb807d98d969'}
 
