@@ -6,12 +6,12 @@ public class DxTagGenerator : IValidateSetValuesGenerator
     {
         string[] Tags = new string[]
         {
-            "Databases.Indexes.ResumableRebuild.Orphans",
             "_Utility.select1",
             "Databases.DdlTrigger",
             "Databases.DuplicateIndexes",
             "Databases.Files.SpaceUsed",
             "Databases.IdentityColumnLimit",
+            "Databases.Indexes.ResumableRebuild.Orphans",
             "Databases.OversizedIndexes",
             "Management.DbMail.DefaultProfile",
             "Management.NumErrorLogs",
