@@ -114,3 +114,7 @@ Describe "Databases.DdlTrigger" -Tag Databases.DdlTrigger {
         }
     }
 }
+
+Describe "Databases.Indexes.ResumableRebuild.Orphans " -Tag Databases.Indexes.ResumableRebuild.Orphans {
+    . $PSScriptRoot/LongRunningChecks/Databases.Indexes.ResumableRebuild.Orphans.ps1 -EntityName $EntityName 
+}
