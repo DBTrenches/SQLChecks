@@ -1,4 +1,3 @@
-
 <#
 .SYNOPSIS
     Creates placeholder components needed to initialise a new SqlCheck

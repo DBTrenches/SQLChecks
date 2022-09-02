@@ -1,4 +1,3 @@
-
 .create table PesterResultV2 (
     TimeGenerated: datetime, 
     Target: string, 
