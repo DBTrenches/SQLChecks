@@ -47,7 +47,7 @@ Describe "DxTag PS class file " -Tag ClassFile, PS {
     }
 }
 
-Describe "All files should have consistent start and end whitespace. " -Tag WhiteSpace {
+Describe "All files should have consistent start and end whitespace. " {
     # TODO: exclude lots, like .gitignored local config
     BeforeDiscovery {
         $FileCollection = Get-ChildItem -Recurse -File | ForEach-Object {
@@ -57,15 +57,26 @@ Describe "All files should have consistent start and end whitespace. " -Tag Whit
                     Path = Resolve-Path $_ -Relative
                     Raw = Get-Content $_ -Raw
                     Trim = (Get-Content $_ -Raw).Trim()
+                    Name = $_.Name
+                    ParentFolder = $_.Directory.Name
                 }
             }
         }
+
+        $PowerShellFunctionFileCollection = $FileCollection | Where-Object {'Functions' -eq $_.ParentFolder}
     }
 
     Context "<_.Path>" -ForEach $FileCollection {
         # Fix with: $FileCollection | % { Set-Content -Path $_.Path -Value $_.Trim }
-        It "Has consistent line endings" {
+        It "Has consistent line endings" -Tag WhiteSpace {
             $_.Raw | Should -Be ($_.Trim + [Environment]::NewLine)
+        }
+
+    }
+
+    Context "<_.Path>" -ForEach $PowerShellFunctionFileCollection -Tag PowerShell {
+        It "PowerShell function files should be named after the function they define" {
+            $_.Raw | Should -Match "function $($_.Name -replace '.ps1')"
         }
     }
 }
