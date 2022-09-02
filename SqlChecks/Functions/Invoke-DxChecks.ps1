@@ -4,12 +4,13 @@ Function Invoke-DxChecks {
         [switch]$PassThru,
 
         [Pester.OutputTypes]
-        $Show = 'All'
+        [Alias('Show')]
+        $Output = 'All'
     )
 
     Push-Location $PSScriptRoot/../..
 
-    Invoke-Pester ./Checks -PassThru:$PassThru -Show $Show
+    Invoke-Pester ./Checks -PassThru:$PassThru -Output $Output
 
     Pop-Location
 }
