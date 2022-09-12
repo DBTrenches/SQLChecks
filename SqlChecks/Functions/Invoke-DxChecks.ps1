@@ -1,11 +1,16 @@
 Function Invoke-DxChecks {
+<#
+.PARAMETER Output
+    Map to https://github.com/pester/Pester/blob/13fb4a2686668d455b8cb9922760e9b651ec6b3f/src/Main.ps1#L570
+#>
     [CmdletBinding()]
     Param (
         [switch]$PassThru,
 
-        [Pester.OutputTypes]
+        [ValidateSet("Diagnostic", "Detailed", "Normal", "Minimal", "None")]
         [Alias('Show')]
-        $Output = 'Default'
+        [String] 
+        $Output = "Normal"
     )
 
     Push-Location $PSScriptRoot/../..
