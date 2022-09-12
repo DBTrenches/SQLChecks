@@ -5,7 +5,7 @@ Function Invoke-DxChecks {
 
         [Pester.OutputTypes]
         [Alias('Show')]
-        $Output = 'All'
+        $Output = 'Default'
     )
 
     Push-Location $PSScriptRoot/../..
