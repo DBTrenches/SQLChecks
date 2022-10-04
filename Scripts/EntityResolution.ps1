@@ -8,8 +8,8 @@ Push-Location $ModuleConfig.TemplateConfig.PathExpression
 
     foreach($file in (Get-ChildItem . -Recurse -Include *.json,*.csv)) {
         $ConfigObject = switch($file.Extension){
-            '.json' {Get-Content $file -Raw | ConvertFrom-Json}
-            '.csv' {Get-Content $file -Raw | ConvertFrom-Csv}
+            '.json' {Get-Content $file.FullName -Raw | ConvertFrom-Json}
+            '.csv' {Get-Content $file.FullName -Raw | ConvertFrom-Csv}
         }
         
         $GrandParent = $file.Directory.Parent.Name
@@ -29,7 +29,7 @@ Pop-Location
 $DxTemplateConfig.Add('Class',@{})
 
 Get-ChildItem ./SqlChecks/Classes -Filter *.json | ForEach-Object {
-    $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
+    $ConfigObject = Get-Content $_.FullName -Raw | ConvertFrom-Json
 
     $DxTemplateConfig.Class.Add($_.BaseName,$ConfigObject)
 }
@@ -45,7 +45,7 @@ $DxProfileConfig = @{}
 Push-Location $ModuleConfig.ProfileConfig.PathExpression
 
     Get-ChildItem . -Recurse -Include *.json | ForEach-Object {
-        $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
+        $ConfigObject = Get-Content $_.FullName -Raw | ConvertFrom-Json
         
         $DxProfileConfig.Add($_.BaseName,$ConfigObject)
     }
@@ -63,7 +63,7 @@ $DxEntityConfig = @{}
 Push-Location $ModuleConfig.EntityConfig.PathExpression
 
     Get-ChildItem . -Recurse -Include *.json | ForEach-Object {
-        $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json
+        $ConfigObject = Get-Content $_.FullName -Raw | ConvertFrom-Json
         
         $DxEntityConfig.Add($_.BaseName,$ConfigObject)
     }
@@ -87,7 +87,7 @@ Push-Location $ModuleConfig.EntityLibrary.PathExpression
             Value = [System.DateTime]::UtcNow
         }
 
-        $ConfigObject = Get-Content $_ -Raw | ConvertFrom-Json 
+        $ConfigObject = Get-Content $_.FullName -Raw | ConvertFrom-Json 
 
         $EntityName = $_.BaseName
         
