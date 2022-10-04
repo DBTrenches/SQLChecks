@@ -43,11 +43,11 @@ $Psm1_V7 = 'Add-Type (Get-Content ./SqlChecks/Classes/DxTagGenerator.cs -Raw) '
 
 $Psd1_V5 = @"
     # toggle compat mode by running toggleCompat.ps1 from the repo root
-    # PowerShellVersion = '6.0'
+    CompatiblePSEditions = 'Desktop'
 "@
 $Psd1_V7 = @"
     # Required for IValidateSetValuesGenerator
-    PowerShellVersion = '6.0'
+    CompatiblePSEditions = 'Core'
 "@
 
 if('Core' -eq $Edition){
