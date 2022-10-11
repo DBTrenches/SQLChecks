@@ -2,12 +2,12 @@
     "Name": "",
     "ConnectionString": "",
     "Scope": "Server",
+    "Databases": [],
     "Service": {
         "SysConfigurations": [],
         "TempDBConfiguration": [],
         "TraceFlags": []
     },
-    "Databases": [],
     "Security": {
         "Logins": [],
         "SysAdmins": []
