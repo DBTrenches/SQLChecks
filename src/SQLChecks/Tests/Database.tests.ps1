@@ -25,8 +25,8 @@ Describe "No large fixed growth transaction logs" -Tag MaxTLogAutoGrowthInKB {
     $MaxTLogAutoGrowthInKB = $Config.MaxTLogAutoGrowthInKB
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
-        It "$database has no log files with autogrowth greater than $MaxTLogAutoGrowthInKB KB on $serverInstance " {
-            @(Get-TLogsWithLargeGrowthSize -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' has no log files with autogrowth greater than $MaxTLogAutoGrowthInKB KB on '$($serverInstance)'" {
+            (Get-TLogsWithLargeGrowthSize -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -36,8 +36,8 @@ Describe "Data file space used" -Tag MaxDataFileSize {
 
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
-        It "$database files are all under $spaceUsedPercentLimit% full on $serverInstance" {
-            @(Get-DatabaseFilesOverMaxDataFileSpaceUsed -Config $Config -Database $database).Count | Should -Be 0
+        It "'$($database)' files are all under $spaceUsedPercentLimit% full on '$($serverInstance)'" {
+            (Get-DatabaseFilesOverMaxDataFileSpaceUsed -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -49,7 +49,7 @@ Describe "DDL Trigger Presence" -Tag MustHaveDDLTrigger {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach ($database in $databases) {
-        It "$database has required DDL triggers on $serverInstance" {
+        It "'$($database)' has required DDL triggers on '$($serverInstance)'" {
             Get-DatabaseTriggerStatus -Config $Config -Database $database | Should Be $true
         }
     }
@@ -60,8 +60,8 @@ Describe "Oversized indexes" -Tag CheckForOversizedIndexes {
 
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
-        It "$database has no oversized indexes on $serverInstance" {
-            @(Get-OversizedIndexes -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' has no oversized indexes on '$($serverInstance)'" {
+            (Get-OversizedIndexes -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -71,8 +71,8 @@ Describe "Orphaned Resumable Index Rebuild" -Tag CheckForOrphanedResumableIndexR
 
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
-        It "$database has no orphaned resumable index rebuild on $serverInstance" {
-            @(Get-OrphanedResumableIndexRebuild -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' has no orphaned resumable index rebuild on '$($serverInstance)'" {
+            (Get-OrphanedResumableIndexRebuild -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -82,8 +82,8 @@ Describe "Check For Identity Column Limit" -Tag CheckForIdentityColumnLimit {
     $PercentThreshold = $config.CheckForIdentityColumnLimit.PercentThreshold
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
-        It "$database has no tables with identity column limit over $PercentThreshold percent on $serverInstance" {
-            @(Get-IdentityColumnLimit -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' has no tables with identity column limit over $PercentThreshold percent on '$($serverInstance)'" {
+            (Get-IdentityColumnLimit -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -91,8 +91,8 @@ Describe "Check For Identity Column Limit" -Tag CheckForIdentityColumnLimit {
 Describe "Percentage growth log files" -Tag CheckForPercentageGrowthLogFiles {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
-        It "$database has no percentage growth log files on $serverInstance" {
-            @(Get-TLogWithPercentageGrowth -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' has no percentage growth log files on '$($serverInstance)'" {
+            (Get-TLogWithPercentageGrowth -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -106,7 +106,7 @@ Describe "Last good checkdb" -Tag LastGoodCheckDb {
 
     $databases = Get-DatabasesToCheck @databasesToCheckParams
     foreach ($database in $databases) {
-        It "$database had a successful CHECKDB in the last $maxDays days on $serverInstance" {
+        It "'$($database)' had a successful CHECKDB in the last $maxDays days on '$($serverInstance)'" {
             (Get-DbsWithoutGoodCheckDb -ServerInstance $serverInstance -Database $database).DaysSinceLastGoodCheckDB | Should -BeLessOrEqual $maxDays
         }
     }
@@ -118,8 +118,8 @@ Describe "Duplicate indexes" -Tag CheckDuplicateIndexes {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach ($database in $databases) {
-        It "$database has no duplicate indexes on $serverInstance" {
-            @(Get-DuplicateIndexes -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' has no duplicate indexes on '$($serverInstance)'" {
+            (Get-DuplicateIndexes -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -128,8 +128,8 @@ Describe "Zero autogrowth files" -Tag ZeroAutoGrowthFiles {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach ($database in $databases) {
-        It "$database has no zero autogrowth files on $serverInstance" {
-            @(Get-FixedSizeFiles -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' has no zero autogrowth files on '$($serverInstance)'" {
+            (Get-FixedSizeFiles -Config $Config -Database $database | ConvertTo-Json) | Should BeNullOrEmpty
         }
     }
 }
@@ -138,8 +138,8 @@ Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
     $databases = Get-DatabasesToCheck @databasesToCheckParams
 
     foreach ($database in $databases) {
-        It "$database size-governed filegroups have space for their next growth on $serverInstance" {
-            @(Get-AutoGrowthRisks -Config $Config -Database $database).Count | Should Be 0
+        It "'$($database)' size-governed filegroups have space for their next growth on '$($serverInstance)'" {
+            (Get-AutoGrowthRisks -Config $Config -Database $database | ConvertTo-Json)  | Should BeNullOrEmpty
         }
     }
 }
@@ -147,10 +147,10 @@ Describe "Autogrowth space to grow" -Tag ShouldCheckForAutoGrowthRisks {
 Describe "Service Broker is enabled" -Tag ServiceBrokerShouldBeEnabled {
     $DatabasesInConfig = $Config.ServiceBrokerShouldBeEnabled.Databases
     $databases = Get-DatabasesToCheck @databasesToCheckParams
-    $databasesToCheck = $DatabasesInConfig | Where-Object {$databases -contains $_}
+    $databasesToCheck = $DatabasesInConfig | Where-Object { $databases -contains $_ }
 
     foreach ($database in $databasesToCheck) {
-        It "$database is service broker enabled on $serverInstance" {
+        It "'$($database)' is service broker enabled on '$($serverInstance)'" {
             Get-DatabaseServiceBrokerStatus -Config $Config -Database $database | Should Be $true
         }
     }
