@@ -13,15 +13,18 @@ Function Get-AutoStartupSQLServices {
     }
 
     $query = @"
-    select  count(*) as [Count]
-    from    sys.dm_server_services
-    where   (
-                servicename like 'SQL Server (%)%'
-        or    servicename like 'SQL Server Agent%'
-            )
-    and     startup_type_desc <> 'Automatic';
+select servicename
+from sys.dm_server_services
+where
+(
+    servicename like 'SQL Server (%)%'
+    or servicename like 'SQL Server Agent%'
+)
+and startup_type_desc <> 'Automatic';
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master
-    
+    (Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database master) |
+        ForEach-Object {
+            [string]$_.servicename
+        }
 }

@@ -8,7 +8,7 @@ Function Get-SQLEndpoints {
         $ServerInstance
 
         , [Parameter(ParameterSetName = "Values")]
-        $SQLEndpoints
+        [string[]] $SQLEndpoints
    
     )
 
@@ -17,13 +17,16 @@ Function Get-SQLEndpoints {
         $SQLEndpoints = $Config.SQLEndpoints
     }
 
+    if (!$SQLEndpoints) {
+        $SQLEndpoints = @()
+    }
+
     $query = @"
-    select  e.[name] as EndPointName
-    from    sys.endpoints as e
-    where   e.state_desc = 'STARTED';
+select  e.[name] as EndpointName
+from    sys.endpoints as e
+where   e.state_desc = 'STARTED';
 "@
 
-    $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master 
-    $SQLEndpoints | Where-Object {$results.EndPointName -notcontains $_}
-    
+    $endpoints = @(Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database master | Select-Object -ExpandProperty EndpointName)
+    $SQLEndpoints | Where-Object { $endpoints.EndpointName -notcontains $_ }
 }

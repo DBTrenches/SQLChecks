@@ -4,7 +4,7 @@ Function Test-Sysadmins {
         [Parameter(ParameterSetName = "Config", ValueFromPipeline = $true, Position = 0)]
         $Config
 
-        ,[Parameter(ParameterSetName = "Values")]
+        , [Parameter(ParameterSetName = "Values")]
         $ServerInstance
 
         , [Parameter(ParameterSetName = "Values")]
@@ -18,12 +18,5 @@ Function Test-Sysadmins {
 
     $serverSysadmins = @(Get-Sysadmins -ServerInstance $serverInstance)
 
-    $comparison = @(Compare-Object -ReferenceObject $Sysadmins -DifferenceObject $serverSysadmins)
-
-    foreach ($delta in $comparison) {
-        [pscustomobject]@{
-            Sysadmin = $delta.InputObject
-            Issue     = if ($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
-        }
-    }
+    Compare-ObjectVerbose -ReferenceObject $Sysadmins -DifferenceObject $serverSysadmins
 }
