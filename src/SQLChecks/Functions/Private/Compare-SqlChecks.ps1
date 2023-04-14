@@ -1,4 +1,4 @@
-function Compare-ObjectVerbose {
+function Compare-SqlChecks {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory, ValueFromPipeline)]

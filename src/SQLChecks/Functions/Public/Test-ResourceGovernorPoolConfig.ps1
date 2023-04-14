@@ -34,5 +34,5 @@ Function Test-ResourceGovernorPoolConfig {
         $RG = ""
     }
 
-    Compare-ObjectVerbose -ReferenceObject $SQLCheckRGConfig -DifferenceObject $TargetRGConfig
+    Compare-SqlChecks -ReferenceObject $SQLCheckRGConfig -DifferenceObject $TargetRGConfig
 }

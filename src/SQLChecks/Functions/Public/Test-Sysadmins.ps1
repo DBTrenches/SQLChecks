@@ -18,5 +18,5 @@ Function Test-Sysadmins {
 
     $serverSysadmins = @(Get-Sysadmins -ServerInstance $serverInstance)
 
-    Compare-ObjectVerbose -ReferenceObject $Sysadmins -DifferenceObject $serverSysadmins
+    Compare-SqlChecks -ReferenceObject $Sysadmins -DifferenceObject $serverSysadmins
 }

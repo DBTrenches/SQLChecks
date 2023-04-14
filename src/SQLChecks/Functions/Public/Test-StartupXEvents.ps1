@@ -29,5 +29,5 @@ where   s.startup_state = 1;
 
     $sessions = @(Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query | Select-Object -ExpandProperty name)
 
-    Compare-ObjectVerbose -ReferenceObject $StartupXEvents -DifferenceObject $Sessions
+    Compare-SqlChecks -ReferenceObject $StartupXEvents -DifferenceObject $Sessions
 }

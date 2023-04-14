@@ -27,5 +27,5 @@ Function Get-SQLAgentAlerts {
 
     $results = Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database msdb 
 
-    Compare-ObjectVerbose -ReferenceObject $results.AlertName -DifferenceObject $SQLAgentAlerts
+    Compare-SqlChecks -ReferenceObject $results.AlertName -DifferenceObject $SQLAgentAlerts
 }

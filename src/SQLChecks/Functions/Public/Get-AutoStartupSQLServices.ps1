@@ -23,8 +23,5 @@ where
 and startup_type_desc <> 'Automatic';
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database master) |
-        ForEach-Object {
-            [string]$_.servicename
-        }
+    (Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database master).servicename
 }

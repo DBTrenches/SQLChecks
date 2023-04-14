@@ -18,5 +18,5 @@ Function Test-TraceFlags {
 
     $flags = @(Get-TraceFlags -ServerInstance $serverInstance)
 
-    Compare-ObjectVerbose -ReferenceObject $TraceFlags -DifferenceObject $flags
+    Compare-SqlChecks -ReferenceObject $TraceFlags -DifferenceObject $flags
 }
