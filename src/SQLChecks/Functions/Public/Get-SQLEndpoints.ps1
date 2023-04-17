@@ -28,5 +28,5 @@ where   e.state_desc = 'STARTED';
 "@
 
     $endpoints = @(Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database master | Select-Object -ExpandProperty EndpointName)
-    $SQLEndpoints | Where-Object { $endpoints.EndpointName -notcontains $_ }
+    $SQLEndpoints | Where-Object { $endpoints -notcontains $_ }
 }
