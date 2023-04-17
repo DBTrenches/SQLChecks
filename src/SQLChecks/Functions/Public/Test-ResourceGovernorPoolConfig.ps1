@@ -20,7 +20,7 @@ Function Test-ResourceGovernorPoolConfig {
     $TargetRGConfig = @(Get-ResourceGovernorPoolConfig -ServerInstance $serverInstance)
 
     #Parse SQLChecks RG config
-    $Properties = $ResourceGovernorPoolConfig | Get-Member | Where-Object MemberType -eq NoteProperty | Sort-Object -Property Name -Descending
+    $Properties = $ResourceGovernorPoolConfig | Get-Member | Where-Object MemberType -EQ NoteProperty | Sort-Object -Property Name -Descending
     $SQLCheckRGConfig = @()
     foreach ($RGConfig in $ResourceGovernorPoolConfig) {
   
@@ -34,7 +34,5 @@ Function Test-ResourceGovernorPoolConfig {
         $RG = ""
     }
 
-    Compare-Object -ReferenceObject $SQLCheckRGConfig -DifferenceObject $TargetRGConfig | Sort-Object -Property InputObject
-
-
+    Compare-SqlChecks -ReferenceObject $SQLCheckRGConfig -DifferenceObject $TargetRGConfig
 }

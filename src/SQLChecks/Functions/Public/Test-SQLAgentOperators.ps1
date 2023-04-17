@@ -32,7 +32,5 @@ Function Test-SQLAgentOperators {
         $Operator = ""
     }
 
-    Compare-Object -ReferenceObject $SQLChecksOperatorConfig -DifferenceObject $TargetOperatorConfig | Sort-Object -Property InputObject
-
-
+    Compare-SqlChecks -ReferenceObject $SQLChecksOperatorConfig -DifferenceObject $TargetOperatorConfig
 }

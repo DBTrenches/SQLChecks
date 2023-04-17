@@ -18,12 +18,5 @@ Function Test-TraceFlags {
 
     $flags = @(Get-TraceFlags -ServerInstance $serverInstance)
 
-    $comparison = @(Compare-Object -ReferenceObject $TraceFlags -DifferenceObject $flags)
-
-    foreach ($delta in $comparison) {
-        [pscustomobject]@{
-            TraceFlag = $delta.InputObject
-            Issue     = if ($delta.SideIndicator -eq "<=") { "Missing from target" } else { "Extra on target" }
-        }
-    }
+    Compare-SqlChecks -ReferenceObject $TraceFlags -DifferenceObject $flags
 }

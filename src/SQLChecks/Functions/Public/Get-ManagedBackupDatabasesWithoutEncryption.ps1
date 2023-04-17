@@ -27,11 +27,7 @@ Function Get-ManagedBackupDatabasesWithoutEncryption {
     and     [db_name] not in ('master','model','tempdb');
 "@
 
- 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database msdb | Where-Object {
-        $ExcludeDatabases -notcontains $_.DatabaseName } | ForEach-Object {
-        [PSCustomObject]@{
-            DatabaseName = $_.DatabaseName
-        }
-    }
+    Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database msdb |
+        Select-Object -ExpandProperty DatabaseName |
+        Where-Object { $ExcludeDatabases -notcontains $_ }
 }
