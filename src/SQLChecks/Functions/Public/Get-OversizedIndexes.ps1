@@ -77,7 +77,7 @@ SELECT tr.DatabaseName ,
        tr.ColumnCount FROM #tempResults AS tr;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
         $ExcludeIndex -notcontains $_.DatabaseName+"."+$_.SchemaName+"."+$_.TableName+"."+$_.IndexName
     } | ForEach-Object {
         [pscustomobject]@{

@@ -24,7 +24,7 @@ where ag.name = '$availabilityGroup'
 
     $cacheKey = "AG-$serverInstance-$availabilityGroup"
     $queryResults = Get-CachedScriptBlockResult -Key $cacheKey -ScriptBlock {
-        Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query -QueryTimeout 60
+        Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Database master -Query $query -QueryTimeout 60
     }
 
     $queryResults | ForEach-Object {

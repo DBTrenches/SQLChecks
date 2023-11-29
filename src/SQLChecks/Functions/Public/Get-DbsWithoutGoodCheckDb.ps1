@@ -35,7 +35,7 @@ select  try_cast(dbi.[Value] as datetime) as LastGoodCheckDbDate
 from    #DBInfo as dbi
 where   dbi.Field = 'dbi_dbccLastKnownGood'
 "@
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $database | ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database $database | ForEach-Object {
         [pscustomobject]@{
             Database                 = $database
             LastGoodCheckDb          = $_.LastGoodCheckDbDate

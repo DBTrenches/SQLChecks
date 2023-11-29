@@ -29,7 +29,7 @@ where js.job_id = j.job_id
 and s.enabled = 1
 )
 "@
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database msdb | ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database msdb | ForEach-Object {
         [pscustomobject]@{
             JobId   = $_.JobId
             JobName = $_.JobName

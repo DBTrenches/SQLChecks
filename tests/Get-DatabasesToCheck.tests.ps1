@@ -1,6 +1,6 @@
 Import-Module $PSScriptRoot\..\src\SQLChecks -Force
 
-# Can't mock Invoke-SqlCmd if we're not in module scope - ultimately invoked in a
+# Can't mock Invoke-SQLCMD -TrustServerCertificate if we're not in module scope - ultimately invoked in a
 # private function (Get-CachedScriptBlockResult)
 InModuleScope -ModuleName SQLChecks {
     # FakeServer has:
@@ -27,7 +27,7 @@ InModuleScope -ModuleName SQLChecks {
         }
 
         Context "FakeServer instance" {
-            Mock -CommandName Invoke-SqlCmd -MockWith {
+            Mock -CommandName Invoke-SQLCMD -TrustServerCertificate -MockWith {
                 return $fakeServer | ForEach-Object {
                     [PSCustomObject]@{
                         DatabaseName                = $_[0]

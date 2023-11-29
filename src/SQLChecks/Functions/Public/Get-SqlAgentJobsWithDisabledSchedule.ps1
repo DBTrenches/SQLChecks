@@ -30,7 +30,7 @@ and s.enabled = 0
 ) as sched
 where c.name <> 'Report Server'
 "@
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database msdb | ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database msdb | ForEach-Object {
         [pscustomobject]@{
             JobId                     = $_.JobId
             JobName                   = $_.JobName

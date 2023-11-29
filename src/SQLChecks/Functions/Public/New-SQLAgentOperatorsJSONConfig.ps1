@@ -27,7 +27,7 @@ Function New-SQLAgentOperatorsJSONConfig {
     select  @Operator_JSON as SQLAgentOperatorsOutput;
 "@
 
-    $results = Invoke-Sqlcmd -ServerInstance $ServerInstance -query $query -Database msdb -MaxCharLength 1000000
+    $results = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -query $query -Database msdb -MaxCharLength 1000000
 
     return $results.SQLAgentOperatorsOutput
 

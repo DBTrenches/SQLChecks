@@ -19,7 +19,7 @@ from    sys.dm_server_services as dss
 where   dss.servicename like 'SQL Server Agent%'
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master | ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database master | ForEach-Object {
         [pscustomobject]@{
             Status      = $_.status_desc
             StartupType = $_.startup_type_desc

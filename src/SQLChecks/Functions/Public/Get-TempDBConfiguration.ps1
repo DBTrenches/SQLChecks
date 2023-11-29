@@ -20,7 +20,7 @@ Function Get-TempDBConfiguration {
     where   [type] = 0;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database tempdb | ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database tempdb | ForEach-Object {
         [pscustomobject]@{
             NumberOfFiles = $_.NumberOfFiles
             TotalSizeMB   = $_.TotalSizeMB

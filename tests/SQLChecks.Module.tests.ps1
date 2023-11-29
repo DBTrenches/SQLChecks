@@ -24,7 +24,7 @@ Describe "Describe tags are unique" {
 
     foreach ($tag in $tags) {
         It "$tag is a unique tag within the module" {
-            ($tags | Where-Object { $_ -eq $tag }).Count | Should Be 1
+            ($tags | Where-Object {$_ -eq $tag}).Count | Should Be 1
         }
     }
 }
@@ -32,9 +32,9 @@ Describe "Describe tags are unique" {
 Describe "Public functions that directly support tests" {
     $excludedFunctions = @("Set-SpConfigValue", "Read-SqlChecksConfig",
         "Get-SpConfigValue", "Get-DatabasesToCheck", "Get-CachedScriptBlockResult",
-        "Get-AGDatabaseReplicaState", "Remove-SQLChecksCache", "Get-AzureSQLDatabasesToCheck", "New-AzureSQLDbConnectionWithCert", "Compare-SqlChecks")
+        "Get-AGDatabaseReplicaState", "Remove-SQLChecksCache", "Get-AzureSQLDatabasesToCheck", "New-AzureSQLDbConnectionWithCert")
 
-    $commands = Get-Command -Module SqlChecks | Where-Object {
+    $commands = Get-Command -Module SqlChecks | where-object {
         $_.Name -notin $excludedFunctions
     }
     foreach ($command in $commands) {

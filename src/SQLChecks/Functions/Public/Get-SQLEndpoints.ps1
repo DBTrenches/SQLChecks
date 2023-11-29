@@ -27,6 +27,6 @@ from    sys.endpoints as e
 where   e.state_desc = 'STARTED';
 "@
 
-    $endpoints = @(Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database master | Select-Object -ExpandProperty EndpointName)
+    $endpoints = @(Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query $query -Database master | Select-Object -ExpandProperty EndpointName)
     $SQLEndpoints | Where-Object { $endpoints -notcontains $_ }
 }

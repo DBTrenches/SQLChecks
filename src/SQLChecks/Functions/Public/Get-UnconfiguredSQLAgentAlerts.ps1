@@ -26,7 +26,7 @@ from msdb.dbo.sysalerts
 where [enabled] = 0 or [has_notification] = 0;
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) | Where-Object {
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Query $query) | Where-Object {
         $ExcludeAlert -notcontains $_.name
       } | ForEach-Object {
         [pscustomobject]@{

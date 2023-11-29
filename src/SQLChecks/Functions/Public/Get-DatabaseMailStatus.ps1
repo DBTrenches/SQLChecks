@@ -17,7 +17,7 @@ Function Get-DatabaseMailStatus {
 EXEC msdb.dbo.sysmail_help_status_sp
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) | ForEach-Object {
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Query $query) | ForEach-Object {
 		[pscustomobject]@{
 			Status      = $_.Status
 		}

@@ -59,7 +59,7 @@ Function Get-AzureSQLDatabasesToCheck {
     elseif ($TargetCredential) {
         try {
 
-            $queryResults = Invoke-Sqlcmd -ServerInstance $ServerInstance `
+            $queryResults = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance `
                 -query $query `
                 -Database master `
                 -Credential $TargetCredential `

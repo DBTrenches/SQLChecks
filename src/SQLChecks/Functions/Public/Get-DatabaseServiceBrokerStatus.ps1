@@ -21,7 +21,7 @@ Function Get-DatabaseServiceBrokerStatus {
     where   d.name = '$($Database)';
 "@
 
-    $result = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master
+    $result = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database master
     if ($result.IsBrokerEnabled -eq 1) {
         $true
     }

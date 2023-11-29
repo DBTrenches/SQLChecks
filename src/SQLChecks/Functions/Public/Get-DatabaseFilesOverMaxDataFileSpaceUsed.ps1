@@ -112,7 +112,7 @@ and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
     }
 
     elseif ($TargetCredential) {
-        $DBFiles = Invoke-Sqlcmd -ServerInstance $ServerInstance `
+        $DBFiles = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance `
             -query $query `
             -Database $Database `
             -Credential $TargetCredential `
@@ -120,7 +120,7 @@ and     c.SpaceUsed > $MaxDataFileSpaceUsedPercent
     }
 
     else {
-        $DBFiles = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database -ErrorAction Stop
+        $DBFiles = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database $Database -ErrorAction Stop
     }
 
 

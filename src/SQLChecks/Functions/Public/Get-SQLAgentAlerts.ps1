@@ -25,7 +25,7 @@ Function Get-SQLAgentAlerts {
     order by    [name];
 "@
 
-    $results = Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database msdb 
+    $results = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query $query -Database msdb 
 
     Compare-SqlChecks -ReferenceObject $results.AlertName -DifferenceObject $SQLAgentAlerts
 }

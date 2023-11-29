@@ -27,7 +27,7 @@ Function Get-DatabaseTriggerStatus {
     and t.is_disabled = 0
 "@
 
-    $result = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database
+    $result = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database $Database
     if ($result.TriggerCount -eq 0) {
         $false
     }

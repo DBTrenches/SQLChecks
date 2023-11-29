@@ -97,7 +97,7 @@ and tr.DataType not in ('tinyint')
 and (tr.DataType <>'bigint'  or (tr.NoRows>tr.MaxValue and tr.LastValue<0 and tr.DataType ='bigint') or (tr.DataType = 'bigint' and tr.LastValue>0));
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database $Database | Where-Object {
         $ExcludedTables -notcontains $_.DatabaseName+"."+$_.SchemaName+"."+$_.TableName
     } | ForEach-Object {
         [pscustomobject]@{

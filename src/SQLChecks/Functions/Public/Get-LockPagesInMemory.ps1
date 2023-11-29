@@ -17,7 +17,7 @@ Function Get-LockPagesInMemory {
     from    sys.dm_os_process_memory;
 "@
 
-    $result = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master
+    $result = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database master
     if ($result.LPIMConfig -gt 0) {
         $result.LPIMConfig = 1
     }

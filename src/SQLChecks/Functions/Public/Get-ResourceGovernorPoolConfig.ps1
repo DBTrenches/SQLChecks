@@ -29,7 +29,7 @@ Function Get-ResourceGovernorPoolConfig {
             order by    wg.name;
 "@
 
-    $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master 
+    $results = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database master 
 
     $Properties = $results | Get-Member | Where-Object MemberType -eq Property | Sort-Object -Property Name -Descending
 

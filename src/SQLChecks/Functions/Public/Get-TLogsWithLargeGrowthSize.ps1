@@ -32,7 +32,7 @@ and (( s.growth * 8 ) > $MaxTLogAutoGrowthInKB and s.is_percent_growth = 0)
 and s.database_id = db_id();
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -Database $Database -query $query |ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Database $Database -query $query |ForEach-Object {
         [pscustomobject]@{
             Database = $_.DatabaseName
             FileName = $_.FileName
