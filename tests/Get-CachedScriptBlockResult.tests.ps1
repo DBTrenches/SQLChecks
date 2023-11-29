@@ -1,3 +1,4 @@
+Import-Module az.accounts -Force
 Import-Module $PSScriptRoot\..\src\SQLChecks -Force
 
 Function Get-ExpensiveToComputeValue {

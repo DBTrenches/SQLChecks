@@ -26,7 +26,7 @@ Function Get-UnconfiguredManagedBackupDatabases {
     and     [db_name] <> 'model';
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database msdb |
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query $query -Database msdb |
         Select-Object -ExpandProperty DatabaseName |
         Where-Object { $ExcludeDatabases -notcontains $_ }
 }

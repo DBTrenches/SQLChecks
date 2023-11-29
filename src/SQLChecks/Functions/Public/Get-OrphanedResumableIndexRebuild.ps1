@@ -37,7 +37,7 @@ Function Get-OrphanedResumableIndexRebuild {
 
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database | ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database $Database | ForEach-Object {
         [pscustomobject]@{
             Database            = $_.DatabaseName
             Schema              = $_.SchemaName

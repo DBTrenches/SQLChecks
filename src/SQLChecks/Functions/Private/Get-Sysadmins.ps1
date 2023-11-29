@@ -24,7 +24,7 @@ and serverRole.is_fixed_role = 1
 where serverRole.name = 'sysadmin'
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) |
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Query $query) |
         ForEach-Object {
         [string]$_.name
     }

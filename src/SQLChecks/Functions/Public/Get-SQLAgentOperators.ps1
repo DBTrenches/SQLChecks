@@ -21,7 +21,7 @@ Function Get-SQLAgentOperators {
     where   s.[enabled] = 1;
 "@
 
-    $results = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database msdb | Sort-Object -Property OperatorName
+    $results = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database msdb | Sort-Object -Property OperatorName
 
     $OperatorConfig = @()
     foreach ($result in $results) {

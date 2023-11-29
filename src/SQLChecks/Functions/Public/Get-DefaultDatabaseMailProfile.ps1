@@ -20,7 +20,7 @@ where pp.principal_sid = 0x0 /* Guest */
 and pp.is_default = 1
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query | ForEach-Object {
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query | ForEach-Object {
         [pscustomobject]@{
             ProfileId = $_.profile_id
         }

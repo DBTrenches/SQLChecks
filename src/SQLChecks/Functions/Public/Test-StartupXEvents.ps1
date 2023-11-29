@@ -27,7 +27,7 @@ from    sys.server_event_sessions as s
 where   s.startup_state = 1;
 "@
 
-    $sessions = @(Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query | Select-Object -ExpandProperty name)
+    $sessions = @(Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Query $query | Select-Object -ExpandProperty name)
 
     Compare-SqlChecks -ReferenceObject $StartupXEvents -DifferenceObject $Sessions
 }

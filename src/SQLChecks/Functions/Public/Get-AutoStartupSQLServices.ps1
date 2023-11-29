@@ -23,5 +23,5 @@ where
 and startup_type_desc <> 'Automatic';
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database master).servicename
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query $query -Database master).servicename
 }

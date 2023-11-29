@@ -26,7 +26,7 @@ from    sys.configurations as c
 where   c.name = '$ConfigName'
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) |
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Query $query) |
         ForEach-Object {
         [pscustomobject]@{
             ConfigName      = $_.name

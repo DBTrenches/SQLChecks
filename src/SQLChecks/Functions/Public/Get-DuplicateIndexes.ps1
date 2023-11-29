@@ -252,7 +252,7 @@ FROM    #tempResults AS tr;
   }
 
   elseif ($TargetCredential) {
-    $DuplicateIndexes = Invoke-Sqlcmd -ServerInstance $ServerInstance `
+    $DuplicateIndexes = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance `
       -query $query `
       -QueryTimeout 0 `
       -Database $Database `
@@ -261,7 +261,7 @@ FROM    #tempResults AS tr;
   }
 
   else {
-    $DuplicateIndexes = Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database $Database -QueryTimeout 0 -ErrorAction Stop
+    $DuplicateIndexes = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database $Database -QueryTimeout 0 -ErrorAction Stop
   }
 
   $DuplicateIndexes | Where-Object {

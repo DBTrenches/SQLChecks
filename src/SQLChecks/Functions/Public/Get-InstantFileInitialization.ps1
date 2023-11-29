@@ -19,6 +19,6 @@ Function Get-InstantFileInitialization {
     where   servicename like 'SQL Server (%)%';
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -Database master
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -Database master
     
 }

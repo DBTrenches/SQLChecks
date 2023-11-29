@@ -36,7 +36,7 @@ declare @RG_JSON nvarchar(max)
 select  @RG_JSON as ResourceGovernorOutput;
 "@
 
-    $results = Invoke-Sqlcmd -ServerInstance $ServerInstance -query $query -Database master -MaxCharLength 1000000
+    $results = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -query $query -Database master -MaxCharLength 1000000
 
     return $results.ResourceGovernorOutput
 

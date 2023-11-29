@@ -40,7 +40,7 @@ and type_desc <> 'FILESTREAM'
 and database_id = db_id();
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database $Database -Query $query) | Where-Object {
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Database $Database -Query $query) | Where-Object {
         $WhitelistFiles -notcontains $_.f_name
     } | ForEach-Object {
         [pscustomobject]@{

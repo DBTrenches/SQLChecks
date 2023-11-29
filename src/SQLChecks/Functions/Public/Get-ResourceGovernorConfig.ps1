@@ -24,7 +24,7 @@ Function Get-ResourceGovernorConfig {
     from    sys.resource_governor_configuration;
 "@
 
-    Invoke-Sqlcmd -ServerInstance $ServerInstance -query $query -Database master 
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -query $query -Database master 
 
     
 }

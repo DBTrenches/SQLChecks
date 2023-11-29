@@ -27,7 +27,7 @@ Function Get-ManagedBackupDatabasesWithoutEncryption {
     and     [db_name] not in ('master','model','tempdb');
 "@
 
-    Invoke-Sqlcmd -ServerInstance $serverInstance -Query $query -Database msdb |
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query $query -Database msdb |
         Select-Object -ExpandProperty DatabaseName |
         Where-Object { $ExcludeDatabases -notcontains $_ }
 }

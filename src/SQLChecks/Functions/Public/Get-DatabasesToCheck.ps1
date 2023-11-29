@@ -54,7 +54,7 @@ where d.state_desc = 'ONLINE'
     }
 
     $queryResults = Get-CachedScriptBlockResult -Key $serverInstance -ScriptBlock {
-        Invoke-Sqlcmd -ServerInstance $serverInstance -query $query -QueryTimeout 0
+        Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -query $query -QueryTimeout 0
     }
 
     $queryResults | Sort-Object -Property DatabaseName | ForEach-Object {

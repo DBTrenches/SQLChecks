@@ -67,7 +67,7 @@
     where (size_mb+growth_mb)>max_size_mb;
 "@
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Database master -Query $query) | Where-Object {
         $WhitelistFiles -notcontains $_.fName
     } | ForEach-Object {
         [pscustomobject]@{

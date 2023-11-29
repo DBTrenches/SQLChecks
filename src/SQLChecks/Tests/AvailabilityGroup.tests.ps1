@@ -8,7 +8,7 @@ $availabilityGroup = $config.AvailabilityGroup
 Describe "AG Instance connectivity" -Tag AGInstanceConnectivity {
     It "Can connect to $serverInstance" {
         {
-            Invoke-SqlCmd -ServerInstance $serverInstance -Query "select @@servername" -Database master
+            Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query "select @@servername" -Database master
         } | Should -Not -Throw
     }
 }
@@ -40,7 +40,7 @@ Describe "AG is located on preferred node" -Tag AGPreferredNode {
     $preferredNode = $config.AGPreferredNode
     
     It "$serverInstance is primary on preferred node - $preferredNode" {
-        $SQLResult = Invoke-SqlCmd -ServerInstance $serverInstance -Query "select @@servername as ServerName" -Database master 
+        $SQLResult = Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query "select @@servername as ServerName" -Database master 
         $SQLResult.ServerName | Should -Be $preferredNode
     }
     

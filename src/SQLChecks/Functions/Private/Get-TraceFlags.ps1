@@ -15,7 +15,7 @@ Function Get-TraceFlags {
 
     $query = "dbcc tracestatus"
 
-    (Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query) |
+    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Query $query) |
         ForEach-Object {
         [int]$_.TraceFlag
     }

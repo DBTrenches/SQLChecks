@@ -41,5 +41,5 @@ begin
 end
 "@
 
-    Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $query
+    Invoke-SQLCMD -TrustServerCertificate -ServerInstance $ServerInstance -Query $query
 }
