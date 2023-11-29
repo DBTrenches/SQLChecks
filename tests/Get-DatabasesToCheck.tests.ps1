@@ -1,3 +1,4 @@
+Import-Module az.accounts -Force
 Import-Module $PSScriptRoot\..\src\SQLChecks -Force
 
 # Can't mock Invoke-SQLCMD -TrustServerCertificate if we're not in module scope - ultimately invoked in a
