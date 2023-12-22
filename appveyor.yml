@@ -4,6 +4,7 @@ skip_commits:
 
 install:
   - choco install pester --version=4.10.1
+  - ps: Install-Module 'Az.Accounts' -MinimumVersion '2.13.1' -AllowClobber -Force
   - ps: Install-Module SqlServer -AllowClobber -Force
   - ps: Install-Module OMSIngestionAPI -Force
 
