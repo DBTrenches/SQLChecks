@@ -23,5 +23,10 @@ where
 and startup_type_desc <> 'Automatic';
 "@
 
-    (Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query $query -Database master).servicename
+    $services =@(Invoke-SQLCMD -TrustServerCertificate -ServerInstance $serverInstance -Query $query -Database master) |
+    ForEach-Object {
+        $_.servicename
+    }
+   
+   return $services
 }
